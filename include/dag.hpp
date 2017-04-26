@@ -60,6 +60,7 @@ public:
     // Container concept member functions
 
     dag() = default;
+    dag(const dag&) = default;
 
     iterator
     begin()
@@ -113,6 +114,8 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     // dag specific member functions
 
+
+    // Add node
     iterator
     add_node(const NodeType& prop)
     {

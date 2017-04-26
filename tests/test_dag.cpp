@@ -1,5 +1,6 @@
 #include "catch.hpp"
 
+#include <algorithm>
 
 #include <dag.hpp>
 
@@ -48,6 +49,16 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
                 auto edge_it_no = a.add_edge(node_it_a, node_it_b, 100);
 
                 REQUIRE(edge_it_no == a.edge_end());
+            }
+
+            SECTION("copy construct another dag")
+            {
+                helene::dag<char, int> mydag2 = a;
+
+                REQUIRE(*a.begin() == *mydag2.begin());
+                REQUIRE(std::equal(a.begin(), a.end(), mydag2.begin()));
+                REQUIRE(std::equal(
+                    a.edge_begin(), a.edge_end(), mydag2.edge_begin()));
             }
         }
     }
