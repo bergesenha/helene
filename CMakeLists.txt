@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.7)
 
 project(helene CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(HELENE_BUILD_TESTS "Build unit tests" ON)
 
