@@ -341,3 +341,28 @@ private:
     std::vector<edge> edges_;
 };
 }
+
+
+namespace std
+{
+template <class NodeType, class EdgeType>
+struct iterator_traits<helene::persistent_iterator_<NodeType, EdgeType>>
+{
+    typedef typename helene::persistent_iterator_<NodeType,
+                                                  EdgeType>::difference_type
+        difference_type;
+
+    typedef
+        typename helene::persistent_iterator_<NodeType, EdgeType>::value_type
+            value_type;
+
+    typedef typename helene::persistent_iterator_<NodeType, EdgeType>::pointer
+        pointer;
+
+    typedef typename helene::persistent_iterator_<NodeType, EdgeType>::reference
+        reference;
+
+    typedef random_access_iterator_tag iterator_category;
+};
+}
+
