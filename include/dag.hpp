@@ -316,10 +316,13 @@ public:
     edge_iterator
     add_edge(iterator from, iterator to, const EdgeType& prop)
     {
+        const auto index = edge_properties_.size();
         const auto from_index = from.current_index_;
         const auto to_index = to.current_index_;
         edge_properties_.push_back(prop);
         edges_.emplace_back(from_index, to_index);
+
+        return edge_iterator(index, edge_properties_);
     }
 
 
