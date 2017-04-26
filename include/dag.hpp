@@ -61,12 +61,6 @@ private:
                    (to_property == other.to_property) &&
                    (edge_property == other.edge_property);
         }
-
-        bool
-        operator!=(const edge& other) const
-        {
-            return !(*this == other);
-        }
     };
 
 public:
@@ -133,6 +127,13 @@ public:
         return (node_properties_ == other.node_properties_) &&
                (edge_properties_ == other.edge_properties_) &&
                (edges_ == other.edges_);
+    }
+
+
+    bool
+    operator!=(const dag& other) const
+    {
+        return !(*this == other);
     }
 
 public:
