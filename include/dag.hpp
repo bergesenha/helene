@@ -85,6 +85,30 @@ public:
         return node_properties_.cend();
     }
 
+    edge_iterator
+    edge_begin()
+    {
+        return edge_properties_.begin();
+    }
+
+    edge_iterator
+    edge_end()
+    {
+        return edge_properties_.end();
+    }
+
+    edge_const_iterator
+    edge_cbegin() const
+    {
+        return edge_properties_.cbegin();
+    }
+
+    edge_const_iterator
+    edge_cend() const
+    {
+        return edge_properties_.cend();
+    }
+
 public:
     ////////////////////////////////////////////////////////////////////////////
     // dag specific member functions

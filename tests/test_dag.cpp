@@ -18,6 +18,12 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
         REQUIRE(*a.cbegin() == 'a');
         REQUIRE(a.begin() == node_it_a);
         REQUIRE(a.cbegin() == node_it_a);
+        REQUIRE(a.begin() != a.end());
+        REQUIRE(a.end() - a.begin() == 1);
+
+        REQUIRE(a.edge_begin() == a.edge_end());
+        REQUIRE(a.edge_cbegin() == a.edge_cend());
+        REQUIRE(a.edge_end() - a.edge_begin() == 0);
 
         SECTION("incrementing iterator")
         {
@@ -33,6 +39,9 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
             auto edge_it_10 = a.add_edge(node_it_a, node_it_b, 10);
 
             REQUIRE(*edge_it_10 == 10);
+            REQUIRE(edge_it_10 == a.edge_begin());
+            REQUIRE(a.edge_end() - edge_it_10 == 1);
+            REQUIRE(a.edge_begin() != a.edge_end());
         }
     }
 }
