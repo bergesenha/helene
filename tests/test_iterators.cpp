@@ -14,6 +14,15 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
     REQUIRE(*my_iter == 'a');
 
+
+    SECTION("copy construct iterator")
+    {
+        helene::persistent_iterator_<char, int> my_iter2 = my_iter;
+
+        REQUIRE(*my_iter2 == 'a');
+    }
+
+
     SECTION("add another element in mock vector")
     {
         mock_nodes.push_back('b');
