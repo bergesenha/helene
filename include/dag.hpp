@@ -264,6 +264,30 @@ public:
         edges_.swap(other.edges_);
     }
 
+    size_type
+    size() const
+    {
+        return node_properties_.size();
+    }
+
+    edge_size_type
+    edge_size() const
+    {
+        return edge_properties_.size();
+    }
+
+    bool
+    empty() const
+    {
+        return node_properties_.empty();
+    }
+
+    bool
+    edge_empty() const
+    {
+        return edge_properties_.empty();
+    }
+
 public:
     ////////////////////////////////////////////////////////////////////////////
     // dag specific member functions
