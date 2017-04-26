@@ -13,6 +13,9 @@ namespace helene
 template <class PropertyType>
 class persistent_iterator_
 {
+    template <class NodeType, class EdgeType>
+    friend class dag;
+
 public:
     typedef typename std::vector<PropertyType>::size_type size_type;
 
@@ -166,8 +169,7 @@ public:
     typedef typename std::vector<NodeType>::difference_type difference_type;
     typedef typename std::vector<NodeType>::size_type size_type;
 
-    typedef typename std::vector<NodeType>::iterator iterator;
-    typedef typename std::vector<NodeType>::const_iterator const_iterator;
+    typedef persistent_iterator_<NodeType> iterator;
 
 
     // edge typedefs
@@ -179,8 +181,7 @@ public:
     typedef
         typename std::vector<EdgeType>::difference_type edge_difference_type;
 
-    typedef typename std::vector<EdgeType>::iterator edge_iterator;
-    typedef typename std::vector<EdgeType>::const_iterator edge_const_iterator;
+    typedef persistent_iterator_<EdgeType> edge_iterator;
 
 
 private:
@@ -218,49 +219,26 @@ public:
     iterator
     begin()
     {
-        return node_properties_.begin();
+        return iterator(0, node_properties_);
     }
 
     iterator
     end()
     {
-        return node_properties_.end();
+        return iterator(node_properties_.size(), node_properties_);
     }
 
-    const_iterator
-    cbegin() const
-    {
-        return node_properties_.cbegin();
-    }
-
-    const_iterator
-    cend() const
-    {
-        return node_properties_.cend();
-    }
 
     edge_iterator
     edge_begin()
     {
-        return edge_properties_.begin();
+        return edge_iterator(0, edge_properties_);
     }
 
     edge_iterator
     edge_end()
     {
-        return edge_properties_.end();
-    }
-
-    edge_const_iterator
-    edge_cbegin() const
-    {
-        return edge_properties_.cbegin();
-    }
-
-    edge_const_iterator
-    edge_cend() const
-    {
-        return edge_properties_.cend();
+        return edge_iterator(edge_properties_.size(), edge_properties_);
     }
 
 
@@ -297,8 +275,9 @@ public:
     iterator
     add_node(const NodeType& prop)
     {
+        const auto index = node_properties_.size();
         node_properties_.push_back(prop);
-        return std::prev(node_properties_.end());
+        return iterator(index, node_properties_);
     }
 
 
@@ -307,23 +286,14 @@ public:
     // Returns iterator to edge property or edge_end() if edge was prevented
     // from being inserted.
     edge_iterator
-    add_edge(const_iterator from, const_iterator to, const EdgeType& prop)
+    add_edge(iterator from, iterator to, const EdgeType& prop)
     {
-        // TODO: check for cycle
-        edges_.emplace_back(from - cbegin(), to - cbegin());
+        const auto from_index = from.current_index_;
+        const auto to_index = to.current_index_;
         edge_properties_.push_back(prop);
-        return std::prev(edge_properties_.end());
+        edges_.emplace_back(from_index, to_index);
     }
 
-
-    std::pair<iterator, iterator>
-    end_nodes(edge_const_iterator edge)
-    {
-        // index of edge property
-        auto edge_property_index = edge - edge_properties_.begin();
-
-        // find
-    }
 
 private:
     std::vector<NodeType> node_properties_;
