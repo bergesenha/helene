@@ -35,6 +35,9 @@ public:
     typedef
         typename std::vector<EdgeType>::difference_type edge_difference_type;
 
+    typedef typename std::vector<EdgeType>::iterator edge_iterator;
+    typedef typename std::vector<EdgeType>::const_iterator edge_const_iterator;
+
 private:
     ////////////////////////////////////////////////////////////////////////////
     // internal classes
@@ -91,6 +94,15 @@ public:
     {
         node_properties_.push_back(prop);
         return std::prev(node_properties_.end());
+    }
+
+
+    edge_iterator
+    add_edge(const_iterator from, const_iterator to, const EdgeType& prop)
+    {
+        edges_.emplace_back(from - cbegin(), to - cbegin(), edges_.size());
+        edge_properties_.push_back(prop);
+        return std::prev(edge_properties_.end());
     }
 
 private:
