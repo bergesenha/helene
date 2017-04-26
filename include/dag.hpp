@@ -70,6 +70,13 @@ public:
         return temp;
     }
 
+    // BidirectionalIterator
+    persistent_iterator_& operator--()
+    {
+        --current_index_;
+        return *this;
+    }
+
 
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;

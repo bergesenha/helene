@@ -87,6 +87,13 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
             REQUIRE(*my_iter == 'y');
             REQUIRE(my_iter != my_iter2);
         }
+
+        SECTION("predecrement second iterator")
+        {
+            --my_iter2;
+
+            REQUIRE(*my_iter2 == 'x');
+        }
     }
 
     SECTION("assign to dereferenced iterator")
