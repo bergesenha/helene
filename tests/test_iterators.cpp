@@ -23,6 +23,9 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
         REQUIRE(*my_iter2 == 'a');
         REQUIRE(my_iter == my_iter2);
+
+        REQUIRE(my_iter <= my_iter2);
+        REQUIRE(my_iter >= my_iter2);
     }
 
     SECTION("move construct iterator")
@@ -110,6 +113,9 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
                 REQUIRE(*my_iter3 == 'z');
                 REQUIRE(my_iter2 < my_iter3);
+                REQUIRE(my_iter2 <= my_iter3);
+                REQUIRE(my_iter3 > my_iter2);
+                REQUIRE(my_iter3 >= my_iter2);
             }
 
             SECTION("add iterator to 2")
