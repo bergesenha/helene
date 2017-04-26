@@ -160,6 +160,20 @@ private:
 };
 
 
+template <class PropertyType>
+class ordered_iterator_
+{
+public:
+    typedef typename std::vector<PropertyType>::size_type size_type;
+
+public:
+private:
+    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
+    size_type current_index_to_index_;
+    std::vector<size_type> indices_;
+};
+
+
 template <class NodeType, class EdgeType>
 class dag
 {
