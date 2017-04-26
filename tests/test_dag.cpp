@@ -45,6 +45,15 @@ TEST_CASE("test dag", "[dag<char, int>]")
             REQUIRE(one.edge_size() == 1);
             REQUIRE(one.edge_end() != one.edge_begin());
             REQUIRE(one.edge_end() - one.edge_begin() == 1);
+
+
+            SECTION("attempt to add a cyclic edge")
+            {
+                auto it_no = one.add_edge(it2, it1, 1000);
+
+                REQUIRE(it_no == one.edge_end());
+                REQUIRE(one.edge_size() == 1);
+            }
         }
     }
 }
