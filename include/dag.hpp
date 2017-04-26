@@ -42,6 +42,11 @@ private:
     // indices to properties of the associated edge
     struct edge
     {
+        edge(size_type from, size_type to, edge_size_type edge_index)
+            : from_property(from), to_property(to), edge_property(edge_index)
+        {
+        }
+
         size_type from_property;
         size_type to_property;
         edge_size_type edge_property;
