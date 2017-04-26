@@ -30,12 +30,6 @@ public:
     }
 
 public:
-    // CopyConstructible
-    persistent_iterator_(const persistent_iterator_& other)
-        : current_index_(other.current_index_), nodes_ref_(other.nodes_ref_)
-    {
-    }
-
     // Iterator concept member functions
     reference operator*()
     {
