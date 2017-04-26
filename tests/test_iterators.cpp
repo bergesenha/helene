@@ -122,6 +122,13 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
             REQUIRE(*my_iter2 == 'x');
         }
+
+        SECTION("subtract 1 from iterator")
+        {
+            auto my_iter3 = my_iter2 - 1;
+
+            REQUIRE(*my_iter3 == 'x');
+        }
     }
 
     SECTION("assign to dereferenced iterator")
