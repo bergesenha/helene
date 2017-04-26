@@ -119,6 +119,12 @@ public:
         return persistent_iterator_(current_index_ - n, nodes_ref_);
     }
 
+    difference_type
+    operator-(const persistent_iterator_& other) const
+    {
+        return current_index_ - other.current_index_;
+    }
+
     reference operator[](difference_type n)
     {
         return nodes_ref_.get()[current_index_ + n];
