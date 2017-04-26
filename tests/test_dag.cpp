@@ -46,6 +46,9 @@ TEST_CASE("test dag", "[dag<char, int>]")
             REQUIRE(one.edge_end() != one.edge_begin());
             REQUIRE(one.edge_end() - one.edge_begin() == 1);
 
+            REQUIRE(*one.edge_endpoints(e_it1).first == 'a');
+            REQUIRE(*one.edge_endpoints(e_it1).second == 'b');
+
 
             SECTION("attempt to add a cyclic edge")
             {

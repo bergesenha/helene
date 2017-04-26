@@ -326,6 +326,16 @@ public:
     }
 
 
+    std::pair<iterator, iterator>
+    edge_endpoints(edge_iterator ed)
+    {
+        const auto edge_index = ed.current_index_;
+
+        return std::make_pair(
+            iterator(edges_[edge_index].from_property, node_properties_),
+            iterator(edges_[edge_index].to_property, node_properties_));
+    }
+
 private:
     std::vector<NodeType> node_properties_;
     std::vector<EdgeType> edge_properties_;
