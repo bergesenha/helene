@@ -61,6 +61,12 @@ private:
                    (to_property == other.to_property) &&
                    (edge_property == other.edge_property);
         }
+
+        bool
+        operator!=(const edge& other) const
+        {
+            return !(*this == other);
+        }
     };
 
 public:
