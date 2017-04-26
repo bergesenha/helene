@@ -73,3 +73,24 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
         }
     }
 }
+
+TEST_CASE("persistent_iterator_ to mock vector of a mock struct",
+          "[persistent_iterator_]")
+{
+    struct has_function
+    {
+        int i;
+
+        int
+        get_i() const
+        {
+            return i;
+        }
+    };
+
+    std::vector<has_function> mock_nodes{{0}, {1}, {2}, {4}, {8}};
+
+    helene::persistent_iterator_<has_function, int> my_iter(2, mock_nodes);
+
+    REQUIRE(my_iter->get_i() == 2);
+}

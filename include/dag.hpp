@@ -50,13 +50,18 @@ public:
                (&(nodes_ref_.get()) == &(other.nodes_ref_.get()));
     }
 
-
     // InputIterator
     bool
     operator!=(const persistent_iterator_& other) const
     {
         return !(*this == other);
     }
+
+    pointer operator->()
+    {
+        return &(nodes_ref_.get()[current_index_]);
+    }
+
 
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
