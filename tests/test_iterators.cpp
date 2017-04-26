@@ -61,6 +61,14 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
             REQUIRE(*old == 'a');
             REQUIRE(*my_iter == 'b');
         }
+
+        SECTION("dereference postincrement")
+        {
+            auto old_val = *my_iter++;
+
+            REQUIRE(old_val == 'a');
+            REQUIRE(*my_iter == 'b');
+        }
     }
 
     SECTION("another mock vector and another iterator")
@@ -79,6 +87,21 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
             REQUIRE(*my_iter == 'y');
             REQUIRE(my_iter != my_iter2);
         }
+    }
+
+    SECTION("assign to dereferenced iterator")
+    {
+        *my_iter = 'c';
+
+        REQUIRE(*my_iter == 'c');
+        REQUIRE(mock_nodes[0] == 'c');
+    }
+
+    SECTION("postincrement assignment")
+    {
+        *my_iter++ = 'c';
+
+        REQUIRE(mock_nodes[0] == 'c');
     }
 }
 
