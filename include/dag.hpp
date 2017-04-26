@@ -62,6 +62,8 @@ public:
     dag() = default;
     dag(const dag&) = default;
 
+    dag& operator=(const dag&) = default;
+
     iterator
     begin()
     {

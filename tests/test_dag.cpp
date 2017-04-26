@@ -60,6 +60,17 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
                 REQUIRE(std::equal(
                     a.edge_begin(), a.edge_end(), mydag2.edge_begin()));
             }
+
+            SECTION("copy assign another dag")
+            {
+                helene::dag<char, int> mydag2;
+                mydag2 = a;
+
+                REQUIRE(*a.begin() == *mydag2.begin());
+                REQUIRE(std::equal(a.begin(), a.end(), mydag2.begin()));
+                REQUIRE(std::equal(
+                    a.edge_begin(), a.edge_end(), mydag2.edge_begin()));
+            }
         }
     }
 }
