@@ -3,10 +3,49 @@
 
 #include <vector>
 #include <iterator>
+#include <functional>
 
 
 namespace helene
 {
+
+template <class NodeType, class EdgeType>
+class dag;
+
+template <class NodeType, class EdgeType>
+class persistent_iterator_
+{
+public:
+    typedef typename dag<NodeType, EdgeType>::size_type size_type;
+
+    typedef typename std::vector<NodeType>::difference_type difference_type;
+    typedef NodeType value_type;
+    typedef NodeType* pointer;
+    typedef NodeType& reference;
+
+public:
+    persistent_iterator_(size_type current_index, std::vector<NodeType>& nodes)
+        : current_index_(current_index), nodes_ref_(nodes)
+    {
+    }
+
+public:
+    // Iterator concept member functions
+    reference operator*()
+    {
+        return nodes_ref_.get()[current_index_];
+    }
+
+    persistent_iterator_& operator++()
+    {
+        ++current_index_;
+        return *this;
+    }
+
+private:
+    std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
+    size_type current_index_;
+};
 
 
 class start_node_iterator_
