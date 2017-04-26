@@ -107,6 +107,13 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
                 REQUIRE(*my_iter3 == 'z');
             }
+
+            SECTION("add iterator to 2")
+            {
+                auto my_iter3 = 2 + my_iter2;
+
+                REQUIRE(*my_iter3 == 'z');
+            }
         }
 
         SECTION("postdecrement second iterator")
