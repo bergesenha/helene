@@ -121,9 +121,14 @@ public:
     }
 
 
+    // Add edge between nodes.
+    // If edge introduces cycle edge will not be inserted.
+    // Returns iterator to edge property or edge_end() if edge was prevented
+    // from being inserted.
     edge_iterator
     add_edge(const_iterator from, const_iterator to, const EdgeType& prop)
     {
+        // TODO: check for cycle
         edges_.emplace_back(from - cbegin(), to - cbegin(), edges_.size());
         edge_properties_.push_back(prop);
         return std::prev(edge_properties_.end());

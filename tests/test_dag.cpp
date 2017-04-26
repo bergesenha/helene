@@ -42,6 +42,13 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
             REQUIRE(edge_it_10 == a.edge_begin());
             REQUIRE(a.edge_end() - edge_it_10 == 1);
             REQUIRE(a.edge_begin() != a.edge_end());
+
+            SECTION("attempt to introduce edge causing cycle")
+            {
+                auto edge_it_no = a.add_edge(node_it_a, node_it_b, 100);
+
+                REQUIRE(edge_it_no == a.edge_end());
+            }
         }
     }
 }
