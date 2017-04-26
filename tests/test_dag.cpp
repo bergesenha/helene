@@ -59,6 +59,8 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
                 REQUIRE(std::equal(a.begin(), a.end(), mydag2.begin()));
                 REQUIRE(std::equal(
                     a.edge_begin(), a.edge_end(), mydag2.edge_begin()));
+
+                REQUIRE(a == mydag2);
             }
 
             SECTION("copy assign another dag")
@@ -70,6 +72,8 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
                 REQUIRE(std::equal(a.begin(), a.end(), mydag2.begin()));
                 REQUIRE(std::equal(
                     a.edge_begin(), a.edge_end(), mydag2.edge_begin()));
+
+                REQUIRE(a == mydag2);
             }
         }
     }

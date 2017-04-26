@@ -53,6 +53,14 @@ private:
         size_type from_property;
         size_type to_property;
         edge_size_type edge_property;
+
+        bool
+        operator==(const edge& other) const
+        {
+            return (from_property == other.from_property) &&
+                   (to_property == other.to_property) &&
+                   (edge_property == other.edge_property);
+        }
     };
 
 public:
@@ -110,6 +118,15 @@ public:
     edge_cend() const
     {
         return edge_properties_.cend();
+    }
+
+
+    bool
+    operator==(const dag& other) const
+    {
+        return (node_properties_ == other.node_properties_) &&
+               (edge_properties_ == other.edge_properties_) &&
+               (edges_ == other.edges_);
     }
 
 public:
