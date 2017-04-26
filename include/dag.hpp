@@ -117,6 +117,11 @@ public:
         return persistent_iterator_(current_index_ - n, nodes_ref_);
     }
 
+    reference operator[](difference_type n)
+    {
+        return nodes_ref_.get()[current_index_ + n];
+    }
+
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
     size_type current_index_;

@@ -14,6 +14,7 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
     helene::persistent_iterator_<char, int> my_iter(0, mock_nodes);
 
     REQUIRE(*my_iter == 'a');
+    REQUIRE(my_iter[0] == 'a');
 
 
     SECTION("copy construct iterator")
@@ -46,12 +47,14 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
         mock_nodes.push_back('b');
 
         REQUIRE(*my_iter == 'a');
+        REQUIRE(my_iter[1] == 'b');
 
         SECTION("preincrement iterator")
         {
             ++my_iter;
 
             REQUIRE(*my_iter == 'b');
+            REQUIRE(my_iter[-1] == 'a');
         }
 
         SECTION("posincrement iterator")
