@@ -62,6 +62,14 @@ public:
         return &(nodes_ref_.get()[current_index_]);
     }
 
+    persistent_iterator_ operator++(int)
+    {
+        auto temp = *this;
+        ++(*this);
+
+        return temp;
+    }
+
 
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;

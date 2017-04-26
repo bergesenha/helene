@@ -53,6 +53,14 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
             REQUIRE(*my_iter == 'b');
         }
+
+        SECTION("posincrement iterator")
+        {
+            auto old = my_iter++;
+
+            REQUIRE(*old == 'a');
+            REQUIRE(*my_iter == 'b');
+        }
     }
 
     SECTION("another mock vector and another iterator")
