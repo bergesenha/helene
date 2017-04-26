@@ -152,10 +152,6 @@ private:
 };
 
 
-class start_node_iterator_
-{
-};
-
 template <class NodeType, class EdgeType>
 class dag
 {
