@@ -20,6 +20,7 @@ public:
     ////////////////////////////////////////////////////////////////////////////
     // public typedefs
 
+    // node typedefs
     typedef NodeType value_type;
     typedef NodeType& reference;
     typedef const NodeType& const_reference;
@@ -31,6 +32,7 @@ public:
     typedef typename std::vector<NodeType>::const_iterator const_iterator;
 
 
+    // edge typedefs
     typedef EdgeType edge_value_type;
     typedef EdgeType& edge_reference;
     typedef const EdgeType& const_edge_reference;
@@ -54,21 +56,19 @@ private:
     // indices to properties of the associated edge
     struct edge
     {
-        edge(size_type from, size_type to, edge_size_type edge_index)
-            : from_property(from), to_property(to), edge_property(edge_index)
+        edge(size_type from, size_type to)
+            : from_property(from), to_property(to)
         {
         }
 
         size_type from_property;
         size_type to_property;
-        edge_size_type edge_property;
 
         bool
         operator==(const edge& other) const
         {
             return (from_property == other.from_property) &&
-                   (to_property == other.to_property) &&
-                   (edge_property == other.edge_property);
+                   (to_property == other.to_property);
         }
     };
 
@@ -176,9 +176,19 @@ public:
     add_edge(const_iterator from, const_iterator to, const EdgeType& prop)
     {
         // TODO: check for cycle
-        edges_.emplace_back(from - cbegin(), to - cbegin(), edges_.size());
+        edges_.emplace_back(from - cbegin(), to - cbegin());
         edge_properties_.push_back(prop);
         return std::prev(edge_properties_.end());
+    }
+
+
+    std::pair<iterator, iterator>
+    end_nodes(edge_const_iterator edge)
+    {
+        // index of edge property
+        auto edge_property_index = edge - edge_properties_.begin();
+
+        // find
     }
 
 private:
