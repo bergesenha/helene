@@ -326,6 +326,7 @@ public:
     }
 
 
+    // returns pair of iterator to nodes connected by edge ed <from , to>
     std::pair<iterator, iterator>
     edge_endpoints(edge_iterator ed)
     {
