@@ -14,5 +14,17 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
         auto it = a.add_node('a');
 
         REQUIRE(*it == 'a');
+        REQUIRE(*a.begin() == 'a');
+        REQUIRE(*a.cbegin() == 'a');
+        REQUIRE(a.begin() == it);
+        REQUIRE(a.cbegin() == it);
+
+        SECTION("incrementing iterator")
+        {
+            ++it;
+
+            REQUIRE(it == a.end());
+            REQUIRE(it == a.cend());
+        }
     }
 }

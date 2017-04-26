@@ -24,6 +24,7 @@ public:
     typedef typename std::vector<NodeType>::size_type size_type;
 
     typedef typename std::vector<NodeType>::iterator iterator;
+    typedef typename std::vector<NodeType>::const_iterator const_iterator;
 
 
     typedef EdgeType edge_value_type;
@@ -52,6 +53,29 @@ public:
 
     dag() = default;
 
+    iterator
+    begin()
+    {
+        return node_properties_.begin();
+    }
+
+    iterator
+    end()
+    {
+        return node_properties_.end();
+    }
+
+    const_iterator
+    cbegin() const
+    {
+        return node_properties_.cbegin();
+    }
+
+    const_iterator
+    cend() const
+    {
+        return node_properties_.cend();
+    }
 
 public:
     ////////////////////////////////////////////////////////////////////////////
