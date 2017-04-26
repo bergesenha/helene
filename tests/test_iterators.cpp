@@ -11,7 +11,7 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
     std::vector<char> mock_nodes;
     mock_nodes.push_back('a');
 
-    helene::persistent_iterator_<char, int> my_iter(0, mock_nodes);
+    helene::persistent_iterator_<char> my_iter(0, mock_nodes);
 
     REQUIRE(*my_iter == 'a');
     REQUIRE(my_iter[0] == 'a');
@@ -19,7 +19,7 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
     SECTION("copy construct iterator")
     {
-        helene::persistent_iterator_<char, int> my_iter2 = my_iter;
+        helene::persistent_iterator_<char> my_iter2 = my_iter;
 
         REQUIRE(*my_iter2 == 'a');
         REQUIRE(my_iter == my_iter2);
@@ -30,14 +30,14 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
     SECTION("move construct iterator")
     {
-        helene::persistent_iterator_<char, int> my_iter2(std::move(my_iter));
+        helene::persistent_iterator_<char> my_iter2(std::move(my_iter));
 
         REQUIRE(*my_iter2 == 'a');
     }
 
     SECTION("copy assign iterator")
     {
-        helene::persistent_iterator_<char, int> my_iter2(10, mock_nodes);
+        helene::persistent_iterator_<char> my_iter2(10, mock_nodes);
 
         my_iter2 = my_iter;
 
@@ -81,7 +81,7 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
     {
         std::vector<char> mock_nodes2{'x', 'y', 'z'};
 
-        helene::persistent_iterator_<char, int> my_iter2(1, mock_nodes2);
+        helene::persistent_iterator_<char> my_iter2(1, mock_nodes2);
 
         REQUIRE(my_iter != my_iter2);
 
@@ -173,7 +173,7 @@ TEST_CASE("persistent_iterator_ to mock vector of a mock struct",
 
     std::vector<has_function> mock_nodes{{0}, {1}, {2}, {4}, {8}};
 
-    helene::persistent_iterator_<has_function, int> my_iter(2, mock_nodes);
+    helene::persistent_iterator_<has_function> my_iter(2, mock_nodes);
 
     REQUIRE(my_iter->get_i() == 2);
 }

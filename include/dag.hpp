@@ -9,22 +9,21 @@
 namespace helene
 {
 
-template <class NodeType, class EdgeType>
-class dag;
 
-template <class NodeType, class EdgeType>
+template <class PropertyType>
 class persistent_iterator_
 {
 public:
-    typedef typename dag<NodeType, EdgeType>::size_type size_type;
+    typedef typename std::vector<PropertyType>::size_type size_type;
 
-    typedef typename std::vector<NodeType>::difference_type difference_type;
-    typedef NodeType value_type;
-    typedef NodeType* pointer;
-    typedef NodeType& reference;
+    typedef typename std::vector<PropertyType>::difference_type difference_type;
+    typedef PropertyType value_type;
+    typedef PropertyType* pointer;
+    typedef PropertyType& reference;
 
 public:
-    persistent_iterator_(size_type current_index, std::vector<NodeType>& nodes)
+    persistent_iterator_(size_type current_index,
+                         std::vector<PropertyType>& nodes)
         : current_index_(current_index), nodes_ref_(nodes)
     {
     }
@@ -147,7 +146,7 @@ public:
     }
 
 private:
-    std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
+    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
     size_type current_index_;
 };
 
@@ -337,21 +336,19 @@ private:
 
 namespace std
 {
-template <class NodeType, class EdgeType>
-struct iterator_traits<helene::persistent_iterator_<NodeType, EdgeType>>
+template <class PropertyType>
+struct iterator_traits<helene::persistent_iterator_<PropertyType>>
 {
-    typedef typename helene::persistent_iterator_<NodeType,
-                                                  EdgeType>::difference_type
+    typedef typename helene::persistent_iterator_<PropertyType>::difference_type
         difference_type;
 
+    typedef typename helene::persistent_iterator_<PropertyType>::value_type
+        value_type;
+
     typedef
-        typename helene::persistent_iterator_<NodeType, EdgeType>::value_type
-            value_type;
+        typename helene::persistent_iterator_<PropertyType>::pointer pointer;
 
-    typedef typename helene::persistent_iterator_<NodeType, EdgeType>::pointer
-        pointer;
-
-    typedef typename helene::persistent_iterator_<NodeType, EdgeType>::reference
+    typedef typename helene::persistent_iterator_<PropertyType>::reference
         reference;
 
     typedef random_access_iterator_tag iterator_category;
