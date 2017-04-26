@@ -184,10 +184,6 @@ public:
     typedef typename std::vector<EdgeType>::const_iterator edge_const_iterator;
 
 
-    // iterator typedefs
-    typedef start_node_iterator_ start_node_iterator;
-    typedef const start_node_iterator const_start_node_iterator;
-
 private:
     ////////////////////////////////////////////////////////////////////////////
     // internal classes
