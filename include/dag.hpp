@@ -165,7 +165,6 @@ public:
     typedef NodeType value_type;
     typedef NodeType& reference;
     typedef const NodeType& const_reference;
-
     typedef typename std::vector<NodeType>::difference_type difference_type;
     typedef typename std::vector<NodeType>::size_type size_type;
 
@@ -176,7 +175,6 @@ public:
     typedef EdgeType edge_value_type;
     typedef EdgeType& edge_reference;
     typedef const EdgeType& const_edge_reference;
-
     typedef typename std::vector<EdgeType>::size_type edge_size_type;
     typedef
         typename std::vector<EdgeType>::difference_type edge_difference_type;
