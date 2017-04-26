@@ -2,11 +2,15 @@
 
 
 #include <vector>
+#include <iterator>
 
 
 namespace helene
 {
-template <class NodeType, class EdgeType> class dag
+
+
+template <class NodeType, class EdgeType>
+class dag
 {
 public:
     ////////////////////////////////////////////////////////////////////////////
@@ -18,6 +22,8 @@ public:
 
     typedef typename std::vector<NodeType>::difference_type difference_type;
     typedef typename std::vector<NodeType>::size_type size_type;
+
+    typedef typename std::vector<NodeType>::iterator iterator;
 
 
     typedef EdgeType edge_value_type;
@@ -45,6 +51,18 @@ public:
     // Container concept member functions
 
     dag() = default;
+
+
+public:
+    ////////////////////////////////////////////////////////////////////////////
+    // dag specific member functions
+
+    iterator
+    add_node(const NodeType& prop)
+    {
+        node_properties_.push_back(prop);
+        return std::prev(node_properties_.end());
+    }
 
 private:
     std::vector<NodeType> node_properties_;
