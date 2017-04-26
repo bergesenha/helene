@@ -93,6 +93,13 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
             --my_iter2;
 
             REQUIRE(*my_iter2 == 'x');
+
+            SECTION("increment iterator with 2")
+            {
+                my_iter2 += 2;
+
+                REQUIRE(*my_iter2 == 'z');
+            }
         }
 
         SECTION("postdecrement second iterator")

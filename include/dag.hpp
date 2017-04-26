@@ -84,6 +84,14 @@ public:
         return temp;
     }
 
+    // RandomAccessIterator
+    persistent_iterator_&
+    operator+=(difference_type n)
+    {
+        current_index_ += n;
+        return *this;
+    }
+
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
     size_type current_index_;
