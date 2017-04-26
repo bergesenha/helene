@@ -75,6 +75,19 @@ TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
 
                 REQUIRE(a == mydag2);
             }
+
+            SECTION("swap with another dag")
+            {
+                helene::dag<char, int> mydag2;
+                mydag2.add_node('c');
+
+                a.swap(mydag2);
+
+                REQUIRE(mydag2 != a);
+                REQUIRE(*mydag2.begin() == 'a');
+                REQUIRE(*a.begin() == 'c');
+                REQUIRE(*mydag2.edge_begin() == 10);
+            }
         }
     }
 }

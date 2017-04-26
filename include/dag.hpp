@@ -136,6 +136,15 @@ public:
         return !(*this == other);
     }
 
+
+    void
+    swap(dag& other)
+    {
+        node_properties_.swap(other.node_properties_);
+        edge_properties_.swap(other.edge_properties_);
+        edges_.swap(other.edges_);
+    }
+
 public:
     ////////////////////////////////////////////////////////////////////////////
     // dag specific member functions
