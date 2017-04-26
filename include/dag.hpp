@@ -92,6 +92,12 @@ public:
         return *this;
     }
 
+    persistent_iterator_
+    operator+(difference_type n) const
+    {
+        return persistent_iterator_(current_index_ + n, nodes_ref_);
+    }
+
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
     size_type current_index_;
