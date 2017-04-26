@@ -9,6 +9,10 @@ namespace helene
 {
 
 
+class start_node_iterator_
+{
+};
+
 template <class NodeType, class EdgeType>
 class dag
 {
@@ -37,6 +41,11 @@ public:
 
     typedef typename std::vector<EdgeType>::iterator edge_iterator;
     typedef typename std::vector<EdgeType>::const_iterator edge_const_iterator;
+
+
+    // iterator typedefs
+    typedef start_node_iterator_ start_node_iterator;
+    typedef const start_node_iterator const_start_node_iterator;
 
 private:
     ////////////////////////////////////////////////////////////////////////////
