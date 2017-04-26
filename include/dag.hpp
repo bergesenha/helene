@@ -77,6 +77,12 @@ public:
         return *this;
     }
 
+    persistent_iterator_ operator--(int)
+    {
+        auto temp = *this;
+        --(*this);
+        return temp;
+    }
 
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
