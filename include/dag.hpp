@@ -41,10 +41,15 @@ private:
     };
 
 public:
+    ////////////////////////////////////////////////////////////////////////////
+    // Container concept member functions
+
     dag() = default;
 
 private:
     std::vector<NodeType> node_properties_;
     std::vector<EdgeType> edge_properties_;
+
+    std::vector<edge> edges_;
 };
 }
