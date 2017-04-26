@@ -155,8 +155,8 @@ public:
     }
 
 private:
-    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
     size_type current_index_;
+    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
 };
 
 
@@ -165,12 +165,28 @@ class ordered_iterator_
 {
 public:
     typedef typename std::vector<PropertyType>::size_type size_type;
+    typedef typename std::vector<size_type>::difference_type difference_type;
+    typedef PropertyType value_type;
+    typedef PropertyType* pointer;
+    typedef PropertyType& reference;
+
+    typedef typename std::vector<size_type>::size_type index_type;
 
 public:
+    ordered_iterator_(index_type current_index_to_index,
+                      const std::vector<size_type>& indices,
+                      std::vector<PropertyType>& nodes)
+        : current_index_to_index_(current_index_to_index),
+          indices_(indices),
+          nodes_ref_(nodes)
+    {
+    }
+
+
 private:
-    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
-    size_type current_index_to_index_;
+    index_type current_index_to_index_;
     std::vector<size_type> indices_;
+    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
 };
 
 
