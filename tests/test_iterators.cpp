@@ -21,6 +21,7 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
         helene::persistent_iterator_<char, int> my_iter2 = my_iter;
 
         REQUIRE(*my_iter2 == 'a');
+        REQUIRE(my_iter == my_iter2);
     }
 
     SECTION("move construct iterator")
@@ -37,6 +38,7 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
         my_iter2 = my_iter;
 
         REQUIRE(*my_iter2 == 'a');
+        REQUIRE(my_iter == my_iter2);
     }
 
     SECTION("add another element in mock vector")
@@ -59,12 +61,15 @@ TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
 
         helene::persistent_iterator_<char, int> my_iter2(1, mock_nodes2);
 
+        REQUIRE(my_iter != my_iter2);
+
         SECTION("swap the two iterators")
         {
             std::swap(my_iter, my_iter2);
 
             REQUIRE(*my_iter2 == 'a');
             REQUIRE(*my_iter == 'y');
+            REQUIRE(my_iter != my_iter2);
         }
     }
 }

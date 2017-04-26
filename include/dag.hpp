@@ -42,6 +42,22 @@ public:
         return *this;
     }
 
+    // EqualityComparable
+    bool
+    operator==(const persistent_iterator_& other) const
+    {
+        return (current_index_ == other.current_index_) &&
+               (&(nodes_ref_.get()) == &(other.nodes_ref_.get()));
+    }
+
+
+    // InputIterator
+    bool
+    operator!=(const persistent_iterator_& other) const
+    {
+        return !(*this == other);
+    }
+
 private:
     std::reference_wrapper<std::vector<NodeType>> nodes_ref_;
     size_type current_index_;
