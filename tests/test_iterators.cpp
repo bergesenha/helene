@@ -195,4 +195,20 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
 
         REQUIRE(*it1 == 'b');
     }
+
+    SECTION("copy iterator")
+    {
+        auto it2 = it1;
+
+        REQUIRE(*it2 == 'a');
+        REQUIRE(it2 == it1);
+
+        SECTION("preincrement second iterator")
+        {
+            ++it2;
+
+            REQUIRE(*it2 == 'b');
+            REQUIRE(it2 != it1);
+        }
+    }
 }

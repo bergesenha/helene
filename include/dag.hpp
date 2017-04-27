@@ -183,6 +183,7 @@ public:
     }
 
 public:
+    // Iterator
     reference operator*()
     {
         return nodes_ref_.get()[indices_[current_index_to_index_]];
@@ -194,10 +195,18 @@ public:
         return *this;
     }
 
+    // Equality comparable
     bool
     operator==(const ordered_iterator_& other) const
     {
         return (current_index_to_index_ == other.current_index_to_index_);
+    }
+
+    // InputIterator
+    bool
+    operator!=(const ordered_iterator_& other) const
+    {
+        return !(*this == other);
     }
 
 private:
