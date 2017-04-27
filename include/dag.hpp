@@ -10,6 +10,8 @@
 namespace helene
 {
 
+template <class PropertyType>
+class persistent_iterator_;
 
 template <class PropertyType>
 class ordered_iterator_
@@ -22,6 +24,8 @@ public:
     typedef PropertyType& reference;
 
     typedef typename std::vector<size_type>::size_type index_type;
+
+    friend class persistent_iterator_<PropertyType>;
 
 public:
     ordered_iterator_(index_type current_index_to_index,
@@ -182,6 +186,12 @@ public:
     persistent_iterator_(size_type current_index,
                          std::vector<PropertyType>& nodes)
         : current_index_(current_index), nodes_ref_(nodes)
+    {
+    }
+
+    persistent_iterator_(const ordered_iterator_<PropertyType>& other)
+        : current_index_(other.indices_[other.current_index_to_index_]),
+          nodes_ref_(other.nodes_ref_)
     {
     }
 

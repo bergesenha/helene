@@ -269,6 +269,13 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
             REQUIRE(it2 - it3 == 3);
             REQUIRE(it3 - it2 == -3);
         }
+
+        SECTION("convert to persistent_iterator_")
+        {
+            helene::persistent_iterator_<char> converted = it2;
+
+            REQUIRE(*converted == *it2);
+        }
     }
 
     SECTION("add iterator to integer")
@@ -290,6 +297,13 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
 
             REQUIRE(*it1 == 'a');
         }
+    }
+
+    SECTION("construct persistent_iterator_ from ordered_iterator_")
+    {
+        helene::persistent_iterator_<char> converted(it1);
+
+        REQUIRE(*it1 == *converted);
     }
 }
 
