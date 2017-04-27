@@ -213,6 +213,24 @@ TEST_CASE("test dag", "[dag<char, int>]")
                                           std::prev(topo_pair.second),
                                           'c') != std::prev(topo_pair.second));
                     }
+
+                    SECTION("remove edge")
+                    {
+                        one.remove_edge(e_it3);
+
+                        REQUIRE(*e_it1 == 10);
+                        REQUIRE(*e_it2 == 20);
+                        REQUIRE(one.edge_size() == 3);
+
+                        SECTION("get topological_order")
+                        {
+                            auto topo_pair = one.topological_order();
+
+                            REQUIRE(topo_pair.second - topo_pair.first == 4);
+                            REQUIRE(*topo_pair.first == 'a');
+                            REQUIRE(*(topo_pair.first + 1) != 'd');
+                        }
+                    }
                 }
 
                 SECTION("get topological order")
@@ -228,6 +246,22 @@ TEST_CASE("test dag", "[dag<char, int>]")
                                       'c') != topo_pair.second);
                     REQUIRE(topo_pair.second - topo_pair.first == 3);
                 }
+
+                SECTION("remove first edge")
+                {
+                    one.remove_edge(e_it1);
+
+                    REQUIRE(one.edge_size() == 1);
+                    REQUIRE(*one.edge_begin() == 20);
+
+                    SECTION("get topological order")
+                    {
+                        auto topo_pair = one.topological_order();
+
+                        REQUIRE(topo_pair.second - topo_pair.first == 3);
+                        REQUIRE(*topo_pair.first != 'c');
+                    }
+                }
             }
 
             SECTION("get topological order")
@@ -237,6 +271,15 @@ TEST_CASE("test dag", "[dag<char, int>]")
                 REQUIRE(*topo_pair.first == 'a');
                 REQUIRE(*(topo_pair.first + 1) == 'b');
                 REQUIRE(topo_pair.second - topo_pair.first == 2);
+            }
+
+            SECTION("remove edge")
+            {
+                one.remove_edge(e_it1);
+
+                REQUIRE(one.size() == 2);
+                REQUIRE(one.edge_size() == 0);
+                REQUIRE(one.edge_begin() == one.edge_end());
             }
         }
 
