@@ -39,6 +39,13 @@ TEST_CASE("test dag", "[dag<char, int>]")
             REQUIRE(child_pair.first == child_pair.second);
         }
 
+        SECTION("attempt to get parents of first node")
+        {
+            auto parent_pair = one.parents(it1);
+
+            REQUIRE(parent_pair.first == parent_pair.second);
+        }
+
 
         SECTION("add another node and an edge between them")
         {
@@ -63,6 +70,14 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 REQUIRE(*child_pair.first == 'b');
                 REQUIRE(child_pair.second - child_pair.first == 1);
+            }
+
+            SECTION("get parents of second node")
+            {
+                auto parent_pair = one.parents(it2);
+
+                REQUIRE(*parent_pair.first == 'a');
+                REQUIRE(parent_pair.second - parent_pair.first == 1);
             }
 
             SECTION("attempt to add a cyclic edge")
@@ -95,6 +110,43 @@ TEST_CASE("test dag", "[dag<char, int>]")
                     REQUIRE(std::find(child_pair.first,
                                       child_pair.second,
                                       'a') == child_pair.second);
+                }
+
+                SECTION("get parents of third node")
+                {
+                    auto parent_pair = one.parents(it3);
+
+                    REQUIRE(*parent_pair.first == 'a');
+                    REQUIRE(parent_pair.second - parent_pair.first == 1);
+                }
+
+                SECTION("add another node with edge from second and third")
+                {
+                    auto it4 = one.add_node('d');
+                    auto e_it3 = one.add_edge(it2, it4, 30);
+                    auto e_it4 = one.add_edge(it3, it4, 40);
+
+                    REQUIRE(one.size() == 4);
+                    REQUIRE(one.edge_size() == 4);
+
+                    SECTION("get parents of fourth node")
+                    {
+                        auto parent_pair = one.parents(it4);
+
+                        REQUIRE(parent_pair.second - parent_pair.first == 2);
+                        REQUIRE(std::find(parent_pair.first,
+                                          parent_pair.second,
+                                          'b') != parent_pair.second);
+                        REQUIRE(std::find(parent_pair.first,
+                                          parent_pair.second,
+                                          'c') != parent_pair.second);
+                        REQUIRE(std::find(parent_pair.first,
+                                          parent_pair.second,
+                                          'a') == parent_pair.second);
+                        REQUIRE(std::find(parent_pair.first,
+                                          parent_pair.second,
+                                          'd') == parent_pair.second);
+                    }
                 }
             }
         }

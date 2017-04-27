@@ -506,6 +506,15 @@ public:
             order_iterator(order.size(), order, node_properties_));
     }
 
+    std::pair<order_iterator, order_iterator>
+    parents(iterator node)
+    {
+        auto order = parent_order(node.current_index_);
+
+        return std::make_pair(
+            order_iterator(0, order, node_properties_),
+            order_iterator(order.size(), order, node_properties_));
+    }
 
 private:
     std::vector<size_type>
@@ -515,10 +524,26 @@ private:
 
         std::for_each(
             edges_.begin(), edges_.end(), [&out, parent_index](const edge& ed) {
-
                 if(ed.from_property == parent_index)
                 {
                     out.push_back(ed.to_property);
+                }
+            });
+
+        return out;
+    }
+
+
+    std::vector<size_type>
+    parent_order(size_type child_index) const
+    {
+        std::vector<size_type> out;
+
+        std::for_each(
+            edges_.begin(), edges_.end(), [&out, child_index](const edge& ed) {
+                if(ed.to_property == child_index)
+                {
+                    out.push_back(ed.from_property);
                 }
             });
 
