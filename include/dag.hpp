@@ -512,6 +512,20 @@ public:
     }
 
 
+    void
+    remove_edge(edge_iterator ed)
+    {
+        const auto index = ed.current_index_;
+
+        // swap and pop
+        std::swap(edges_[index], edges_.back());
+        edges_.pop_back();
+
+        std::swap(edge_properties_[index], edge_properties_.back());
+        edge_properties_.pop_back();
+    }
+
+
     // returns pair of iterator to nodes connected by edge ed <from , to>
     std::pair<iterator, iterator>
     edge_endpoints(edge_iterator ed)
