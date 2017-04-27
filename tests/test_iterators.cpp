@@ -212,3 +212,26 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
         }
     }
 }
+
+TEST_CASE("ordered iterator with mock vector of mock structs",
+          "[ordere_iterator_]")
+{
+    struct has_function
+    {
+        int i;
+
+        int
+        get_i() const
+        {
+            return i;
+        }
+    };
+
+    std::vector<has_function> mock_nodes{{2}, {4}, {1}, {0}, {3}};
+    std::vector<std::vector<has_function>::size_type> mock_order{3, 2, 0, 4, 1};
+
+    helene::ordered_iterator_<has_function> it1(0, mock_order, mock_nodes);
+
+
+    REQUIRE(it1->get_i() == 0);
+}

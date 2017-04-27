@@ -209,6 +209,11 @@ public:
         return !(*this == other);
     }
 
+    pointer operator->()
+    {
+        return &(nodes_ref_.get()[indices_[current_index_to_index_]]);
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;
