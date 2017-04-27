@@ -248,6 +248,8 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
             auto it3 = it2 - 3;
 
             REQUIRE(*it3 == 'a');
+            REQUIRE(it2 - it3 == 3);
+            REQUIRE(it3 - it2 == -3);
         }
     }
 
