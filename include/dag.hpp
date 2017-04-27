@@ -5,6 +5,7 @@
 #include <iterator>
 #include <functional>
 #include <algorithm>
+#include <numeric>
 
 
 namespace helene
@@ -526,6 +527,16 @@ public:
             order_iterator(order.size(), order, node_properties_));
     }
 
+    std::pair<order_iterator, order_iterator>
+    start_nodes()
+    {
+        auto order = start_nodes_order();
+
+        return std::make_pair(
+            order_iterator(0, order, node_properties_),
+            order_iterator(order.size(), order, node_properties_));
+    }
+
 private:
     std::vector<size_type>
     child_order(size_type parent_index) const
@@ -558,6 +569,47 @@ private:
             });
 
         return out;
+    }
+
+
+    std::vector<size_type>
+    start_nodes_order() const
+    {
+        std::vector<size_type> node_indices(node_properties_.size());
+        std::iota(node_indices.begin(), node_indices.end(), 0);
+
+        node_indices.erase(
+            // remove index if it is found in the to_property field of any
+            // edge in edges_
+            std::remove_if(node_indices.begin(),
+                           node_indices.end(),
+                           [this](size_type index) {
+                               auto found =
+                                   std::find_if(edges_.begin(),
+                                                edges_.end(),
+                                                [index](const edge& ed) {
+                                                    if(ed.to_property == index)
+                                                    {
+                                                        return true;
+                                                    }
+                                                    else
+                                                    {
+                                                        return false;
+                                                    }
+                                                });
+
+                               if(found != edges_.end())
+                               {
+                                   return true;
+                               }
+                               else
+                               {
+                                   return false;
+                               }
+                           }),
+            node_indices.end());
+
+        return node_indices;
     }
 
 private:

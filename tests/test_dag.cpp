@@ -147,6 +147,39 @@ TEST_CASE("test dag", "[dag<char, int>]")
                                           parent_pair.second,
                                           'd') == parent_pair.second);
                     }
+
+                    SECTION("get start nodes")
+                    {
+                        auto start_pair = one.start_nodes();
+
+                        REQUIRE(*start_pair.first == 'a');
+                        REQUIRE(start_pair.second - start_pair.first == 1);
+                    }
+
+
+                    SECTION("add a node with no connections to it")
+                    {
+                        auto it5 = one.add_node('e');
+
+                        REQUIRE(one.size() == 5);
+                        REQUIRE(one.edge_size() == 4);
+
+                        SECTION("get start nodes")
+                        {
+                            auto start_pair = one.start_nodes();
+
+                            REQUIRE(start_pair.second - start_pair.first == 2);
+                            REQUIRE(std::find(start_pair.first,
+                                              start_pair.second,
+                                              'a') != start_pair.second);
+                            REQUIRE(std::find(start_pair.first,
+                                              start_pair.second,
+                                              'e') != start_pair.second);
+                            REQUIRE(std::find(start_pair.first,
+                                              start_pair.second,
+                                              'b') == start_pair.second);
+                        }
+                    }
                 }
             }
         }
@@ -158,5 +191,20 @@ TEST_CASE("test dag", "[dag<char, int>]")
             REQUIRE(it_no == one.edge_end());
             REQUIRE(one.edge_size() == 0);
         }
+
+        SECTION("get start nodes")
+        {
+            auto start_pair = one.start_nodes();
+
+            REQUIRE(*start_pair.first == 'a');
+            REQUIRE(start_pair.second - start_pair.first == 1);
+        }
+    }
+
+    SECTION("attempt to get start nodes of empty dag")
+    {
+        auto start_pair = one.start_nodes();
+
+        REQUIRE(start_pair.first == start_pair.second);
     }
 }
