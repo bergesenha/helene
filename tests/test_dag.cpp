@@ -58,5 +58,13 @@ TEST_CASE("test dag", "[dag<char, int>]")
                 REQUIRE(one.edge_size() == 1);
             }
         }
+
+        SECTION("attempt to add edge from a node to itself")
+        {
+            auto it_no = one.add_edge(it1, it1, 2000);
+
+            REQUIRE(it_no == one.edge_end());
+            REQUIRE(one.edge_size() == 0);
+        }
     }
 }
