@@ -182,6 +182,23 @@ public:
     {
     }
 
+public:
+    reference operator*()
+    {
+        return nodes_ref_.get()[indices_[current_index_to_index_]];
+    }
+
+    ordered_iterator_& operator++()
+    {
+        ++current_index_to_index_;
+        return *this;
+    }
+
+    bool
+    operator==(const ordered_iterator_& other) const
+    {
+        return (current_index_to_index_ == other.current_index_to_index_);
+    }
 
 private:
     index_type current_index_to_index_;

@@ -177,3 +177,22 @@ TEST_CASE("persistent_iterator_ to mock vector of a mock struct",
 
     REQUIRE(my_iter->get_i() == 2);
 }
+
+
+TEST_CASE("ordered_iterator_ with mock order and mock vector",
+          "[ordered_iterator_")
+{
+    std::vector<char> mock_vec{'c', 'e', 'b', 'a', 'd'};
+    std::vector<std::vector<char>::size_type> mock_order{3, 2, 0, 4, 1};
+
+    helene::ordered_iterator_<char> it1(0, mock_order, mock_vec);
+
+    REQUIRE(*it1 == 'a');
+
+    SECTION("preincrement iterator")
+    {
+        ++it1;
+
+        REQUIRE(*it1 == 'b');
+    }
+}
