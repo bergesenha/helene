@@ -189,11 +189,18 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
 
     REQUIRE(*it1 == 'a');
 
+    REQUIRE(it1[0] == 'a');
+    REQUIRE(it1[1] == 'b');
+    REQUIRE(it1[4] == 'e');
+
     SECTION("preincrement iterator")
     {
         ++it1;
 
         REQUIRE(*it1 == 'b');
+
+        REQUIRE(it1[-1] == 'a');
+        REQUIRE(it1[1] == 'c');
 
 
         SECTION("predecrement iterator")

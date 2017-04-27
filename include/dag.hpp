@@ -276,6 +276,11 @@ public:
         return current_index_to_index_ - other.current_index_to_index_;
     }
 
+    reference operator[](difference_type n)
+    {
+        return nodes_ref_.get()[indices_[current_index_to_index_ + n]];
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;
