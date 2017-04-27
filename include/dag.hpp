@@ -4,6 +4,7 @@
 #include <vector>
 #include <iterator>
 #include <functional>
+#include <algorithm>
 
 
 namespace helene
@@ -341,6 +342,10 @@ public:
     typedef persistent_iterator_<EdgeType> edge_iterator;
 
 
+    // special iterator typedefs
+    typedef ordered_iterator_<NodeType> order_iterator;
+    typedef ordered_iterator_<EdgeType> edge_order_iterator;
+
 private:
     ////////////////////////////////////////////////////////////////////////////
     // internal classes
@@ -488,6 +493,36 @@ public:
         return std::make_pair(
             iterator(edges_[edge_index].from_property, node_properties_),
             iterator(edges_[edge_index].to_property, node_properties_));
+    }
+
+
+    std::pair<order_iterator, order_iterator>
+    children(iterator node)
+    {
+        auto order = child_order(node.current_index_);
+
+        return std::make_pair(
+            order_iterator(0, order, node_properties_),
+            order_iterator(order.size(), order, node_properties_));
+    }
+
+
+private:
+    std::vector<size_type>
+    child_order(size_type parent_index) const
+    {
+        std::vector<size_type> out;
+
+        std::for_each(
+            edges_.begin(), edges_.end(), [&out, parent_index](const edge& ed) {
+
+                if(ed.from_property == parent_index)
+                {
+                    out.push_back(ed.to_property);
+                }
+            });
+
+        return out;
     }
 
 private:
