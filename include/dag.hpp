@@ -228,6 +228,13 @@ public:
         return *this;
     }
 
+    ordered_iterator_ operator--(int)
+    {
+        auto temp = *this;
+        --(*this);
+        return temp;
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;
