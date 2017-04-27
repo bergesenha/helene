@@ -235,6 +235,14 @@ public:
         return temp;
     }
 
+    // RandomAccessIterator
+    ordered_iterator_&
+    operator+=(difference_type n)
+    {
+        current_index_to_index_ += n;
+        return *this;
+    }
+
     ordered_iterator_
     operator+(difference_type n) const
     {

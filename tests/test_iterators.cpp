@@ -243,6 +243,13 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
 
         REQUIRE(*it2 == 'd');
     }
+
+    SECTION("append integer to iterator")
+    {
+        it1 += 3;
+
+        REQUIRE(*it1 == 'd');
+    }
 }
 
 TEST_CASE("ordered iterator with mock vector of mock structs",
