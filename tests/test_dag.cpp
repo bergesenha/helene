@@ -179,8 +179,59 @@ TEST_CASE("test dag", "[dag<char, int>]")
                                               start_pair.second,
                                               'b') == start_pair.second);
                         }
+
+                        SECTION("add edge from fifth node to first")
+                        {
+                            auto e_it5 = one.add_edge(it5, it1, 50);
+
+                            SECTION("get topological_order")
+                            {
+                                auto topo_pair = one.topological_order();
+
+                                REQUIRE(*topo_pair.first == 'e');
+                                REQUIRE(*std::next(topo_pair.first) == 'a');
+                                REQUIRE(*std::prev(topo_pair.second) == 'd');
+                            }
+                        }
+                    }
+
+                    SECTION("get topological order")
+                    {
+                        auto topo_pair = one.topological_order();
+
+                        REQUIRE(*topo_pair.first == 'a');
+                        REQUIRE(*std::prev(topo_pair.second) == 'd');
+                        REQUIRE(std::find(std::next(topo_pair.first),
+                                          std::prev(topo_pair.second),
+                                          'b') != std::prev(topo_pair.second));
+                        REQUIRE(std::find(std::next(topo_pair.first),
+                                          std::prev(topo_pair.second),
+                                          'c') != std::prev(topo_pair.second));
                     }
                 }
+
+                SECTION("get topological order")
+                {
+                    auto topo_pair = one.topological_order();
+
+                    REQUIRE(*topo_pair.first == 'a');
+                    REQUIRE(std::find(topo_pair.first + 1,
+                                      topo_pair.second,
+                                      'b') != topo_pair.second);
+                    REQUIRE(std::find(topo_pair.first + 1,
+                                      topo_pair.second,
+                                      'c') != topo_pair.second);
+                    REQUIRE(topo_pair.second - topo_pair.first == 3);
+                }
+            }
+
+            SECTION("get topological order")
+            {
+                auto topo_pair = one.topological_order();
+
+                REQUIRE(*topo_pair.first == 'a');
+                REQUIRE(*(topo_pair.first + 1) == 'b');
+                REQUIRE(topo_pair.second - topo_pair.first == 2);
             }
         }
 
@@ -198,6 +249,14 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             REQUIRE(*start_pair.first == 'a');
             REQUIRE(start_pair.second - start_pair.first == 1);
+        }
+
+        SECTION("get topological order")
+        {
+            auto topo_pair = one.topological_order();
+
+            REQUIRE(*topo_pair.first == 'a');
+            REQUIRE(topo_pair.second - topo_pair.first == 1);
         }
     }
 

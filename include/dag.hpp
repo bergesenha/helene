@@ -544,6 +544,60 @@ public:
             order_iterator(order.size(), order, node_properties_));
     }
 
+
+    std::pair<order_iterator, order_iterator>
+    topological_order()
+    {
+
+        // will eventually contain topological order
+        std::vector<size_type> order;
+        order.reserve(node_properties_.size());
+
+        // initialize nodes with start nodes
+        auto nodes = start_nodes_order(edges_);
+
+        // keep track of what edges are removed
+        std::vector<mark> edge_marks(edges_.size(), mark::not_removed);
+
+        while(!nodes.empty())
+        {
+            order.push_back(nodes.back());
+            nodes.pop_back();
+
+            // get children
+            auto child_indices = child_order(order.back(), edges_, edge_marks);
+
+            // remove edges to children
+            auto out_edges = out_edge_order(order.back(), edges_, edge_marks);
+            std::for_each(out_edges.begin(),
+                          out_edges.end(),
+                          [&edge_marks](edge_size_type edge_index) {
+                              edge_marks[edge_index] = mark::removed;
+                          });
+
+            for_each(child_indices.begin(),
+                     child_indices.end(),
+                     [&nodes, &edge_marks, this](size_type child_index) {
+
+                         // check if there are other edges going into child
+                         auto other_parents =
+                             parent_order(child_index, edges_, edge_marks);
+
+                         if(other_parents.empty())
+                         {
+                             nodes.push_back(child_index);
+                         }
+
+                     });
+        }
+
+        // TODO: check if edges left... ie. cycle
+
+        return std::make_pair(
+            order_iterator(0, order, node_properties_),
+            order_iterator(order.size(), order, node_properties_));
+    }
+
 private:
     std::vector<size_type>
     child_order(size_type parent_index, const std::vector<edge>& edges) const
