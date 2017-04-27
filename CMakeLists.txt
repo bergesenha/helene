@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.7)
 
 project(helene CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(HELENE_BUILD_TESTS "Build unit tests" ON)
 
@@ -13,6 +14,8 @@ if(HELENE_BUILD_TESTS)
 
     set(HELENE_TEST_SRC
         tests/test_main.cpp
+        tests/test_dag.cpp
+        tests/test_iterators.cpp
         )
 
     add_executable(unit_tests ${HELENE_TEST_SRC})
