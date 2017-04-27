@@ -481,6 +481,7 @@ public:
     {
         const auto index = node_properties_.size();
         node_properties_.push_back(prop);
+        topo_cache_.push_back(index);
         return iterator(index, node_properties_);
     }
 
@@ -498,7 +499,16 @@ public:
         edge_properties_.push_back(prop);
         edges_.emplace_back(from_index, to_index);
 
-        return edge_iterator(index, edge_properties_);
+        if(update_topological_order())
+        {
+            return edge_iterator(index, edge_properties_);
+        }
+        else
+        {
+            edge_properties_.pop_back();
+            edges_.pop_back();
+            return edge_end();
+        }
     }
 
 
@@ -548,54 +558,9 @@ public:
     std::pair<order_iterator, order_iterator>
     topological_order()
     {
-
-        // will eventually contain topological order
-        std::vector<size_type> order;
-        order.reserve(node_properties_.size());
-
-        // initialize nodes with start nodes
-        auto nodes = start_nodes_order(edges_);
-
-        // keep track of what edges are removed
-        std::vector<mark> edge_marks(edges_.size(), mark::not_removed);
-
-        while(!nodes.empty())
-        {
-            order.push_back(nodes.back());
-            nodes.pop_back();
-
-            // get children
-            auto child_indices = child_order(order.back(), edges_, edge_marks);
-
-            // remove edges to children
-            auto out_edges = out_edge_order(order.back(), edges_, edge_marks);
-            std::for_each(out_edges.begin(),
-                          out_edges.end(),
-                          [&edge_marks](edge_size_type edge_index) {
-                              edge_marks[edge_index] = mark::removed;
-                          });
-
-            for_each(child_indices.begin(),
-                     child_indices.end(),
-                     [&nodes, &edge_marks, this](size_type child_index) {
-
-                         // check if there are other edges going into child
-                         auto other_parents =
-                             parent_order(child_index, edges_, edge_marks);
-
-                         if(other_parents.empty())
-                         {
-                             nodes.push_back(child_index);
-                         }
-
-                     });
-        }
-
-        // TODO: check if edges left... ie. cycle
-
         return std::make_pair(
-            order_iterator(0, order, node_properties_),
-            order_iterator(order.size(), order, node_properties_));
+            order_iterator(0, topo_cache_, node_properties_),
+            order_iterator(topo_cache_.size(), topo_cache_, node_properties_));
     }
 
 private:
@@ -751,11 +716,70 @@ private:
         return node_indices;
     }
 
+    bool
+    update_topological_order()
+    {
+
+        // will eventually contain topological order
+        std::vector<size_type> order;
+        order.reserve(node_properties_.size());
+
+        // initialize nodes with start nodes
+        auto nodes = start_nodes_order(edges_);
+
+        // keep track of what edges are removed
+        std::vector<mark> edge_marks(edges_.size(), mark::not_removed);
+
+        while(!nodes.empty())
+        {
+            order.push_back(nodes.back());
+            nodes.pop_back();
+
+            // get children
+            auto child_indices = child_order(order.back(), edges_, edge_marks);
+
+            // remove edges to children
+            auto out_edges = out_edge_order(order.back(), edges_, edge_marks);
+            std::for_each(out_edges.begin(),
+                          out_edges.end(),
+                          [&edge_marks](edge_size_type edge_index) {
+                              edge_marks[edge_index] = mark::removed;
+                          });
+
+            for_each(child_indices.begin(),
+                     child_indices.end(),
+                     [&nodes, &edge_marks, this](size_type child_index) {
+
+                         // check if there are other edges going into child
+                         auto other_parents =
+                             parent_order(child_index, edges_, edge_marks);
+
+                         if(other_parents.empty())
+                         {
+                             nodes.push_back(child_index);
+                         }
+
+                     });
+        }
+
+        if(std::find(edge_marks.begin(), edge_marks.end(), mark::not_removed) !=
+           edge_marks.end())
+        {
+            return false;
+        }
+        else
+        {
+            topo_cache_ = order;
+            return true;
+        }
+    }
+
 private:
     std::vector<NodeType> node_properties_;
     std::vector<EdgeType> edge_properties_;
-
     std::vector<edge> edges_;
+
+    std::vector<size_type> topo_cache_;
 };
 }
 
