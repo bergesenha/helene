@@ -235,6 +235,13 @@ public:
         return temp;
     }
 
+    ordered_iterator_
+    operator+(difference_type n) const
+    {
+        return ordered_iterator_(
+            current_index_to_index_ + n, indices_, nodes_ref_);
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;
