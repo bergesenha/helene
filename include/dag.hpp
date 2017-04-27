@@ -281,6 +281,31 @@ public:
         return nodes_ref_.get()[indices_[current_index_to_index_ + n]];
     }
 
+    bool
+    operator<(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ < other.current_index_to_index_;
+    }
+
+    bool
+    operator>(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ > other.current_index_to_index_;
+    }
+
+    bool
+    operator<=(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ <= other.current_index_to_index_;
+    }
+
+    bool
+    operator>=(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ >= other.current_index_to_index_;
+    }
+
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;

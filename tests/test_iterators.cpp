@@ -209,6 +209,10 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
 
             REQUIRE(*it2 == 'a');
             REQUIRE(*it1 == 'a');
+
+            REQUIRE(it2 == it1);
+            REQUIRE(it2 >= it1);
+            REQUIRE(it2 <= it1);
         }
 
         SECTION("postdecrement iterator")
@@ -217,6 +221,11 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
 
             REQUIRE(*it2 == 'b');
             REQUIRE(*it1 == 'a');
+
+            REQUIRE(it2 > it1);
+            REQUIRE(it2 >= it1);
+            REQUIRE(it1 < it2);
+            REQUIRE(it1 <= it2);
         }
     }
 
