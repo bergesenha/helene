@@ -555,6 +555,28 @@ public:
     }
 
 
+    // return iterator to edge between from and to if it exists, otherwise will
+    // return edge_end()
+    edge_iterator
+    connecting_edge(iterator from, iterator to)
+    {
+        auto found = std::find_if(
+            edges_.begin(), edges_.end(), [from, to](const edge& ed) {
+                if(ed.from_property == from.current_index_ &&
+                   ed.to_property == to.current_index_)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+
+        return edge_iterator(found - edges_.begin(), edge_properties_);
+    }
+
+
     std::pair<order_iterator, order_iterator>
     topological_order()
     {

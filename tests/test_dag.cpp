@@ -64,6 +64,11 @@ TEST_CASE("test dag", "[dag<char, int>]")
             REQUIRE(*one.edge_endpoints(e_it1).first == 'a');
             REQUIRE(*one.edge_endpoints(e_it1).second == 'b');
 
+            REQUIRE(one.connecting_edge(it1, it2) != one.edge_end());
+            REQUIRE(*one.connecting_edge(it1, it2) == 10);
+
+            REQUIRE(one.connecting_edge(it2, it1) == one.edge_end());
+
             SECTION("get children of first node")
             {
                 auto child_pair = one.children(it1);
