@@ -5,100 +5,57 @@
 #include <dag.hpp>
 
 
-TEST_CASE("dag with node type char and edge type int", "[dag<char, int>]")
+TEST_CASE("test dag", "[dag<char, int>]")
 {
-    helene::dag<char, int> a;
+    typedef helene::dag<char, int> dag_type;
 
+    dag_type one;
 
-    SECTION("adding a node")
+    REQUIRE(one.size() == 0);
+    REQUIRE(one.edge_size() == 0);
+    REQUIRE(one.begin() == one.end());
+    REQUIRE(one.end() - one.begin() == 0);
+    REQUIRE(one.edge_begin() == one.edge_end());
+    REQUIRE(one.edge_end() - one.edge_begin() == 0);
+
+    SECTION("add a node")
     {
-        auto node_it_a = a.add_node('a');
+        auto it1 = one.add_node('a');
 
-        REQUIRE(*node_it_a == 'a');
-        REQUIRE(*a.begin() == 'a');
-        REQUIRE(*a.cbegin() == 'a');
-        REQUIRE(a.begin() == node_it_a);
-        REQUIRE(a.cbegin() == node_it_a);
-        REQUIRE(a.begin() != a.end());
-        REQUIRE(a.end() - a.begin() == 1);
+        REQUIRE(one.size() == 1);
+        REQUIRE(one.edge_size() == 0);
+        REQUIRE(one.begin() != one.end());
+        REQUIRE(one.end() - one.begin() == 1);
+        REQUIRE(one.edge_begin() == one.edge_end());
+        REQUIRE(one.edge_end() - one.edge_begin() == 0);
 
-        REQUIRE(a.edge_begin() == a.edge_end());
-        REQUIRE(a.edge_cbegin() == a.edge_cend());
-        REQUIRE(a.edge_end() - a.edge_begin() == 0);
+        REQUIRE(*it1 == 'a');
 
-        SECTION("incrementing iterator")
+
+        SECTION("add another node and an edge between them")
         {
-            ++node_it_a;
+            auto it2 = one.add_node('b');
+            auto e_it1 = one.add_edge(it1, it2, 10);
 
-            REQUIRE(node_it_a == a.end());
-            REQUIRE(node_it_a == a.cend());
-        }
+            REQUIRE(*it1 == 'a');
+            REQUIRE(*it2 == 'b');
+            REQUIRE(*e_it1 == 10);
 
-        SECTION("add another node and an edge from first to second")
-        {
-            auto node_it_b = a.add_node('b');
-            auto edge_it_10 = a.add_edge(node_it_a, node_it_b, 10);
+            REQUIRE(one.size() == 2);
+            REQUIRE(one.edge_size() == 1);
+            REQUIRE(one.edge_end() != one.edge_begin());
+            REQUIRE(one.edge_end() - one.edge_begin() == 1);
 
-            REQUIRE(*edge_it_10 == 10);
-            REQUIRE(edge_it_10 == a.edge_begin());
-            REQUIRE(a.edge_end() - edge_it_10 == 1);
-            REQUIRE(a.edge_begin() != a.edge_end());
+            REQUIRE(*one.edge_endpoints(e_it1).first == 'a');
+            REQUIRE(*one.edge_endpoints(e_it1).second == 'b');
 
-            SECTION("attempt to introduce edge causing cycle")
+
+            SECTION("attempt to add a cyclic edge")
             {
-                auto edge_it_no = a.add_edge(node_it_a, node_it_b, 100);
+                auto it_no = one.add_edge(it2, it1, 1000);
 
-                REQUIRE(edge_it_no == a.edge_end());
-            }
-
-            SECTION("copy construct another dag")
-            {
-                helene::dag<char, int> mydag2 = a;
-
-                REQUIRE(*a.begin() == *mydag2.begin());
-                REQUIRE(std::equal(a.begin(), a.end(), mydag2.begin()));
-                REQUIRE(std::equal(
-                    a.edge_begin(), a.edge_end(), mydag2.edge_begin()));
-
-                REQUIRE(a == mydag2);
-            }
-
-            SECTION("copy assign another dag")
-            {
-                helene::dag<char, int> mydag2;
-                mydag2 = a;
-
-                REQUIRE(*a.begin() == *mydag2.begin());
-                REQUIRE(std::equal(a.begin(), a.end(), mydag2.begin()));
-                REQUIRE(std::equal(
-                    a.edge_begin(), a.edge_end(), mydag2.edge_begin()));
-
-                REQUIRE(a == mydag2);
-            }
-
-            SECTION("swap with another dag")
-            {
-                helene::dag<char, int> mydag2;
-                mydag2.add_node('c');
-
-                a.swap(mydag2);
-
-                REQUIRE(mydag2 != a);
-                REQUIRE(*mydag2.begin() == 'a');
-                REQUIRE(*a.begin() == 'c');
-                REQUIRE(*mydag2.edge_begin() == 10);
-            }
-
-            SECTION("using std::swap with another")
-            {
-                helene::dag<char, int> mydag2;
-                mydag2.add_node('c');
-                std::swap(a, mydag2);
-
-                REQUIRE(mydag2 != a);
-                REQUIRE(*mydag2.begin() == 'a');
-                REQUIRE(*a.begin() == 'c');
-                REQUIRE(*mydag2.edge_begin() == 10);
+                REQUIRE(it_no == one.edge_end());
+                REQUIRE(one.edge_size() == 1);
             }
         }
     }

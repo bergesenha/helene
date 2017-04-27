@@ -3,15 +3,315 @@
 
 #include <vector>
 #include <iterator>
+#include <functional>
 
 
 namespace helene
 {
 
 
-class start_node_iterator_
+template <class PropertyType>
+class persistent_iterator_
 {
+    template <class NodeType, class EdgeType>
+    friend class dag;
+
+public:
+    typedef typename std::vector<PropertyType>::size_type size_type;
+
+    typedef typename std::vector<PropertyType>::difference_type difference_type;
+    typedef PropertyType value_type;
+    typedef PropertyType* pointer;
+    typedef PropertyType& reference;
+
+public:
+    persistent_iterator_(size_type current_index,
+                         std::vector<PropertyType>& nodes)
+        : current_index_(current_index), nodes_ref_(nodes)
+    {
+    }
+
+public:
+    // Iterator concept member functions
+    reference operator*()
+    {
+        return nodes_ref_.get()[current_index_];
+    }
+
+    persistent_iterator_& operator++()
+    {
+        ++current_index_;
+        return *this;
+    }
+
+    // EqualityComparable
+    bool
+    operator==(const persistent_iterator_& other) const
+    {
+        return (current_index_ == other.current_index_) &&
+               (&(nodes_ref_.get()) == &(other.nodes_ref_.get()));
+    }
+
+    // InputIterator
+    bool
+    operator!=(const persistent_iterator_& other) const
+    {
+        return !(*this == other);
+    }
+
+    pointer operator->()
+    {
+        return &(nodes_ref_.get()[current_index_]);
+    }
+
+    persistent_iterator_ operator++(int)
+    {
+        auto temp = *this;
+        ++(*this);
+
+        return temp;
+    }
+
+    // BidirectionalIterator
+    persistent_iterator_& operator--()
+    {
+        --current_index_;
+        return *this;
+    }
+
+    persistent_iterator_ operator--(int)
+    {
+        auto temp = *this;
+        --(*this);
+        return temp;
+    }
+
+    // RandomAccessIterator
+    persistent_iterator_&
+    operator+=(difference_type n)
+    {
+        current_index_ += n;
+        return *this;
+    }
+
+    persistent_iterator_
+    operator+(difference_type n) const
+    {
+        return persistent_iterator_(current_index_ + n, nodes_ref_);
+    }
+
+    friend persistent_iterator_
+    operator+(difference_type lhs, const persistent_iterator_& rhs)
+    {
+        return rhs + lhs;
+    }
+
+    persistent_iterator_&
+    operator-=(difference_type n)
+    {
+        current_index_ -= n;
+        return *this;
+    }
+
+    persistent_iterator_
+    operator-(difference_type n) const
+    {
+        return persistent_iterator_(current_index_ - n, nodes_ref_);
+    }
+
+    difference_type
+    operator-(const persistent_iterator_& other) const
+    {
+        return current_index_ - other.current_index_;
+    }
+
+    reference operator[](difference_type n)
+    {
+        return nodes_ref_.get()[current_index_ + n];
+    }
+
+    bool
+    operator<(const persistent_iterator_& other) const
+    {
+        return current_index_ < other.current_index_;
+    }
+
+    bool
+    operator>(const persistent_iterator_& other) const
+    {
+        return current_index_ > other.current_index_;
+    }
+
+    bool
+    operator<=(const persistent_iterator_& other) const
+    {
+        return current_index_ <= other.current_index_;
+    }
+
+    bool
+    operator>=(const persistent_iterator_& other) const
+    {
+        return current_index_ >= other.current_index_;
+    }
+
+private:
+    size_type current_index_;
+    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
 };
+
+
+template <class PropertyType>
+class ordered_iterator_
+{
+public:
+    typedef typename std::vector<PropertyType>::size_type size_type;
+    typedef typename std::vector<size_type>::difference_type difference_type;
+    typedef PropertyType value_type;
+    typedef PropertyType* pointer;
+    typedef PropertyType& reference;
+
+    typedef typename std::vector<size_type>::size_type index_type;
+
+public:
+    ordered_iterator_(index_type current_index_to_index,
+                      const std::vector<size_type>& indices,
+                      std::vector<PropertyType>& nodes)
+        : current_index_to_index_(current_index_to_index),
+          indices_(indices),
+          nodes_ref_(nodes)
+    {
+    }
+
+public:
+    // Iterator
+    reference operator*()
+    {
+        return nodes_ref_.get()[indices_[current_index_to_index_]];
+    }
+
+    ordered_iterator_& operator++()
+    {
+        ++current_index_to_index_;
+        return *this;
+    }
+
+    // Equality comparable
+    bool
+    operator==(const ordered_iterator_& other) const
+    {
+        return (current_index_to_index_ == other.current_index_to_index_);
+    }
+
+    // InputIterator
+    bool
+    operator!=(const ordered_iterator_& other) const
+    {
+        return !(*this == other);
+    }
+
+    pointer operator->()
+    {
+        return &(nodes_ref_.get()[indices_[current_index_to_index_]]);
+    }
+
+    ordered_iterator_ operator++(int)
+    {
+        auto temp = *this;
+        ++(*this);
+        return temp;
+    }
+
+    // BidirectionalIterator
+    ordered_iterator_& operator--()
+    {
+        --current_index_to_index_;
+        return *this;
+    }
+
+    ordered_iterator_ operator--(int)
+    {
+        auto temp = *this;
+        --(*this);
+        return temp;
+    }
+
+    // RandomAccessIterator
+    ordered_iterator_&
+    operator+=(difference_type n)
+    {
+        current_index_to_index_ += n;
+        return *this;
+    }
+
+    ordered_iterator_
+    operator+(difference_type n) const
+    {
+        return ordered_iterator_(
+            current_index_to_index_ + n, indices_, nodes_ref_);
+    }
+
+    friend ordered_iterator_
+    operator+(difference_type lhs, const ordered_iterator_& rhs)
+    {
+        return rhs + lhs;
+    }
+
+    ordered_iterator_&
+    operator-=(difference_type n)
+    {
+        current_index_to_index_ -= n;
+        return *this;
+    }
+
+    ordered_iterator_
+    operator-(difference_type n) const
+    {
+        return ordered_iterator_(
+            current_index_to_index_ - n, indices_, nodes_ref_);
+    }
+
+    difference_type
+    operator-(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ - other.current_index_to_index_;
+    }
+
+    reference operator[](difference_type n)
+    {
+        return nodes_ref_.get()[indices_[current_index_to_index_ + n]];
+    }
+
+    bool
+    operator<(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ < other.current_index_to_index_;
+    }
+
+    bool
+    operator>(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ > other.current_index_to_index_;
+    }
+
+    bool
+    operator<=(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ <= other.current_index_to_index_;
+    }
+
+    bool
+    operator>=(const ordered_iterator_& other) const
+    {
+        return current_index_to_index_ >= other.current_index_to_index_;
+    }
+
+
+private:
+    index_type current_index_to_index_;
+    std::vector<size_type> indices_;
+    std::reference_wrapper<std::vector<PropertyType>> nodes_ref_;
+};
+
 
 template <class NodeType, class EdgeType>
 class dag
@@ -24,30 +324,22 @@ public:
     typedef NodeType value_type;
     typedef NodeType& reference;
     typedef const NodeType& const_reference;
-
     typedef typename std::vector<NodeType>::difference_type difference_type;
     typedef typename std::vector<NodeType>::size_type size_type;
 
-    typedef typename std::vector<NodeType>::iterator iterator;
-    typedef typename std::vector<NodeType>::const_iterator const_iterator;
+    typedef persistent_iterator_<NodeType> iterator;
 
 
     // edge typedefs
     typedef EdgeType edge_value_type;
     typedef EdgeType& edge_reference;
     typedef const EdgeType& const_edge_reference;
-
     typedef typename std::vector<EdgeType>::size_type edge_size_type;
     typedef
         typename std::vector<EdgeType>::difference_type edge_difference_type;
 
-    typedef typename std::vector<EdgeType>::iterator edge_iterator;
-    typedef typename std::vector<EdgeType>::const_iterator edge_const_iterator;
+    typedef persistent_iterator_<EdgeType> edge_iterator;
 
-
-    // iterator typedefs
-    typedef start_node_iterator_ start_node_iterator;
-    typedef const start_node_iterator const_start_node_iterator;
 
 private:
     ////////////////////////////////////////////////////////////////////////////
@@ -84,49 +376,26 @@ public:
     iterator
     begin()
     {
-        return node_properties_.begin();
+        return iterator(0, node_properties_);
     }
 
     iterator
     end()
     {
-        return node_properties_.end();
+        return iterator(node_properties_.size(), node_properties_);
     }
 
-    const_iterator
-    cbegin() const
-    {
-        return node_properties_.cbegin();
-    }
-
-    const_iterator
-    cend() const
-    {
-        return node_properties_.cend();
-    }
 
     edge_iterator
     edge_begin()
     {
-        return edge_properties_.begin();
+        return edge_iterator(0, edge_properties_);
     }
 
     edge_iterator
     edge_end()
     {
-        return edge_properties_.end();
-    }
-
-    edge_const_iterator
-    edge_cbegin() const
-    {
-        return edge_properties_.cbegin();
-    }
-
-    edge_const_iterator
-    edge_cend() const
-    {
-        return edge_properties_.cend();
+        return edge_iterator(edge_properties_.size(), edge_properties_);
     }
 
 
@@ -154,6 +423,30 @@ public:
         edges_.swap(other.edges_);
     }
 
+    size_type
+    size() const
+    {
+        return node_properties_.size();
+    }
+
+    edge_size_type
+    edge_size() const
+    {
+        return edge_properties_.size();
+    }
+
+    bool
+    empty() const
+    {
+        return node_properties_.empty();
+    }
+
+    bool
+    edge_empty() const
+    {
+        return edge_properties_.empty();
+    }
+
 public:
     ////////////////////////////////////////////////////////////////////////////
     // dag specific member functions
@@ -163,8 +456,9 @@ public:
     iterator
     add_node(const NodeType& prop)
     {
+        const auto index = node_properties_.size();
         node_properties_.push_back(prop);
-        return std::prev(node_properties_.end());
+        return iterator(index, node_properties_);
     }
 
 
@@ -173,22 +467,27 @@ public:
     // Returns iterator to edge property or edge_end() if edge was prevented
     // from being inserted.
     edge_iterator
-    add_edge(const_iterator from, const_iterator to, const EdgeType& prop)
+    add_edge(iterator from, iterator to, const EdgeType& prop)
     {
-        // TODO: check for cycle
-        edges_.emplace_back(from - cbegin(), to - cbegin());
+        const auto index = edge_properties_.size();
+        const auto from_index = from.current_index_;
+        const auto to_index = to.current_index_;
         edge_properties_.push_back(prop);
-        return std::prev(edge_properties_.end());
+        edges_.emplace_back(from_index, to_index);
+
+        return edge_iterator(index, edge_properties_);
     }
 
 
+    // returns pair of iterator to nodes connected by edge ed <from , to>
     std::pair<iterator, iterator>
-    end_nodes(edge_const_iterator edge)
+    edge_endpoints(edge_iterator ed)
     {
-        // index of edge property
-        auto edge_property_index = edge - edge_properties_.begin();
+        const auto edge_index = ed.current_index_;
 
-        // find
+        return std::make_pair(
+            iterator(edges_[edge_index].from_property, node_properties_),
+            iterator(edges_[edge_index].to_property, node_properties_));
     }
 
 private:
@@ -198,3 +497,26 @@ private:
     std::vector<edge> edges_;
 };
 }
+
+
+namespace std
+{
+template <class PropertyType>
+struct iterator_traits<helene::persistent_iterator_<PropertyType>>
+{
+    typedef typename helene::persistent_iterator_<PropertyType>::difference_type
+        difference_type;
+
+    typedef typename helene::persistent_iterator_<PropertyType>::value_type
+        value_type;
+
+    typedef
+        typename helene::persistent_iterator_<PropertyType>::pointer pointer;
+
+    typedef typename helene::persistent_iterator_<PropertyType>::reference
+        reference;
+
+    typedef random_access_iterator_tag iterator_category;
+};
+}
+
