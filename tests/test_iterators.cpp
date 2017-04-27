@@ -242,6 +242,13 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
         auto it2 = it1 + 3;
 
         REQUIRE(*it2 == 'd');
+
+        SECTION("subtract integer from iterator")
+        {
+            auto it3 = it2 - 3;
+
+            REQUIRE(*it3 == 'a');
+        }
     }
 
     SECTION("add iterator to integer")
