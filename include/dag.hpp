@@ -256,6 +256,13 @@ public:
         return rhs + lhs;
     }
 
+    ordered_iterator_&
+    operator-=(difference_type n)
+    {
+        current_index_to_index_ -= n;
+        return *this;
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;

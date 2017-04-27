@@ -256,6 +256,13 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
         it1 += 3;
 
         REQUIRE(*it1 == 'd');
+
+        SECTION("subpend integer from iterator")
+        {
+            it1 -= 3;
+
+            REQUIRE(*it1 == 'a');
+        }
     }
 }
 
