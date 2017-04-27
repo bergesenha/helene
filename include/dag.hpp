@@ -380,6 +380,13 @@ private:
         }
     };
 
+    // marks
+    enum class mark
+    {
+        not_removed,
+        removed
+    };
+
 public:
     ////////////////////////////////////////////////////////////////////////////
     // Container concept member functions
@@ -556,6 +563,26 @@ private:
 
 
     std::vector<size_type>
+    child_order(size_type parent_index,
+                const std::vector<edge>& edges,
+                const std::vector<mark>& edge_marks) const
+    {
+        std::vector<size_type> out;
+
+        for(typename std::vector<edge>::size_type i = 0; i < edges.size(); ++i)
+        {
+            if(edges[i].from_property == parent_index &&
+               edge_marks[i] == mark::not_removed)
+            {
+                out.push_back(edges[i].to_property);
+            }
+        }
+
+        return out;
+    }
+
+
+    std::vector<size_type>
     parent_order(size_type child_index, const std::vector<edge>& edges) const
     {
         std::vector<size_type> out;
@@ -567,6 +594,27 @@ private:
                     out.push_back(ed.from_property);
                 }
             });
+
+        return out;
+    }
+
+
+    std::vector<size_type>
+    parent_order(size_type child_index,
+                 const std::vector<edge>& edges,
+                 const std::vector<mark>& edge_marks) const
+    {
+        std::vector<size_type> out;
+
+        for(typename std::vector<edge>::size_type i = 0; i < edges.size(); ++i)
+        {
+            if(edges[i].to_property == child_index &&
+               edge_marks[i] == mark::not_removed)
+            {
+                out.push_back(edges[i].from_property);
+            }
+        }
+
 
         return out;
     }
