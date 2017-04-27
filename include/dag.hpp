@@ -214,6 +214,13 @@ public:
         return &(nodes_ref_.get()[indices_[current_index_to_index_]]);
     }
 
+    ordered_iterator_ operator++(int)
+    {
+        auto temp = *this;
+        ++(*this);
+        return temp;
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;
