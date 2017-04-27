@@ -582,6 +582,43 @@ private:
     }
 
 
+    std::vector<edge_size_type>
+    out_edge_order(size_type parent_index, const std::vector<edge>& edges)
+    {
+        std::vector<edge_size_type> out;
+
+        for(typename std::vector<edge>::size_type i = 0; i < edges.size(); ++i)
+        {
+            if(edges[i].from_property == parent_index)
+            {
+                out.push_back(i);
+            }
+        }
+
+        return out;
+    }
+
+
+    std::vector<edge_size_type>
+    out_edge_order(size_type parent_index,
+                   const std::vector<edge>& edges,
+                   const std::vector<mark>& edge_marks)
+    {
+        std::vector<edge_size_type> out;
+
+        for(typename std::vector<edge>::size_type i = 0; i < edges.size(); ++i)
+        {
+            if(edges[i].from_property == parent_index &&
+               edge_marks[i] == mark::not_removed)
+            {
+                out.push_back(i);
+            }
+        }
+
+        return out;
+    }
+
+
     std::vector<size_type>
     parent_order(size_type child_index, const std::vector<edge>& edges) const
     {
