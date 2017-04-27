@@ -510,7 +510,7 @@ public:
     std::pair<order_iterator, order_iterator>
     children(iterator node)
     {
-        auto order = child_order(node.current_index_);
+        auto order = child_order(node.current_index_, edges_);
 
         return std::make_pair(
             order_iterator(0, order, node_properties_),
@@ -520,7 +520,7 @@ public:
     std::pair<order_iterator, order_iterator>
     parents(iterator node)
     {
-        auto order = parent_order(node.current_index_);
+        auto order = parent_order(node.current_index_, edges_);
 
         return std::make_pair(
             order_iterator(0, order, node_properties_),
@@ -530,7 +530,7 @@ public:
     std::pair<order_iterator, order_iterator>
     start_nodes()
     {
-        auto order = start_nodes_order();
+        auto order = start_nodes_order(edges_);
 
         return std::make_pair(
             order_iterator(0, order, node_properties_),
@@ -539,12 +539,12 @@ public:
 
 private:
     std::vector<size_type>
-    child_order(size_type parent_index) const
+    child_order(size_type parent_index, const std::vector<edge>& edges) const
     {
         std::vector<size_type> out;
 
         std::for_each(
-            edges_.begin(), edges_.end(), [&out, parent_index](const edge& ed) {
+            edges.begin(), edges.end(), [&out, parent_index](const edge& ed) {
                 if(ed.from_property == parent_index)
                 {
                     out.push_back(ed.to_property);
@@ -556,12 +556,12 @@ private:
 
 
     std::vector<size_type>
-    parent_order(size_type child_index) const
+    parent_order(size_type child_index, const std::vector<edge>& edges) const
     {
         std::vector<size_type> out;
 
         std::for_each(
-            edges_.begin(), edges_.end(), [&out, child_index](const edge& ed) {
+            edges.begin(), edges.end(), [&out, child_index](const edge& ed) {
                 if(ed.to_property == child_index)
                 {
                     out.push_back(ed.from_property);
@@ -573,20 +573,20 @@ private:
 
 
     std::vector<size_type>
-    start_nodes_order() const
+    start_nodes_order(const std::vector<edge>& edges) const
     {
         std::vector<size_type> node_indices(node_properties_.size());
         std::iota(node_indices.begin(), node_indices.end(), 0);
 
         node_indices.erase(
             // remove index if it is found in the to_property field of any
-            // edge in edges_
+            // edge in edges
             std::remove_if(node_indices.begin(),
                            node_indices.end(),
-                           [this](size_type index) {
+                           [&edges](size_type index) {
                                auto found =
-                                   std::find_if(edges_.begin(),
-                                                edges_.end(),
+                                   std::find_if(edges.begin(),
+                                                edges.end(),
                                                 [index](const edge& ed) {
                                                     if(ed.to_property == index)
                                                     {
@@ -598,7 +598,7 @@ private:
                                                     }
                                                 });
 
-                               if(found != edges_.end())
+                               if(found != edges.end())
                                {
                                    return true;
                                }
