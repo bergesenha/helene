@@ -3,6 +3,7 @@
 
 #include <dag.hpp>
 #include <utility>
+#include <algorithm>
 
 
 TEST_CASE("persistent_iterator_ to mock vector", "[presistent_iterator_]")
@@ -193,6 +194,7 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
     REQUIRE(it1[1] == 'b');
     REQUIRE(it1[4] == 'e');
 
+
     SECTION("preincrement iterator")
     {
         ++it1;
@@ -312,4 +314,28 @@ TEST_CASE("ordered iterator with mock vector of mock structs",
 
 
     REQUIRE(it1->get_i() == 0);
+}
+
+
+TEST_CASE("test std algorithms on ordered_iterator_", "[ordered_iterator_]")
+{
+    std::vector<char> mock_vec{'a', 'b', 'c', 'd', 'e'};
+    std::vector<std::vector<char>::size_type> mock_order{2, 1, 0, 3, 4};
+
+    helene::ordered_iterator_<char> begin_unordered(0, mock_order, mock_vec);
+    helene::ordered_iterator_<char> end_unordered(
+        mock_order.size(), mock_order, mock_vec);
+
+    REQUIRE(*begin_unordered != 'a');
+
+    SECTION("sort on ordered_iterator_")
+    {
+        std::sort(begin_unordered, end_unordered);
+
+        REQUIRE(mock_vec[0] == 'c');
+        REQUIRE(mock_vec[1] == 'b');
+        REQUIRE(mock_vec[2] == 'a');
+        REQUIRE(mock_vec[3] == 'd');
+        REQUIRE(mock_vec[4] == 'e');
+    }
 }

@@ -518,5 +518,24 @@ struct iterator_traits<helene::persistent_iterator_<PropertyType>>
 
     typedef random_access_iterator_tag iterator_category;
 };
+
+
+template <class PropertyType>
+struct iterator_traits<helene::ordered_iterator_<PropertyType>>
+{
+    typedef typename helene::persistent_iterator_<PropertyType>::difference_type
+        difference_type;
+
+    typedef typename helene::persistent_iterator_<PropertyType>::value_type
+        value_type;
+
+    typedef
+        typename helene::persistent_iterator_<PropertyType>::pointer pointer;
+
+    typedef typename helene::persistent_iterator_<PropertyType>::reference
+        reference;
+
+    typedef random_access_iterator_tag iterator_category;
+};
 }
 
