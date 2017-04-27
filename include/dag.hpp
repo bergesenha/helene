@@ -250,6 +250,12 @@ public:
             current_index_to_index_ + n, indices_, nodes_ref_);
     }
 
+    friend ordered_iterator_
+    operator+(difference_type lhs, const ordered_iterator_& rhs)
+    {
+        return rhs + lhs;
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;
