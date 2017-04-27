@@ -221,6 +221,13 @@ public:
         return temp;
     }
 
+    // BidirectionalIterator
+    ordered_iterator_& operator--()
+    {
+        --current_index_to_index_;
+        return *this;
+    }
+
 private:
     index_type current_index_to_index_;
     std::vector<size_type> indices_;

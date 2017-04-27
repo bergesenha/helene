@@ -194,6 +194,15 @@ TEST_CASE("ordered_iterator_ with mock order and mock vector",
         ++it1;
 
         REQUIRE(*it1 == 'b');
+
+
+        SECTION("predecrement iterator")
+        {
+            auto it2 = --it1;
+
+            REQUIRE(*it2 == 'a');
+            REQUIRE(*it1 == 'a');
+        }
     }
 
     SECTION("postincrement iterator")
