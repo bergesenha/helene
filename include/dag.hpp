@@ -486,6 +486,12 @@ public:
     }
 
 
+    void
+    remove_node(iterator nd)
+    {
+    }
+
+
     // Add edge between nodes.
     // If edge introduces cycle edge will not be inserted.
     // Returns iterator to edge property or edge_end() if edge was prevented
