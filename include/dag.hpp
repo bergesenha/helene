@@ -489,6 +489,10 @@ public:
     void
     remove_node(iterator nd)
     {
+        const auto index_to_remove = nd.current_index_;
+        const auto index_of_last = node_properties_.size() - 1;
+        std::swap(*nd, node_properties_.back());
+        node_properties_.pop_back();
     }
 
 
