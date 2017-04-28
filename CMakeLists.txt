@@ -16,6 +16,7 @@ if(HELENE_BUILD_TESTS)
         tests/test_main.cpp
         tests/test_dag.cpp
         tests/test_iterators.cpp
+        tests/test_algorithms.cpp
         )
 
     add_executable(unit_tests ${HELENE_TEST_SRC})
