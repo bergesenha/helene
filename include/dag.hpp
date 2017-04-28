@@ -531,7 +531,7 @@ public:
                       });
 
         // update topological order.
-        update_topological_order();
+        topo_needs_update_ = true;
     }
 
 
@@ -638,6 +638,11 @@ public:
     std::pair<order_iterator, order_iterator>
     topological_order()
     {
+        if(topo_needs_update_)
+        {
+            update_topological_order();
+        }
+
         return std::make_pair(
             order_iterator(0, topo_cache_, node_properties_),
             order_iterator(topo_cache_.size(), topo_cache_, node_properties_));
@@ -842,6 +847,8 @@ private:
                      });
         }
 
+        topo_needs_update_ = false;
+
         if(std::find(edge_marks.begin(), edge_marks.end(), mark::not_removed) !=
            edge_marks.end())
         {
@@ -869,6 +876,7 @@ private:
     std::vector<edge> edges_;
 
     std::vector<size_type> topo_cache_;
+    bool topo_needs_update_;
 };
 }
 
