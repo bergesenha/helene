@@ -486,6 +486,55 @@ public:
     }
 
 
+    void
+    remove_node(iterator nd)
+    {
+        const auto index_to_remove = nd.current_index_;
+        const auto index_of_last = node_properties_.size() - 1;
+        std::swap(*nd, node_properties_.back());
+        node_properties_.pop_back();
+
+        // find indices of edges to remove
+        std::vector<typename std::vector<edge>::size_type> indices_to_remove;
+
+        for(auto i = 0ul; i < edges_.size(); ++i)
+        {
+            auto& ed = edges_[i];
+            if((ed.from_property == index_to_remove) ||
+               (ed.to_property == index_to_remove))
+            {
+                indices_to_remove.push_back(i);
+            }
+        }
+
+        // erase edges associated
+        std::for_each(indices_to_remove.rbegin(),
+                      indices_to_remove.rend(),
+                      [this](typename std::vector<edge>::size_type i) {
+                          edges_.erase(edges_.begin() + i);
+                          edge_properties_.erase(edge_properties_.begin() + i);
+                      });
+
+        // fix indices in edges for the node that was swapped
+        std::for_each(edges_.begin(),
+                      edges_.end(),
+                      [index_to_remove, index_of_last](edge& ed) {
+                          if(ed.from_property == index_of_last)
+                          {
+                              ed.from_property = index_to_remove;
+                          }
+
+                          if(ed.to_property == index_of_last)
+                          {
+                              ed.to_property = index_to_remove;
+                          }
+                      });
+
+        // update topological order.
+        update_topological_order();
+    }
+
+
     // Add edge between nodes.
     // If edge introduces cycle edge will not be inserted.
     // Returns iterator to edge property or edge_end() if edge was prevented
@@ -509,6 +558,15 @@ public:
             edges_.pop_back();
             return edge_end();
         }
+    }
+
+
+    void
+    remove_edge(edge_iterator ed)
+    {
+        const auto index = ed.current_index_;
+
+        swap_and_pop_edge(index);
     }
 
 
@@ -552,6 +610,28 @@ public:
         return std::make_pair(
             order_iterator(0, order, node_properties_),
             order_iterator(order.size(), order, node_properties_));
+    }
+
+
+    // return iterator to edge between from and to if it exists, otherwise will
+    // return edge_end()
+    edge_iterator
+    connecting_edge(iterator from, iterator to)
+    {
+        auto found = std::find_if(
+            edges_.begin(), edges_.end(), [from, to](const edge& ed) {
+                if(ed.from_property == from.current_index_ &&
+                   ed.to_property == to.current_index_)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+
+        return edge_iterator(found - edges_.begin(), edge_properties_);
     }
 
 
@@ -772,6 +852,15 @@ private:
             topo_cache_ = order;
             return true;
         }
+    }
+
+    void
+    swap_and_pop_edge(edge_size_type idx)
+    {
+        std::swap(edges_[idx], edges_.back());
+        std::swap(edge_properties_[idx], edge_properties_.back());
+        edges_.pop_back();
+        edge_properties_.pop_back();
     }
 
 private:
