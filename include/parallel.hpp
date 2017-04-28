@@ -2,9 +2,22 @@
 
 
 #include <utility>
+#include <iterator>
+#include <algorithm>
+#include <vector>
+
 
 namespace helene
 {
+
+
+template <class InputIterator1, class InputIterator2>
+InputIterator1
+remove_by_index(InputIterator1 begin,
+                InputIterator1 end,
+                InputIterator2 index_begin)
+{
+}
 
 
 template <class InputIterator1, class InputIterator2, class T>

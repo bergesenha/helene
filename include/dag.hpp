@@ -493,6 +493,45 @@ public:
         const auto index_of_last = node_properties_.size() - 1;
         std::swap(*nd, node_properties_.back());
         node_properties_.pop_back();
+
+        // find indices of edges to remove
+        std::vector<typename std::vector<edge>::size_type> indices_to_remove;
+
+        for(auto i = 0ul; i < edges_.size(); ++i)
+        {
+            auto& ed = edges_[i];
+            if((ed.from_property == index_to_remove) ||
+               (ed.to_property == index_to_remove))
+            {
+                indices_to_remove.push_back(i);
+            }
+        }
+
+        // erase edges associated
+        std::for_each(indices_to_remove.rbegin(),
+                      indices_to_remove.rend(),
+                      [this](typename std::vector<edge>::size_type i) {
+                          edges_.erase(edges_.begin() + i);
+                          edge_properties_.erase(edge_properties_.begin() + i);
+                      });
+
+        // fix indices in edges for the node that was swapped
+        std::for_each(edges_.begin(),
+                      edges_.end(),
+                      [index_to_remove, index_of_last](edge& ed) {
+                          if(ed.from_property == index_of_last)
+                          {
+                              ed.from_property = index_to_remove;
+                          }
+
+                          if(ed.to_property == index_of_last)
+                          {
+                              ed.to_property = index_to_remove;
+                          }
+                      });
+
+        // update topological order.
+        update_topological_order();
     }
 
 
