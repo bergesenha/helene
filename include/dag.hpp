@@ -523,12 +523,7 @@ public:
     {
         const auto index = ed.current_index_;
 
-        // swap and pop
-        std::swap(edges_[index], edges_.back());
-        edges_.pop_back();
-
-        std::swap(edge_properties_[index], edge_properties_.back());
-        edge_properties_.pop_back();
+        swap_and_pop_edge(index);
     }
 
 
@@ -814,6 +809,15 @@ private:
             topo_cache_ = order;
             return true;
         }
+    }
+
+    void
+    swap_and_pop_edge(edge_size_type idx)
+    {
+        std::swap(edges_[idx], edges_.back());
+        std::swap(edge_properties_[idx], edge_properties_.back());
+        edges_.pop_back();
+        edge_properties_.pop_back();
     }
 
 private:
