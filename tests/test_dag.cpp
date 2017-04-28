@@ -231,6 +231,132 @@ TEST_CASE("test dag", "[dag<char, int>]")
                             REQUIRE(*(topo_pair.first + 1) != 'd');
                         }
                     }
+
+                    SECTION("remove first node")
+                    {
+                        one.remove_node(it1);
+
+                        REQUIRE(one.size() == 3);
+                        REQUIRE(one.edge_size() == 2);
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'b') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'c') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'd') !=
+                                one.end());
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'a') ==
+                                one.end());
+
+                        SECTION("get topological_order")
+                        {
+                            auto topo_pair = one.topological_order();
+
+                            REQUIRE(topo_pair.second - topo_pair.first == 3);
+                            REQUIRE(*(std::prev(topo_pair.second)) == 'd');
+                            REQUIRE(std::find(topo_pair.first,
+                                              std::prev(topo_pair.second),
+                                              'b') !=
+                                    std::prev(topo_pair.second));
+                            REQUIRE(std::find(topo_pair.first,
+                                              std::prev(topo_pair.second),
+                                              'c') !=
+                                    std::prev(topo_pair.second));
+                            REQUIRE(std::find(topo_pair.first,
+                                              std::prev(topo_pair.second),
+                                              'd') ==
+                                    std::prev(topo_pair.second));
+                        }
+                    }
+
+                    SECTION("remove second node")
+                    {
+                        one.remove_node(it2);
+
+                        REQUIRE(one.size() == 3);
+                        REQUIRE(one.edge_size() == 2);
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'a') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'c') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'd') !=
+                                one.end());
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'b') ==
+                                one.end());
+
+                        SECTION("get topological_order")
+                        {
+                            auto topo_pair = one.topological_order();
+
+                            REQUIRE(topo_pair.second - topo_pair.first == 3);
+                            REQUIRE(*topo_pair.first == 'a');
+                            REQUIRE(*(std::next(topo_pair.first)) == 'c');
+                            REQUIRE(*(std::prev(topo_pair.second)) == 'd');
+                        }
+                    }
+
+                    SECTION("remove third node")
+                    {
+                        one.remove_node(it3);
+
+                        REQUIRE(one.size() == 3);
+                        REQUIRE(one.edge_size() == 2);
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'a') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'b') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'd') !=
+                                one.end());
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'c') ==
+                                one.end());
+
+                        SECTION("get topological_order")
+                        {
+                            auto topo_pair = one.topological_order();
+
+                            REQUIRE(topo_pair.second - topo_pair.first == 3);
+                            REQUIRE(*topo_pair.first == 'a');
+                            REQUIRE(*(std::next(topo_pair.first)) == 'b');
+                            REQUIRE(*(std::prev(topo_pair.second)) == 'd');
+                        }
+                    }
+
+                    SECTION("remove fourth node")
+                    {
+                        one.remove_node(it4);
+
+                        REQUIRE(one.size() == 3);
+                        REQUIRE(one.edge_size() == 2);
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'a') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'b') !=
+                                one.end());
+                        REQUIRE(std::find(one.begin(), one.end(), 'c') !=
+                                one.end());
+
+                        REQUIRE(std::find(one.begin(), one.end(), 'd') ==
+                                one.end());
+
+                        SECTION("get topological_order")
+                        {
+                            auto topo_pair = one.topological_order();
+
+                            REQUIRE(topo_pair.second - topo_pair.first == 3);
+                            REQUIRE(*topo_pair.first == 'a');
+                            REQUIRE(std::find(std::next(topo_pair.first),
+                                              topo_pair.second,
+                                              'b') != topo_pair.second);
+                            REQUIRE(std::find(std::next(topo_pair.first),
+                                              topo_pair.second,
+                                              'c') != topo_pair.second);
+                        }
+                    }
                 }
 
                 SECTION("get topological order")
@@ -262,6 +388,74 @@ TEST_CASE("test dag", "[dag<char, int>]")
                         REQUIRE(*topo_pair.first != 'c');
                     }
                 }
+
+                SECTION("remove first node")
+                {
+                    one.remove_node(it1);
+
+                    REQUIRE(one.size() == 2);
+
+                    REQUIRE(std::find(one.begin(), one.end(), 'b') !=
+                            one.end());
+                    REQUIRE(std::find(one.begin(), one.end(), 'c') !=
+                            one.end());
+                    REQUIRE(std::find(one.begin(), one.end(), 'a') ==
+                            one.end());
+
+                    REQUIRE(one.edge_size() == 0);
+                }
+
+                SECTION("remove second node")
+                {
+                    one.remove_node(it2);
+
+                    REQUIRE(one.size() == 2);
+
+                    REQUIRE(std::find(one.begin(), one.end(), 'a') !=
+                            one.end());
+                    REQUIRE(std::find(one.begin(), one.end(), 'c') !=
+                            one.end());
+                    REQUIRE(std::find(one.begin(), one.end(), 'b') ==
+                            one.end());
+
+                    REQUIRE(one.edge_size() == 1);
+
+                    SECTION("get topological order")
+                    {
+                        auto topo_pair = one.topological_order();
+
+                        REQUIRE(topo_pair.second - topo_pair.first == 2);
+
+                        REQUIRE(*topo_pair.first == 'a');
+                        REQUIRE(*(std::next(topo_pair.first)) == 'c');
+                    }
+                }
+
+                SECTION("remove third node")
+                {
+                    one.remove_node(it3);
+
+                    REQUIRE(one.size() == 2);
+
+                    REQUIRE(std::find(one.begin(), one.end(), 'a') !=
+                            one.end());
+                    REQUIRE(std::find(one.begin(), one.end(), 'b') !=
+                            one.end());
+                    REQUIRE(std::find(one.begin(), one.end(), 'c') ==
+                            one.end());
+
+                    REQUIRE(one.edge_size() == 1);
+
+                    SECTION("get topological order")
+                    {
+                        auto topo_pair = one.topological_order();
+
+                        REQUIRE(topo_pair.second - topo_pair.first == 2);
+
+                        REQUIRE(*topo_pair.first == 'a');
+                        REQUIRE(*(std::next(topo_pair.first)) == 'b');
+                    }
+                }
             }
 
             SECTION("get topological order")
@@ -280,6 +474,24 @@ TEST_CASE("test dag", "[dag<char, int>]")
                 REQUIRE(one.size() == 2);
                 REQUIRE(one.edge_size() == 0);
                 REQUIRE(one.edge_begin() == one.edge_end());
+            }
+
+            SECTION("remove first node")
+            {
+                one.remove_node(it1);
+
+                REQUIRE(one.size() == 1);
+                REQUIRE(one.edge_size() == 0);
+                REQUIRE(*one.begin() == 'b');
+            }
+
+            SECTION("remove second node")
+            {
+                one.remove_node(it2);
+
+                REQUIRE(one.size() == 1);
+                REQUIRE(one.edge_size() == 0);
+                REQUIRE(*one.begin() == 'a');
             }
         }
 
@@ -305,6 +517,14 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             REQUIRE(*topo_pair.first == 'a');
             REQUIRE(topo_pair.second - topo_pair.first == 1);
+        }
+
+        SECTION("remove the node")
+        {
+            one.remove_node(it1);
+
+            REQUIRE(one.size() == 0);
+            REQUIRE(one.begin() == one.end());
         }
     }
 
