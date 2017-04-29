@@ -32,41 +32,49 @@ parallel_remove(InputIterator1 begin1,
                 InputIterator2 begin2,
                 const T& value)
 {
-    auto found1 = begin1;
+    // initialize new end with initial end
+    auto new_end1 = end1;
 
-    auto temp_end1 = end1;
-    auto temp_end2 = begin2;
-    std::advance(temp_end2, std::distance(begin1, end1));
+    // calculate end of range 2 and set new_end2 with it
+    auto new_end2 = begin2;
+    std::advance(new_end2, std::distance(begin1, end1));
 
-    while(found1 != end1)
+    // find first occurrence of value
+    auto found1 = std::find(begin1, new_end1, value);
+
+    // if value was found, continue
+    while(found1 != new_end1)
     {
-        found1 = std::find(begin1, end1, value);
+        // make sure to remove only from range until new end and not original
+        // end
+        new_end1 = std::remove_if(begin1,
+                                  new_end1,
+                                  [found1](const typename std::iterator_traits<
+                                           InputIterator1>::reference elm) {
+                                      // remove based on address of found
+                                      // element
+                                      if(&elm == std::addressof(*found1))
+                                      {
+                                          return true;
+                                      }
+                                      else
+                                      {
+                                          return false;
+                                      }
+                                  });
 
-        temp_end1 = std::remove_if(
-            begin1,
-            temp_end1,
-            [found1](
-                typename std::iterator_traits<InputIterator1>::reference elm) {
-                if(&elm == std::addressof(*found1))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            });
+        // construct corresponding iterator in range 2
+        auto corresponding = begin2;
+        std::advance(corresponding, std::distance(begin1, found1));
 
-        auto found2 = begin2;
-        std::advance(found2, std::distance(begin1, found1));
-
-        temp_end2 = std::remove_if(
+        new_end2 = std::remove_if(
             begin2,
-            temp_end2,
-            [found2](
-                typename std::iterator_traits<InputIterator2>::reference elm) {
-
-                if(&elm == std::addressof(*found2))
+            new_end2,
+            [corresponding](
+                const typename std::iterator_traits<InputIterator2>::reference
+                    elm) {
+                // remove based on address of corresponding element
+                if(&elm == std::addressof(*corresponding))
                 {
                     return true;
                 }
@@ -74,11 +82,13 @@ parallel_remove(InputIterator1 begin1,
                 {
                     return false;
                 }
-
             });
+
+        // continue attempting to find value in range 1
+        found1 = std::find(begin1, new_end1, value);
     }
 
-    return std::make_pair(temp_end1, temp_end2);
+    return std::make_pair(new_end1, new_end2);
 }
 
 
