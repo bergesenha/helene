@@ -46,13 +46,13 @@ parallel_remove(ForwardIterator1 begin1,
         "ForwardIterator2 must at least satisfy ForwardIterator");
 
     // compile time check for dereferenced types
-    static_assert(std::is_move_assignable<decltype(*begin1)>::value,
-                  "Type of element pointed to by ForwardIterator1 must be move "
-                  "assignable");
+    static_assert(
+        std::is_move_assignable<decltype(*begin1)>::value,
+        "The type of dereferenced ForwardIterator1 must be MoveAssignable");
 
-    static_assert(std::is_move_assignable<decltype(*begin2)>::value,
-                  "Type of element pointed to by ForwardIterator2 must be move "
-                  "assignable");
+    static_assert(
+        std::is_move_assignable<decltype(*begin2)>::value,
+        "The type of dereferenced ForwardIterator2 must be MoveAssignable");
 
 
     // initialize new end with initial end
