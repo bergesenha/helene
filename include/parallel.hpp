@@ -25,11 +25,11 @@ remove_by_index(InputIterator1 begin,
 
 // remove elements in same positions in both ranges according to value in first
 // range.
-template <class InputIterator1, class InputIterator2, class T>
-std::pair<InputIterator1, InputIterator2>
-parallel_remove(InputIterator1 begin1,
-                InputIterator1 end1,
-                InputIterator2 begin2,
+template <class ForwardIterator1, class ForwardIterator2, class T>
+std::pair<ForwardIterator1, ForwardIterator2>
+parallel_remove(ForwardIterator1 begin1,
+                ForwardIterator1 end1,
+                ForwardIterator2 begin2,
                 const T& value)
 {
     // initialize new end with initial end
@@ -50,7 +50,7 @@ parallel_remove(InputIterator1 begin1,
         new_end1 = std::remove_if(begin1,
                                   new_end1,
                                   [found1](const typename std::iterator_traits<
-                                           InputIterator1>::reference elm) {
+                                           ForwardIterator1>::reference elm) {
                                       // remove based on address of found
                                       // element
                                       if(&elm == std::addressof(*found1))
@@ -71,7 +71,7 @@ parallel_remove(InputIterator1 begin1,
             begin2,
             new_end2,
             [corresponding](
-                const typename std::iterator_traits<InputIterator2>::reference
+                const typename std::iterator_traits<ForwardIterator2>::reference
                     elm) {
                 // remove based on address of corresponding element
                 if(&elm == std::addressof(*corresponding))
