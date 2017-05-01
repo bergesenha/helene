@@ -3,8 +3,8 @@
 
 #include <utility>
 #include <iterator>
+#include <type_traits>
 #include <algorithm>
-#include <vector>
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunused-parameter"
@@ -37,13 +37,22 @@ parallel_remove(ForwardIterator1 begin1,
         std::is_base_of<std::forward_iterator_tag,
                         typename std::iterator_traits<
                             ForwardIterator1>::iterator_category>::value,
-        "Iterators must at least satisfy ForwardIterator");
+        "ForwardIterator1 must at least satisfy ForwardIterator");
 
     static_assert(
         std::is_base_of<std::forward_iterator_tag,
                         typename std::iterator_traits<
                             ForwardIterator2>::iterator_category>::value,
-        "Iterators must at least satisfy ForwardIterator");
+        "ForwardIterator2 must at least satisfy ForwardIterator");
+
+    // compile time check for dereferenced types
+    static_assert(std::is_move_assignable<decltype(*begin1)>::value,
+                  "Type of element pointed to by ForwardIterator1 must be move "
+                  "assignable");
+
+    static_assert(std::is_move_assignable<decltype(*begin2)>::value,
+                  "Type of element pointed to by ForwardIterator2 must be move "
+                  "assignable");
 
 
     // initialize new end with initial end
