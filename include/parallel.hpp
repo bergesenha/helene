@@ -32,6 +32,20 @@ parallel_remove(ForwardIterator1 begin1,
                 ForwardIterator2 begin2,
                 const T& value)
 {
+    // compile time check of iterator types
+    static_assert(
+        std::is_base_of<std::forward_iterator_tag,
+                        typename std::iterator_traits<
+                            ForwardIterator1>::iterator_category>::value,
+        "Iterators must at least satisfy ForwardIterator");
+
+    static_assert(
+        std::is_base_of<std::forward_iterator_tag,
+                        typename std::iterator_traits<
+                            ForwardIterator2>::iterator_category>::value,
+        "Iterators must at least satisfy ForwardIterator");
+
+
     // initialize new end with initial end
     auto new_end1 = end1;
 
