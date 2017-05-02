@@ -164,7 +164,7 @@ public:
 
     // Add node
     iterator
-    add_node(const NodeType& prop)
+    insert(const NodeType& prop)
     {
         const auto index = node_properties_.size();
         node_properties_.push_back(prop);
