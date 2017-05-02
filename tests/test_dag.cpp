@@ -216,7 +216,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove edge")
                     {
-                        one.remove_edge(e_it3);
+                        one.erase_edge(e_it3);
 
                         REQUIRE(*e_it1 == 10);
                         REQUIRE(*e_it2 == 20);
@@ -375,7 +375,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove first edge")
                 {
-                    one.remove_edge(e_it1);
+                    one.erase_edge(e_it1);
 
                     REQUIRE(one.edge_size() == 1);
                     REQUIRE(*one.edge_begin() == 20);
@@ -469,7 +469,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("remove edge")
             {
-                one.remove_edge(e_it1);
+                one.erase_edge(e_it1);
 
                 REQUIRE(one.size() == 2);
                 REQUIRE(one.edge_size() == 0);

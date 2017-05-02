@@ -249,7 +249,7 @@ public:
 
 
     void
-    remove_edge(edge_iterator ed)
+    erase_edge(edge_iterator ed)
     {
         const auto index = ed.current_index_;
 
