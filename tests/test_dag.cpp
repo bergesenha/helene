@@ -20,7 +20,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
     SECTION("add a node")
     {
-        auto it1 = one.add_node('a');
+        auto it1 = one.insert('a');
 
         REQUIRE(one.size() == 1);
         REQUIRE(one.edge_size() == 0);
@@ -49,8 +49,8 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
         SECTION("add another node and an edge between them")
         {
-            auto it2 = one.add_node('b');
-            auto e_it1 = one.add_edge(it1, it2, 10);
+            auto it2 = one.insert('b');
+            auto e_it1 = one.insert_edge(it1, it2, 10);
 
             REQUIRE(*it1 == 'a');
             REQUIRE(*it2 == 'b');
@@ -87,7 +87,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("attempt to add a cyclic edge")
             {
-                auto it_no = one.add_edge(it2, it1, 1000);
+                auto it_no = one.insert_edge(it2, it1, 1000);
 
                 REQUIRE(it_no == one.edge_end());
                 REQUIRE(one.edge_size() == 1);
@@ -95,8 +95,8 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("add another node and an edge from first")
             {
-                auto it3 = one.add_node('c');
-                auto e_it2 = one.add_edge(it1, it3, 20);
+                auto it3 = one.insert('c');
+                auto e_it2 = one.insert_edge(it1, it3, 20);
 
                 REQUIRE(one.size() == 3);
                 REQUIRE(one.edge_size() == 2);
@@ -127,9 +127,9 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("add another node with edge from second and third")
                 {
-                    auto it4 = one.add_node('d');
-                    auto e_it3 = one.add_edge(it2, it4, 30);
-                    auto e_it4 = one.add_edge(it3, it4, 40);
+                    auto it4 = one.insert('d');
+                    auto e_it3 = one.insert_edge(it2, it4, 30);
+                    auto e_it4 = one.insert_edge(it3, it4, 40);
 
                     REQUIRE(one.size() == 4);
                     REQUIRE(one.edge_size() == 4);
@@ -164,7 +164,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("add a node with no connections to it")
                     {
-                        auto it5 = one.add_node('e');
+                        auto it5 = one.insert('e');
 
                         REQUIRE(one.size() == 5);
                         REQUIRE(one.edge_size() == 4);
@@ -187,7 +187,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                         SECTION("add edge from fifth node to first")
                         {
-                            auto e_it5 = one.add_edge(it5, it1, 50);
+                            auto e_it5 = one.insert_edge(it5, it1, 50);
 
                             SECTION("get topological_order")
                             {
@@ -216,7 +216,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove edge")
                     {
-                        one.remove_edge(e_it3);
+                        one.erase_edge(e_it3);
 
                         REQUIRE(*e_it1 == 10);
                         REQUIRE(*e_it2 == 20);
@@ -234,7 +234,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove first node")
                     {
-                        one.remove_node(it1);
+                        one.erase(it1);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -272,7 +272,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove second node")
                     {
-                        one.remove_node(it2);
+                        one.erase(it2);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -300,7 +300,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove third node")
                     {
-                        one.remove_node(it3);
+                        one.erase(it3);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -328,7 +328,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove fourth node")
                     {
-                        one.remove_node(it4);
+                        one.erase(it4);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -375,7 +375,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove first edge")
                 {
-                    one.remove_edge(e_it1);
+                    one.erase_edge(e_it1);
 
                     REQUIRE(one.edge_size() == 1);
                     REQUIRE(*one.edge_begin() == 20);
@@ -391,7 +391,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove first node")
                 {
-                    one.remove_node(it1);
+                    one.erase(it1);
 
                     REQUIRE(one.size() == 2);
 
@@ -407,7 +407,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove second node")
                 {
-                    one.remove_node(it2);
+                    one.erase(it2);
 
                     REQUIRE(one.size() == 2);
 
@@ -433,7 +433,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove third node")
                 {
-                    one.remove_node(it3);
+                    one.erase(it3);
 
                     REQUIRE(one.size() == 2);
 
@@ -469,7 +469,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("remove edge")
             {
-                one.remove_edge(e_it1);
+                one.erase_edge(e_it1);
 
                 REQUIRE(one.size() == 2);
                 REQUIRE(one.edge_size() == 0);
@@ -478,7 +478,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("remove first node")
             {
-                one.remove_node(it1);
+                one.erase(it1);
 
                 REQUIRE(one.size() == 1);
                 REQUIRE(one.edge_size() == 0);
@@ -487,7 +487,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("remove second node")
             {
-                one.remove_node(it2);
+                one.erase(it2);
 
                 REQUIRE(one.size() == 1);
                 REQUIRE(one.edge_size() == 0);
@@ -497,7 +497,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
         SECTION("attempt to add edge from a node to itself")
         {
-            auto it_no = one.add_edge(it1, it1, 2000);
+            auto it_no = one.insert_edge(it1, it1, 2000);
 
             REQUIRE(it_no == one.edge_end());
             REQUIRE(one.edge_size() == 0);
@@ -521,7 +521,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
         SECTION("remove the node")
         {
-            one.remove_node(it1);
+            one.erase(it1);
 
             REQUIRE(one.size() == 0);
             REQUIRE(one.begin() == one.end());
