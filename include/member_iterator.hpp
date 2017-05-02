@@ -97,6 +97,11 @@ public:
     typedef typename std::iterator_traits<IteratorToStruct>::difference_type
         difference_type;
 
+    typedef MemberType& reference;
+
+    typedef
+        typename std::iterator_traits<IteratorToStruct>::value_type struct_type;
+
 public:
     using member_iterator_base<std::bidirectional_iterator_tag,
                                IteratorToStruct,
@@ -113,6 +118,12 @@ public:
     operator_pluss_number(difference_type n) const
     {
         return this->current_ + n;
+    }
+
+    struct_type&
+    array_access(difference_type n)
+    {
+        return this->current_[n];
     }
 };
 
@@ -206,6 +217,11 @@ public:
     operator-(difference_type n) const
     {
         return *this + (-n);
+    }
+
+    reference operator[](difference_type n)
+    {
+        return this->array_access(n).*PtrValue;
     }
 };
 }

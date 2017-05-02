@@ -57,6 +57,13 @@ TEST_CASE("member_iterator to member of a mock struct in std::vector",
             auto middle = new_it - 1;
 
             REQUIRE(*middle == 2.0);
+
+            SECTION("array access")
+            {
+                REQUIRE(middle[-1] == 1.0);
+                REQUIRE(middle[0] == 2.0);
+                REQUIRE(middle[1] == 3.0);
+            }
         }
     }
 
@@ -66,6 +73,13 @@ TEST_CASE("member_iterator to member of a mock struct in std::vector",
 
         REQUIRE(*new_it == 3.0);
         REQUIRE(*beg_it == 1.0);
+    }
+
+    SECTION("array access")
+    {
+        REQUIRE(beg_it[0] == 1.0);
+        REQUIRE(beg_it[1] == 2.0);
+        REQUIRE(beg_it[2] == 3.0);
     }
 }
 
