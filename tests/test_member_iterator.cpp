@@ -31,6 +31,7 @@ TEST_CASE("member_iterator to member of a mock struct in std::vector",
     my_iter end_it(container.end());
 
     REQUIRE(beg_it < end_it);
+    REQUIRE(end_it > beg_it);
 
 
     SECTION("operator+= 2")
@@ -46,6 +47,8 @@ TEST_CASE("member_iterator to member of a mock struct in std::vector",
 
         REQUIRE(*new_it == 3.0);
         REQUIRE(*beg_it == 1.0);
+
+        REQUIRE(new_it >= beg_it);
 
         SECTION("operator-= 1")
         {
