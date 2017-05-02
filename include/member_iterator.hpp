@@ -32,6 +32,8 @@ public:
         return *this;
     }
 
+    // TODO: post increment
+
 protected:
     IteratorToStruct current_;
 };
@@ -77,6 +79,11 @@ public:
     reference operator*()
     {
         return *(this->current_).*PtrValue;
+    }
+
+    pointer operator->()
+    {
+        return &(*(this->current_).*PtrValue);
     }
 };
 }
