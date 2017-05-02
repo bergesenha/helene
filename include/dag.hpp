@@ -227,7 +227,7 @@ public:
     // Returns iterator to edge property or edge_end() if edge was prevented
     // from being inserted.
     edge_iterator
-    add_edge(iterator from, iterator to, const EdgeType& prop)
+    insert_edge(iterator from, iterator to, const EdgeType& prop)
     {
         const auto index = edge_properties_.size();
         const auto from_index = from.current_index_;
