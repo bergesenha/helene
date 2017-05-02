@@ -37,6 +37,14 @@ TEST_CASE("member_iterator to member of a mock struct in std::vector",
 
         REQUIRE(*beg_it == 3.0);
     }
+
+    SECTION("operator+ 2")
+    {
+        auto new_it = beg_it + 2;
+
+        REQUIRE(*new_it == 3.0);
+        REQUIRE(*beg_it == 1.0);
+    }
 }
 
 

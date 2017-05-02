@@ -108,6 +108,12 @@ public:
     {
         this->current_ += n;
     }
+
+    IteratorToStruct
+    operator_pluss_number(difference_type n) const
+    {
+        return this->current_ + n;
+    }
 };
 
 template <class MemberType,
@@ -175,6 +181,12 @@ public:
     {
         this->operator_pluss_equals(n);
         return *this;
+    }
+
+    member_iterator
+    operator+(difference_type n) const
+    {
+        return member_iterator(this->operator_pluss_number(n));
     }
 };
 }
