@@ -71,4 +71,11 @@ TEST_CASE("member_iterator to member of a mock struct in a std::forward_list",
             }
         }
     }
+
+    SECTION("mutate element through iterator")
+    {
+        *it_beg = 10;
+
+        REQUIRE(*it_beg == 10);
+    }
 }
