@@ -52,4 +52,23 @@ TEST_CASE("member_iterator to member of a mock struct in a std::forward_list",
     my_iter it_end(container.end());
 
     REQUIRE(it_beg != it_end);
+    REQUIRE(*it_beg == 3);
+
+    SECTION("increment iterator")
+    {
+        ++it_beg;
+        REQUIRE(*it_beg == 2);
+
+        SECTION("increment again")
+        {
+            ++it_beg;
+            REQUIRE(*it_beg == 1);
+
+            SECTION("increment again")
+            {
+                ++it_beg;
+                REQUIRE_FALSE(it_beg != it_end);
+            }
+        }
+    }
 }

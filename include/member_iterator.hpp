@@ -26,6 +26,12 @@ public:
         return current_ != other.current_;
     }
 
+    member_iterator_base& operator++()
+    {
+        ++current_;
+        return *this;
+    }
+
 protected:
     IteratorToStruct current_;
 };
@@ -56,6 +62,10 @@ class member_iterator
           IteratorToStruct,
           MemberType>
 {
+    typedef MemberType value_type;
+    typedef MemberType& reference;
+    typedef MemberType* pointer;
+
 public:
     // using base class constructor directly
     using member_iterator_base<
@@ -63,5 +73,10 @@ public:
         IteratorToStruct,
         MemberType>::member_iterator_base;
 
+public:
+    reference operator*()
+    {
+        return *(this->current_).*PtrValue;
+    }
 };
 }
