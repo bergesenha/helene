@@ -4,6 +4,7 @@
 #include <member_iterator.hpp>
 #include <vector>
 #include <forward_list>
+#include <list>
 #include <string>
 
 
@@ -54,22 +55,34 @@ TEST_CASE("member_iterator to member of a mock struct in a std::forward_list",
     REQUIRE(it_beg != it_end);
     REQUIRE(*it_beg == 3);
 
-    SECTION("increment iterator")
+    SECTION("preincrement iterator")
     {
         ++it_beg;
         REQUIRE(*it_beg == 2);
 
-        SECTION("increment again")
+        SECTION("preincrement again")
         {
             ++it_beg;
             REQUIRE(*it_beg == 1);
 
-            SECTION("increment again")
+            SECTION("preincrement again")
             {
                 ++it_beg;
                 REQUIRE_FALSE(it_beg != it_end);
             }
         }
+    }
+
+    SECTION("preincrement and dereference")
+    {
+        REQUIRE(*(++it_beg) == 2);
+    }
+
+    SECTION("postincrement")
+    {
+        auto prev = it_beg++;
+        REQUIRE(*prev == 3);
+        REQUIRE(*it_beg == 2);
     }
 
     SECTION("mutate element through iterator")
@@ -78,4 +91,9 @@ TEST_CASE("member_iterator to member of a mock struct in a std::forward_list",
 
         REQUIRE(*it_beg == 10);
     }
+}
+
+TEST_CASE("member_iterator to member of a mock struct in a std::list",
+          "[member_iterator]")
+{
 }
