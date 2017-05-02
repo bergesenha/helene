@@ -125,6 +125,12 @@ public:
     {
         return this->current_[n];
     }
+
+    bool
+    operator<(const member_iterator_base& other) const
+    {
+        return this->current_ < other.current_;
+    }
 };
 
 template <class MemberType,
