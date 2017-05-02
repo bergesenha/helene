@@ -85,6 +85,31 @@ public:
 };
 
 
+template <class IteratorToStruct, class MemberType>
+class member_iterator_base<std::random_access_iterator_tag,
+                           IteratorToStruct,
+                           MemberType>
+    : public member_iterator_base<std::bidirectional_iterator_tag,
+                                  IteratorToStruct,
+                                  MemberType>
+{
+public:
+    typedef typename std::iterator_traits<IteratorToStruct>::difference_type
+        difference_type;
+
+public:
+    using member_iterator_base<std::bidirectional_iterator_tag,
+                               IteratorToStruct,
+                               MemberType>::member_iterator_base;
+
+public:
+    void
+    operator_pluss_equals(difference_type n)
+    {
+        this->current_ += n;
+    }
+};
+
 template <class MemberType,
           class StructType,
           class IteratorToStruct,
@@ -95,9 +120,13 @@ class member_iterator
           IteratorToStruct,
           MemberType>
 {
+public:
     typedef MemberType value_type;
     typedef MemberType& reference;
     typedef MemberType* pointer;
+
+    typedef typename std::iterator_traits<IteratorToStruct>::difference_type
+        difference_type;
 
 public:
     // using base class constructor directly
@@ -139,6 +168,13 @@ public:
     {
         IteratorToStruct temp = this->post_decrement();
         return member_iterator(temp);
+    }
+
+    member_iterator&
+    operator+=(difference_type n)
+    {
+        this->operator_pluss_equals(n);
+        return *this;
     }
 };
 }

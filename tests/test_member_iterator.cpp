@@ -26,6 +26,17 @@ TEST_CASE("member_iterator to member of a mock struct in std::vector",
         my_iter;
 
     std::vector<mock> container{{1, 1.0}, {2, 2.0}, {3, 3.0}};
+
+    my_iter beg_it(container.begin());
+    my_iter end_it(container.end());
+
+
+    SECTION("operator+= 2")
+    {
+        beg_it += 2;
+
+        REQUIRE(*beg_it == 3.0);
+    }
 }
 
 
