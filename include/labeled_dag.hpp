@@ -23,6 +23,20 @@ private:
     base_iterator current_;
 };
 
+template <class MemberType,
+          class StructType,
+          template <class...> class Container,
+          MemberType StructType::*Ptr>
+class const_member_iterator
+{
+private:
+    typedef typename Container<StructType>::const_iterator base_iterator;
+
+public:
+private:
+    base_iterator current_;
+};
+
 
 template <class LabelType, class NodeType>
 class labeled_dag
@@ -50,7 +64,17 @@ class labeled_dag
 public:
     ////////////////////////////////////////////////////////////////////////////
     // public typedefs
+    typedef member_iterator<NodeType,
+                            node_impl_,
+                            std::vector,
+                            &node_impl_::property>
+        iterator;
 
+    typedef const_member_iterator<NodeType,
+                                  node_impl_,
+                                  std::vector,
+                                  &node_impl_::property>
+        const_iterator;
 
 public:
 private:
