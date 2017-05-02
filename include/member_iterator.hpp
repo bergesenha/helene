@@ -194,5 +194,12 @@ public:
     {
         return rhs + lhs;
     }
+
+    member_iterator&
+    operator-=(difference_type n)
+    {
+        (*this) += -n;
+        return *this;
+    }
 };
 }
