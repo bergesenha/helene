@@ -26,13 +26,12 @@ public:
         return current_ != other.current_;
     }
 
-    member_iterator_base& operator++()
+    void
+    increment()
     {
         ++current_;
-        return *this;
     }
 
-    // TODO: post increment
 
 protected:
     IteratorToStruct current_;
@@ -84,6 +83,12 @@ public:
     pointer operator->()
     {
         return &(*(this->current_).*PtrValue);
+    }
+
+    member_iterator& operator++()
+    {
+        this->increment();
+        return *this;
     }
 };
 }
