@@ -46,21 +46,6 @@ public:
 };
 
 
-/*
-template <class IteratorToStruct>
-class member_iterator_base<std::random_access_iterator_tag, IteratorToStruct>
-{
-public:
-    member_iterator_base(IteratorToStruct it) : current_(it)
-    {
-    }
-
-protected:
-    IteratorToStruct current_;
-};
-*/
-
-
 template <class MemberType,
           class StructType,
           class IteratorToStruct,
