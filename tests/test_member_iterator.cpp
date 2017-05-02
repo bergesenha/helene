@@ -51,6 +51,13 @@ TEST_CASE("member_iterator to member of a mock struct in std::vector",
 
             REQUIRE(*new_it == 2.0);
         }
+
+        SECTION("operator- 1")
+        {
+            auto middle = new_it - 1;
+
+            REQUIRE(*middle == 2.0);
+        }
     }
 
     SECTION("2 + iterator")

@@ -201,5 +201,11 @@ public:
         (*this) += -n;
         return *this;
     }
+
+    member_iterator
+    operator-(difference_type n) const
+    {
+        return *this + (-n);
+    }
 };
 }
