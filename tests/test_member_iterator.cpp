@@ -96,4 +96,53 @@ TEST_CASE("member_iterator to member of a mock struct in a std::forward_list",
 TEST_CASE("member_iterator to member of a mock struct in a std::list",
           "[member_iterator]")
 {
+    struct mock
+    {
+        std::string name;
+        int value;
+    };
+
+    typedef helene::
+        member_iterator<int, mock, std::list<mock>::iterator, &mock::value>
+            my_iter;
+
+    std::list<mock> container{{std::string("one"), 1},
+                              {std::string("two"), 2},
+                              {std::string("three"), 3}};
+
+
+    my_iter it_beg(container.begin());
+    my_iter it_end(container.end());
+
+    REQUIRE(*it_beg == 1);
+
+    SECTION("increment iterator")
+    {
+        ++it_beg;
+
+        REQUIRE(*it_beg == 2);
+
+        SECTION("predecrement")
+        {
+            --it_beg;
+
+            REQUIRE(*it_beg == 1);
+        }
+
+        SECTION("post decrement")
+        {
+            auto prev = it_beg--;
+
+            REQUIRE(*it_beg == 1);
+            REQUIRE(*prev == 2);
+        }
+
+        SECTION("post decrement and dereference")
+        {
+            auto prev_val = *it_beg--;
+
+            REQUIRE(*it_beg == 1);
+            REQUIRE(prev_val == 2);
+        }
+    }
 }

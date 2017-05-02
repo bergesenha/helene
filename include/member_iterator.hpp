@@ -58,6 +58,33 @@ public:
 };
 
 
+template <class IteratorToStruct, class MemberType>
+class member_iterator_base<std::bidirectional_iterator_tag,
+                           IteratorToStruct,
+                           MemberType>
+    : public member_iterator_base<std::forward_iterator_tag,
+                                  IteratorToStruct,
+                                  MemberType>
+{
+public:
+    using member_iterator_base<std::forward_iterator_tag,
+                               IteratorToStruct,
+                               MemberType>::member_iterator_base;
+
+    void
+    decrement()
+    {
+        --this->current_;
+    }
+
+    IteratorToStruct
+    post_decrement()
+    {
+        return this->current_--;
+    }
+};
+
+
 template <class MemberType,
           class StructType,
           class IteratorToStruct,
@@ -99,6 +126,18 @@ public:
     member_iterator operator++(int)
     {
         IteratorToStruct temp = this->post_increment();
+        return member_iterator(temp);
+    }
+
+    member_iterator& operator--()
+    {
+        this->decrement();
+        return *this;
+    }
+
+    member_iterator operator--(int)
+    {
+        IteratorToStruct temp = this->post_decrement();
         return member_iterator(temp);
     }
 };
