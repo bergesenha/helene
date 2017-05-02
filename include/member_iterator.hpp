@@ -32,6 +32,11 @@ public:
         ++current_;
     }
 
+    IteratorToStruct
+    post_increment()
+    {
+        return current_++;
+    }
 
 protected:
     IteratorToStruct current_;
@@ -89,6 +94,12 @@ public:
     {
         this->increment();
         return *this;
+    }
+
+    member_iterator operator++(int)
+    {
+        IteratorToStruct temp = this->post_increment();
+        return member_iterator(temp);
     }
 };
 }
