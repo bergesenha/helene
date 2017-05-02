@@ -188,5 +188,11 @@ public:
     {
         return member_iterator(this->operator_pluss_number(n));
     }
+
+    friend member_iterator
+    operator+(difference_type lhs, const member_iterator& rhs)
+    {
+        return rhs + lhs;
+    }
 };
 }
