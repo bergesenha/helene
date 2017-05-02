@@ -9,6 +9,21 @@ namespace helene
 {
 
 
+template <class MemberType,
+          class StructType,
+          template <class...> class Container,
+          MemberType StructType::*Ptr>
+class member_iterator
+{
+private:
+    typedef typename Container<StructType>::iterator base_iterator;
+
+public:
+private:
+    base_iterator current_;
+};
+
+
 template <class LabelType, class NodeType>
 class labeled_dag
 {
