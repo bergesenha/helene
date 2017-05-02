@@ -234,7 +234,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove first node")
                     {
-                        one.remove_node(it1);
+                        one.erase(it1);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -272,7 +272,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove second node")
                     {
-                        one.remove_node(it2);
+                        one.erase(it2);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -300,7 +300,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove third node")
                     {
-                        one.remove_node(it3);
+                        one.erase(it3);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -328,7 +328,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                     SECTION("remove fourth node")
                     {
-                        one.remove_node(it4);
+                        one.erase(it4);
 
                         REQUIRE(one.size() == 3);
                         REQUIRE(one.edge_size() == 2);
@@ -391,7 +391,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove first node")
                 {
-                    one.remove_node(it1);
+                    one.erase(it1);
 
                     REQUIRE(one.size() == 2);
 
@@ -407,7 +407,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove second node")
                 {
-                    one.remove_node(it2);
+                    one.erase(it2);
 
                     REQUIRE(one.size() == 2);
 
@@ -433,7 +433,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
                 SECTION("remove third node")
                 {
-                    one.remove_node(it3);
+                    one.erase(it3);
 
                     REQUIRE(one.size() == 2);
 
@@ -478,7 +478,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("remove first node")
             {
-                one.remove_node(it1);
+                one.erase(it1);
 
                 REQUIRE(one.size() == 1);
                 REQUIRE(one.edge_size() == 0);
@@ -487,7 +487,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
             SECTION("remove second node")
             {
-                one.remove_node(it2);
+                one.erase(it2);
 
                 REQUIRE(one.size() == 1);
                 REQUIRE(one.edge_size() == 0);
@@ -521,7 +521,7 @@ TEST_CASE("test dag", "[dag<char, int>]")
 
         SECTION("remove the node")
         {
-            one.remove_node(it1);
+            one.erase(it1);
 
             REQUIRE(one.size() == 0);
             REQUIRE(one.begin() == one.end());

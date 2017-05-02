@@ -174,7 +174,7 @@ public:
 
 
     void
-    remove_node(iterator nd)
+    erase(iterator nd)
     {
         const auto index_to_remove = nd.current_index_;
         const auto index_of_last = node_properties_.size() - 1;
