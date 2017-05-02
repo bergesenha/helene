@@ -169,6 +169,9 @@ public:
     typedef typename std::iterator_traits<IteratorToStruct>::difference_type
         difference_type;
 
+    typedef typename std::iterator_traits<IteratorToStruct>::iterator_category
+        iterator_category;
+
 public:
     // using base class constructor directly
     using member_iterator_base<
@@ -247,5 +250,26 @@ public:
     {
         return this->array_access(n).*PtrValue;
     }
+};
+}
+
+
+namespace std
+{
+
+template <class MemberType,
+          class StructType,
+          class IteratorToStruct,
+          MemberType StructType::*PtrValue>
+struct iterator_traits<
+    helene::member_iterator<MemberType, StructType, IteratorToStruct, PtrValue>>
+{
+    typedef typename std::iterator_traits<IteratorToStruct>::difference_type
+        difference_type;
+    typedef MemberType value_type;
+    typedef MemberType* pointer;
+    typedef MemberType& reference;
+    typedef typename std::iterator_traits<IteratorToStruct>::iterator_category
+        iterator_category;
 };
 }
