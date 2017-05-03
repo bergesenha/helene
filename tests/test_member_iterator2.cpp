@@ -3,6 +3,7 @@
 #include <utility>
 #include <type_traits>
 #include <iterator>
+#include <algorithm>
 
 #include <member_iterator.hpp>
 
@@ -182,5 +183,16 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(val0 == 1);
         REQUIRE(val1 == 2);
         REQUIRE(val2 == 3);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Test std algorithms
+    SECTION("std::equal")
+    {
+        std::forward_list<mock> mocklist_copy = mocklist;
+
+        mocklist_iterator_type beg_it_copy(mocklist_copy.begin());
+
+        REQUIRE(std::equal(beg_it, end_it, beg_it_copy) == true);
     }
 }
