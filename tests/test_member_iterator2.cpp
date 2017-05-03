@@ -1,6 +1,8 @@
 #include "catch.hpp"
 
 #include <utility>
+#include <type_traits>
+#include <iterator>
 
 #include <member_iterator.hpp>
 
@@ -64,5 +66,27 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
 
         REQUIRE(beg_it2 == end_it);
         REQUIRE(end_it2 == beg_it);
+    }
+
+    SECTION("traits")
+    {
+        std::iterator_traits<mocklist_iterator_type>::value_type i = 20;
+        std::iterator_traits<mocklist_iterator_type>::difference_type j = -2;
+        std::iterator_traits<mocklist_iterator_type>::reference k = i;
+        std::iterator_traits<mocklist_iterator_type>::pointer l = &i;
+
+        bool is_forward_iterator = std::is_same<
+            std::iterator_traits<mocklist_iterator_type>::iterator_category,
+            std::forward_iterator_tag>::value;
+
+        REQUIRE(is_forward_iterator == true);
+    }
+
+    SECTION("dereference")
+    {
+        auto is_reference = std::is_same<decltype(*beg_it), int&>::value;
+
+        REQUIRE(is_reference == true);
+        REQUIRE(*beg_it == 1);
     }
 }
