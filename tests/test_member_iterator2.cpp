@@ -130,4 +130,16 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(is_conv_to_const_ref == true);
         REQUIRE(*beg_it == 2);
     }
+
+    SECTION("postincrement and dereference")
+    {
+        bool is_conv_to_value_type =
+            std::is_convertible<decltype(*beg_it++), int>::value;
+
+        auto val = *beg_it++;
+
+        REQUIRE(is_conv_to_value_type == true);
+        REQUIRE(val == 1);
+        REQUIRE(*beg_it == 2);
+    }
 }
