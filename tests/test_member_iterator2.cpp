@@ -372,4 +372,14 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
         REQUIRE(is_iter_type == true);
         REQUIRE(res1->i == 1);
     }
+
+    SECTION("subtracting two iterators")
+    {
+        bool is_difference_type =
+            std::is_same<decltype(end_it - beg_it),
+                         std::iterator_traits<
+                             mockveck_iterator_type>::difference_type>::value;
+
+        REQUIRE(end_it - beg_it == mockvec.size());
+    }
 }
