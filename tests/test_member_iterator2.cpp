@@ -317,4 +317,19 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
         REQUIRE(old.i == 2);
         REQUIRE(beg_it->i == 1);
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // RandomAccesIterator
+
+    SECTION("+=")
+    {
+        bool is_iter_ref =
+            std::is_same<decltype(beg_it += 2), mockveck_iterator_type&>::value;
+
+        beg_it += 2;
+
+        REQUIRE(is_iter_ref == true);
+
+        REQUIRE(beg_it->i == 3);
+    }
 }
