@@ -23,6 +23,12 @@ public:
     }
 
     bool
+    operator==(const member_iterator_base& other) const
+    {
+        return current_ == other.current_;
+    }
+
+    bool
     operator!=(const member_iterator_base& other) const
     {
         return current_ != other.current_;
