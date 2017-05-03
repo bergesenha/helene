@@ -1,5 +1,7 @@
 #include "catch.hpp"
 
+#include <utility>
+
 #include <member_iterator.hpp>
 
 #include <forward_list>
@@ -49,5 +51,18 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
 
         REQUIRE(another_it == beg_it);
         REQUIRE(*another_it == *beg_it);
+    }
+
+    SECTION("swappable")
+    {
+        using std::swap;
+
+        mocklist_iterator_type beg_it2 = beg_it;
+        mocklist_iterator_type end_it2 = end_it;
+
+        swap(beg_it2, end_it2);
+
+        REQUIRE(beg_it2 == end_it);
+        REQUIRE(end_it2 == beg_it);
     }
 }
