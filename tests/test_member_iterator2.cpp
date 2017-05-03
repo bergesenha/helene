@@ -277,4 +277,13 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
         mockveck_iterator_type;
 
     std::vector<mock> mockvec{{0.3, {1}}, {0.4, {2}}, {0.3, {3}}};
+
+    SECTION("category should be random_access_iterator_tag")
+    {
+        bool is_rai = std::is_same<
+            std::iterator_traits<mockveck_iterator_type>::iterator_category,
+            std::random_access_iterator_tag>::value;
+
+        REQUIRE(is_rai == true);
+    }
 }
