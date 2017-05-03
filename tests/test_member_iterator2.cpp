@@ -278,6 +278,9 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
 
     std::vector<mock> mockvec{{0.3, {1}}, {0.4, {2}}, {0.3, {3}}};
 
+    mockveck_iterator_type beg_it(mockvec.begin());
+    mockveck_iterator_type end_it(mockvec.end());
+
     SECTION("category should be random_access_iterator_tag")
     {
         bool is_rai = std::is_same<
@@ -285,5 +288,33 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
             std::random_access_iterator_tag>::value;
 
         REQUIRE(is_rai == true);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // BidirectionalIterator
+
+    SECTION("predecrement")
+    {
+        --end_it;
+
+        REQUIRE(end_it->i == 3);
+        REQUIRE(end_it->get_i() == 3);
+    }
+
+    SECTION("postdecrement")
+    {
+        end_it--;
+
+        REQUIRE(end_it->i == 3);
+        REQUIRE(end_it->get_i() == 3);
+    }
+
+    SECTION("postdecrement and dereference statement")
+    {
+        ++beg_it;
+
+        auto old = *beg_it--;
+        REQUIRE(old.i == 2);
+        REQUIRE(beg_it->i == 1);
     }
 }
