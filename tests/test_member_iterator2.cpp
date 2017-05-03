@@ -168,4 +168,19 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         mocklist_iterator_type();
         mocklist_iterator_type{};
     }
+
+    SECTION("multipass guarantee")
+    {
+        auto beg_it_copy = beg_it;
+        ++beg_it;
+        ++beg_it;
+
+        auto val0 = *beg_it_copy++;
+        auto val1 = *beg_it_copy++;
+        auto val2 = *beg_it_copy;
+
+        REQUIRE(val0 == 1);
+        REQUIRE(val1 == 2);
+        REQUIRE(val2 == 3);
+    }
 }
