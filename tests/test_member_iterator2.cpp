@@ -414,4 +414,29 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
 
         REQUIRE(std::equal(beg_it, end_it, payloads.begin()));
     }
+
+    SECTION("std::find")
+    {
+        auto found = std::find(beg_it, end_it, payload{2});
+
+        REQUIRE(found != end_it);
+        REQUIRE(found->i == 2);
+    }
+
+    SECTION("std::find_if")
+    {
+        auto found = std::find_if(beg_it, end_it, [](const payload& pl) {
+            if(pl.get_i() == 3)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        });
+
+        REQUIRE(found != end_it);
+        REQUIRE(found->i == 3);
+    }
 }
