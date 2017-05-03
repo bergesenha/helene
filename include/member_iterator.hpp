@@ -6,10 +6,12 @@
 namespace helene
 {
 
+// undefined base template, specialized for each iterator category
 template <class IteratorCategory, class IteratorToStruct, class MemberType>
 class member_iterator_base;
 
 
+// implements functionality necessary to satisfy InputIterator
 template <class IteratorToStruct, class MemberType>
 class member_iterator_base<std::input_iterator_tag,
                            IteratorToStruct,
@@ -43,6 +45,7 @@ protected:
 };
 
 
+// implements functionality necessary to satisfy ForwardIterator
 template <class IteratorToStruct, class MemberType>
 class member_iterator_base<std::forward_iterator_tag,
                            IteratorToStruct,
@@ -58,6 +61,7 @@ public:
 };
 
 
+// implements functionality necessary to satisfy BidirectionalIterator
 template <class IteratorToStruct, class MemberType>
 class member_iterator_base<std::bidirectional_iterator_tag,
                            IteratorToStruct,
@@ -85,6 +89,7 @@ public:
 };
 
 
+// implements functionality necessary to satisfy RandomAccessIterator
 template <class IteratorToStruct, class MemberType>
 class member_iterator_base<std::random_access_iterator_tag,
                            IteratorToStruct,
@@ -151,6 +156,9 @@ public:
     }
 };
 
+
+// interface to member_iterator, inherits appropriate functionality depending on
+// template arguments
 template <class MemberType,
           class StructType,
           class IteratorToStruct,
@@ -257,6 +265,7 @@ public:
 namespace std
 {
 
+// specialization of iterator_traits for use with the standard library
 template <class MemberType,
           class StructType,
           class IteratorToStruct,
