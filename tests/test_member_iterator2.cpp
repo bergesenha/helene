@@ -382,4 +382,26 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
 
         REQUIRE(end_it - beg_it == mockvec.size());
     }
+
+    SECTION("array_access")
+    {
+        REQUIRE(beg_it[0].i == 1);
+        REQUIRE(beg_it[2].i == 3);
+        REQUIRE(end_it[-1].i == 3);
+    }
+
+    SECTION("less than")
+    {
+
+        REQUIRE(beg_it < end_it);
+        REQUIRE(beg_it <= end_it);
+        REQUIRE(beg_it <= beg_it);
+    }
+
+    SECTION("greater than")
+    {
+        REQUIRE(end_it > beg_it);
+        REQUIRE(end_it >= beg_it);
+        REQUIRE(end_it >= end_it);
+    }
 }
