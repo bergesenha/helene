@@ -202,4 +202,39 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
 
         REQUIRE(found != end_it);
     }
+
+    SECTION("std::for_each")
+    {
+        int sum = 0;
+
+        std::for_each(beg_it, end_it, [&sum](int i) { sum += i; });
+
+        REQUIRE(sum == 6);
+    }
+
+    SECTION("std::search") // requires ForwardIterator
+    {
+        std::vector<int> subsequence;
+        subsequence.push_back(2);
+        subsequence.push_back(3);
+
+        auto found =
+            std::search(beg_it, end_it, subsequence.begin(), subsequence.end());
+
+        REQUIRE(found != end_it);
+    }
+
+    SECTION("std::remove") // requires ForwardIterator
+    {
+        auto past_end = std::remove(beg_it, end_it, 2);
+
+        REQUIRE(*beg_it == 1);
+
+        SECTION("increment to second element")
+        {
+            ++beg_it;
+
+            REQUIRE(*beg_it == 3);
+        }
+    }
 }
