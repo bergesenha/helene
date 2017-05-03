@@ -119,4 +119,15 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(not_equal == false);
     }
 
+    SECTION("postincrement")
+    {
+        bool is_conv_to_const_ref =
+            std::is_convertible<decltype(beg_it++),
+                                const mocklist_iterator_type&>::value;
+
+        (void)beg_it++;
+
+        REQUIRE(is_conv_to_const_ref == true);
+        REQUIRE(*beg_it == 2);
+    }
 }
