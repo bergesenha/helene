@@ -404,4 +404,14 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
         REQUIRE(end_it >= beg_it);
         REQUIRE(end_it >= end_it);
     }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // std library algorithm tests
+
+    SECTION("std::equal")
+    {
+        std::vector<payload> payloads{{1}, {2}, {3}};
+
+        REQUIRE(std::equal(beg_it, end_it, payloads.begin()));
+    }
 }
