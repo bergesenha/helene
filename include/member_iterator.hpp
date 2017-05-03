@@ -52,6 +52,13 @@ public:
 
 protected:
     IteratorToStruct current_;
+
+public:
+    friend IteratorToStruct
+    cast_to_struct_iterator(const member_iterator_base& other)
+    {
+        return other.current_;
+    }
 };
 
 
