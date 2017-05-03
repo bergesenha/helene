@@ -195,4 +195,11 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
 
         REQUIRE(std::equal(beg_it, end_it, beg_it_copy) == true);
     }
+
+    SECTION("std::find")
+    {
+        auto found = std::find(beg_it, end_it, 2);
+
+        REQUIRE(found != end_it);
+    }
 }
