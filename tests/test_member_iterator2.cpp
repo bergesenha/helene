@@ -101,4 +101,13 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(*beg_it == 2);
         REQUIRE(is_iterator_reference == true);
     }
+
+    SECTION("EqualityComparable")
+    {
+        bool equal = beg_it == end_it;
+
+
+        REQUIRE(equal == false);
+        REQUIRE(beg_it == mocklist.begin());
+    }
 }
