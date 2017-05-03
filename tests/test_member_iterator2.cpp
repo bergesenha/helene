@@ -89,4 +89,16 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(is_reference == true);
         REQUIRE(*beg_it == 1);
     }
+
+    SECTION("preincrement")
+    {
+        auto ref_it = ++beg_it;
+
+        bool is_iterator_reference =
+            std::is_same<decltype(++beg_it), mocklist_iterator_type&>::value;
+
+        REQUIRE(ref_it == beg_it);
+        REQUIRE(*beg_it == 2);
+        REQUIRE(is_iterator_reference == true);
+    }
 }
