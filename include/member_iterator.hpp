@@ -142,6 +142,12 @@ public:
         return this->current_[n];
     }
 
+    difference_type
+    operator_minus(const member_iterator_base& other) const
+    {
+        return this->current_ - other.current_;
+    }
+
     bool
     operator<(const member_iterator_base& other) const
     {
@@ -263,6 +269,12 @@ public:
     operator-(difference_type n) const
     {
         return *this + (-n);
+    }
+
+    difference_type
+    operator-(const member_iterator& other) const
+    {
+        return this->operator_minus(other);
     }
 
     reference operator[](difference_type n)
