@@ -227,14 +227,20 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
     SECTION("std::remove") // requires ForwardIterator
     {
         auto past_end = std::remove(beg_it, end_it, 2);
+        auto native_iter = mocklist.begin();
 
         REQUIRE(*beg_it == 1);
+        REQUIRE(native_iter->i == 1);
+        REQUIRE(native_iter->c == 'a');
 
         SECTION("increment to second element")
         {
             ++beg_it;
+            ++native_iter;
 
             REQUIRE(*beg_it == 3);
+            REQUIRE(native_iter->i == 3);
+            REQUIRE(native_iter->c == 'b');
         }
     }
 }
