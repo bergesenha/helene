@@ -299,6 +299,18 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
 
         REQUIRE(end_it->i == 3);
         REQUIRE(end_it->get_i() == 3);
+
+        SECTION("cast back to vector::iterator")
+        {
+            // called with namespace
+            auto vec_it = helene::cast_to_struct_iterator(end_it);
+
+            // called through ADL
+            auto vec_it2 = cast_to_struct_iterator(beg_it);
+
+            REQUIRE(vec_it->weight == 0.3);
+            REQUIRE(vec_it2->value.i == 1);
+        }
     }
 
     SECTION("postdecrement")

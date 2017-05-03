@@ -52,6 +52,8 @@ public:
 
 protected:
     IteratorToStruct current_;
+
+public:
 };
 
 
@@ -173,6 +175,25 @@ public:
     }
 };
 
+template <class MemberType,
+          class StructType,
+          class IteratorToStruct,
+          MemberType StructType::*PtrValue>
+class member_iterator;
+
+
+template <class MemberType,
+          class StructType,
+          class IteratorToStruct,
+          MemberType StructType::*PtrValue>
+IteratorToStruct
+cast_to_struct_iterator(
+    const member_iterator<MemberType, StructType, IteratorToStruct, PtrValue>&
+        iter)
+{
+    return iter.current_;
+}
+
 
 // interface to member_iterator, inherits appropriate functionality depending on
 // template arguments
@@ -186,6 +207,14 @@ class member_iterator
           IteratorToStruct,
           MemberType>
 {
+public:
+    friend IteratorToStruct
+    cast_to_struct_iterator<MemberType, StructType, IteratorToStruct, PtrValue>(
+        const member_iterator<MemberType,
+                              StructType,
+                              IteratorToStruct,
+                              PtrValue>&);
+
 public:
     typedef MemberType value_type;
     typedef MemberType& reference;
