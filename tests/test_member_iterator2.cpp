@@ -26,6 +26,8 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
     mocklist_iterator_type beg_it = mocklist.begin();
     mocklist_iterator_type end_it = mocklist.end();
 
+    ////////////////////////////////////////////////////////////////////////////
+    // Iterator concept
     SECTION("construction")
     {
         auto elem = *beg_it;
@@ -111,6 +113,8 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(beg_it == mocklist.begin());
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    // InputIterator
     SECTION("!=")
     {
         bool not_equal = beg_it != mocklist.begin();
@@ -141,5 +145,16 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(is_conv_to_value_type == true);
         REQUIRE(val == 1);
         REQUIRE(*beg_it == 2);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////
+    // OutputIterator
+    SECTION("assignment through iterator")
+    {
+        *beg_it = 10;
+
+        REQUIRE(*beg_it == 10);
+        REQUIRE(mocklist.front().i == 10);
+        REQUIRE(mocklist.front().c == 'a');
     }
 }
