@@ -361,4 +361,15 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
         REQUIRE(is_iter_ref == true);
         REQUIRE(end_it->i == 2);
     }
+
+    SECTION("subtracting number")
+    {
+        bool is_iter_type =
+            std::is_same<decltype(end_it - 2), mockveck_iterator_type>::value;
+
+        auto res1 = end_it - 3;
+
+        REQUIRE(is_iter_type == true);
+        REQUIRE(res1->i == 1);
+    }
 }
