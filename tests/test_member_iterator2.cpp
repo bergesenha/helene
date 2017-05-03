@@ -244,3 +244,37 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         }
     }
 }
+
+
+TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
+{
+    struct payload
+    {
+        int i;
+        int
+        get_i() const
+        {
+            return i;
+        }
+
+        bool
+        operator==(const payload& other) const
+        {
+            return i == other.i;
+        }
+    };
+
+    struct mock
+    {
+        double weight;
+        payload value;
+    };
+
+    typedef helene::member_iterator<payload,
+                                    mock,
+                                    std::vector<mock>::iterator,
+                                    &mock::value>
+        mockveck_iterator_type;
+
+    std::vector<mock> mockvec{{0.3, {1}}, {0.4, {2}}, {0.3, {3}}};
+}
