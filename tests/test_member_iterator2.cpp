@@ -439,4 +439,35 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
         REQUIRE(found != end_it);
         REQUIRE(found->i == 3);
     }
+
+    // requires RandomAccessIterator
+    SECTION("std::sort")
+    {
+        // reverse sort
+        std::sort(beg_it, end_it, [](const payload& lhs, const payload& rhs) {
+            if(lhs.i > rhs.i)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        });
+
+        auto second = beg_it + 1;
+        auto third = beg_it + 2;
+
+        REQUIRE(beg_it->i == 3);
+        REQUIRE(second->i == 2);
+        REQUIRE(third->i == 1);
+
+        // rest of mock structs untouched
+        REQUIRE(mockvec[0].value.i == 3);
+        REQUIRE(mockvec[0].weight == 0.3);
+        REQUIRE(mockvec[1].value.i == 2);
+        REQUIRE(mockvec[1].weight == 0.4);
+        REQUIRE(mockvec[2].value.i == 1);
+        REQUIRE(mockvec[2].weight == 0.3);
+    }
 }
