@@ -332,4 +332,22 @@ TEST_CASE("member_iterator based on std::vector::iterator", "[member_iterator]")
 
         REQUIRE(beg_it->i == 3);
     }
+
+    SECTION("adding number")
+    {
+        bool is_iter_type =
+            std::is_same<decltype(beg_it + 2), mockveck_iterator_type>::value;
+        bool is_iter_type2 =
+            std::is_same<decltype(2 + beg_it), mockveck_iterator_type>::value;
+
+        auto res1 = beg_it + 2;
+        auto res2 = 2 + beg_it;
+
+        REQUIRE(is_iter_type == true);
+        REQUIRE(is_iter_type2 == true);
+
+        REQUIRE(res1 == res2);
+        REQUIRE(res1->i == 3);
+        REQUIRE(res2->i == 3);
+    }
 }
