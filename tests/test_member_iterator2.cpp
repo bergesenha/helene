@@ -20,6 +20,7 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
             mocklist_iterator_type;
 
     mocklist_iterator_type beg_it = mocklist.begin();
+    mocklist_iterator_type end_it = mocklist.end();
 
     SECTION("construction")
     {
@@ -29,5 +30,24 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
 
         REQUIRE(*mov_it == elem);
         REQUIRE(cop_it == mov_it);
+    }
+
+    SECTION("assignment")
+    {
+        mocklist_iterator_type cop_it = beg_it;
+        cop_it = end_it;
+
+        REQUIRE(cop_it == end_it);
+    }
+
+    SECTION("move assignment")
+    {
+        mocklist_iterator_type an_it = beg_it;
+        mocklist_iterator_type another_it = end_it;
+
+        another_it = std::move(an_it);
+
+        REQUIRE(another_it == beg_it);
+        REQUIRE(*another_it == *beg_it);
     }
 }
