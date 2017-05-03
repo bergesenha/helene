@@ -110,4 +110,13 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(equal == false);
         REQUIRE(beg_it == mocklist.begin());
     }
+
+    SECTION("!=")
+    {
+        bool not_equal = beg_it != mocklist.begin();
+
+        REQUIRE(beg_it != end_it);
+        REQUIRE(not_equal == false);
+    }
+
 }
