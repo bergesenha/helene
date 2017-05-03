@@ -18,6 +18,10 @@ class member_iterator_base<std::input_iterator_tag,
                            MemberType>
 {
 public:
+    member_iterator_base() : current_()
+    {
+    }
+
     member_iterator_base(IteratorToStruct it) : current_(it)
     {
     }
@@ -80,6 +84,7 @@ public:
     using member_iterator_base<std::forward_iterator_tag,
                                IteratorToStruct,
                                MemberType>::member_iterator_base;
+
 
     void
     decrement()

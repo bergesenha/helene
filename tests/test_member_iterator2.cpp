@@ -157,4 +157,15 @@ TEST_CASE("member_iterator based on ForwardIterator", "[member_iterator]")
         REQUIRE(mocklist.front().i == 10);
         REQUIRE(mocklist.front().c == 'a');
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // ForwardIterator
+    SECTION("DefaultConstructible")
+    {
+        mocklist_iterator_type it;
+        mocklist_iterator_type it2{};
+        mocklist_iterator_type();
+        mocklist_iterator_type{};
+    }
 }
