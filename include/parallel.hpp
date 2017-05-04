@@ -12,17 +12,6 @@
 
 namespace helene
 {
-
-
-template <class InputIterator1, class InputIterator2>
-InputIterator1
-remove_by_index(InputIterator1 begin,
-                InputIterator1 end,
-                InputIterator2 index_begin)
-{
-}
-
-
 // remove elements in same positions in both ranges according to value in first
 // range.
 template <class ForwardIterator1, class ForwardIterator2, class T>
@@ -112,17 +101,6 @@ parallel_remove(ForwardIterator1 begin1,
     }
 
     return std::make_pair(new_end1, new_end2);
-}
-
-
-// remove elements in both ranges according to predicate on first range.
-template <class InputIterator1, class InputIterator2, class UnaryPredicate>
-std::pair<InputIterator1, InputIterator2>
-parallel_remove_if(InputIterator1 begin1,
-                   InputIterator1 end1,
-                   InputIterator2 begin2,
-                   UnaryPredicate p)
-{
 }
 }
 
