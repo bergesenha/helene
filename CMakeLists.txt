@@ -5,7 +5,7 @@ project(helene CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-option(HELENE_BUILD_TESTS "Build unit tests" ON)
+option(HELENE_BUILD_TESTS "Build unit tests" OFF)
 
 add_library(helene INTERFACE)
 target_include_directories(helene INTERFACE
