@@ -68,3 +68,23 @@ d = underlying_found->payload; // d is 3.1
 size_t metadata_of_found = underlying_found->metadata; // metadata_of_found is 2
 
 ```
+
+
+
+## Building
+
+Helene is a header only library, as such the only required build step is to
+include the relevant header files from helene's include/ directory.
+
+If your project uses cmake, you can take advantage of the interface library
+target defined in helene's CMakeLists.txt.
+
+In your CMakeLists.txt:
+```cmake
+add_subdirectory(path/to/helene)
+
+target_link_libraries(your_target helene)
+```
+
+This adds the required include paths to your build. Then simply include the
+required include files for the desired class/algorithm.
