@@ -88,3 +88,18 @@ target_link_libraries(your_target helene)
 
 This adds the required include paths to your build. Then simply include the
 required include files for the desired class/algorithm.
+
+
+## Building Unit Tests
+
+Helene uses Catch for unit testing. In the unlikely event you want to compile
+the unit tests, you'll need to use the --recursive/--recurse-submodules option
+when cloning this repo to your machine to also pull down the Catch source into
+the external/ subdirectory. Alternatively you could run the following:
+```bash
+$ git submodule init
+$ git submodule update
+```
+
+In addition, the option -DHELENE_BUILD_TESTS=ON must be specified when running
+cmake.
