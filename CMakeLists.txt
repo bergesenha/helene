@@ -7,6 +7,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(HELENE_BUILD_TESTS "Build unit tests" ON)
 
+add_library(helene INTERFACE)
+target_include_directories(helene INTERFACE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/)
 
 if(HELENE_BUILD_TESTS)
     add_subdirectory(external/Catch)
@@ -23,9 +26,9 @@ if(HELENE_BUILD_TESTS)
         )
 
     add_executable(unit_tests ${HELENE_TEST_SRC})
+    target_link_libraries(unit_tests helene)
     target_include_directories(unit_tests
         PRIVATE external/Catch/include/
-        PRIVATE include/
         )
     set_target_properties(unit_tests PROPERTIES
         CXX_STANDARD_REQUIRED ON
