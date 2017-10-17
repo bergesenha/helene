@@ -21,3 +21,13 @@ TEST_CASE("create array_view from array of ints", "[array_view]")
         REQUIRE(*f == 1);
     }
 }
+
+
+TEST_CASE("create array_view from const array of double", "[make_array_view]")
+{
+    const double my_array[] = {1.1, 2.2, 3.3};
+
+    auto av = helene::make_array_view(my_array);
+
+    auto f = av.begin();
+}

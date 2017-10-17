@@ -79,4 +79,10 @@ private:
     T* decayed_;
     std::size_t size_;
 };
+
+template <class T, std::size_t N>
+array_view<T> make_array_view(T (&arr)[N])
+{
+    return array_view<T>(arr);
+}
 }
