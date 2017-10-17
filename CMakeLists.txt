@@ -23,6 +23,8 @@ if(HELENE_BUILD_TESTS)
         tests/test_member_iterator.cpp
         tests/test_member_iterator2.cpp
         tests/test_algorithms.cpp
+        tests/test_algorithms.cpp
+        tests/test_array_view.cpp
         )
 
     add_executable(unit_tests ${HELENE_TEST_SRC})
