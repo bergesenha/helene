@@ -75,6 +75,18 @@ public:
         return decayed_[n];
     }
 
+    T*
+    data()
+    {
+        return decayed_;
+    }
+
+    const T*
+    data() const
+    {
+        return decayed_;
+    }
+
 private:
     T* decayed_;
     std::size_t size_;
