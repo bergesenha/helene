@@ -31,6 +31,7 @@ TEST_CASE("", "[soa]")
 
 
         a.push_back(p);
+        CHECK(a.size() == 1);
 
         SECTION("access first element by array access")
         {
@@ -39,6 +40,13 @@ TEST_CASE("", "[soa]")
             CHECK(pp.x == Approx(1.1f));
             CHECK(pp.y == Approx(2.2f));
             CHECK(pp.z == Approx(3.3f));
+        }
+
+        SECTION("access underlying buffer of x members")
+        {
+            auto x_data = a.data<decltype(&point::x), &point::x>();
+
+            CHECK(*x_data == Approx(1.1f));
         }
     }
 }

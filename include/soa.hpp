@@ -199,5 +199,19 @@ public:
         return proxy_value_type(
             member_container<MemberPtrTypes, MemberPtrValues>::members_[n]...);
     }
+
+    template <class MemberPtrType, MemberPtrType MemberPtrValue>
+    soa_detail::member_type_t<MemberPtrType>*
+    data()
+    {
+        return member_container<MemberPtrType, MemberPtrValue>::members_.data();
+    }
+
+    template <class MemberPtrType, MemberPtrType MemberPtrValue>
+    const soa_detail::member_type_t<MemberPtrType>*
+    data() const
+    {
+        return member_container<MemberPtrType, MemberPtrValue>::members_.data();
+    }
 };
 }
