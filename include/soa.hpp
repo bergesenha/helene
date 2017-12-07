@@ -29,7 +29,7 @@ using object_type_t =
 
 
 // helper to access respective parents that are multiply inherited
-template <class FirstParent, class... RestParenst>
+template <class FirstParent, class... RestParents>
 struct parent_helper
 {
     template <class SoaType>
@@ -38,7 +38,16 @@ struct parent_helper
     {
         return s.FirstParent::members_.size();
     }
+
+    template <class SoaType>
+    static void
+    push_back(SoaType& s, const typename SoaType::value_type& value)
+    {
+        s.FirstParent::members_.push_back(value.*FirstParent::pointer);
+        parent_helper<RestParents...>::push_back(s, value);
+    }
 };
+
 
 template <class LastParent>
 struct parent_helper<LastParent>
@@ -49,6 +58,13 @@ struct parent_helper<LastParent>
     {
         return s.LastParent::members_.size();
     }
+
+    template <class SoaType>
+    static void
+    push_back(SoaType& s, const typename SoaType::value_type& value)
+    {
+        s.LastParent::members_.push_back(value.*LastParent::pointer);
+    }
 };
 
 
@@ -58,6 +74,8 @@ class member_container
 public:
     typedef soa_detail::member_type_t<MemberPointerType> member_type;
     typedef soa_detail::object_type_t<MemberPointerType> object_type;
+
+    static constexpr MemberPointerType pointer = MemberPointerValue;
 
 public:
     member_container() = default;
@@ -74,6 +92,8 @@ class soa<T, member_container<MemberPtrTypes, MemberPtrValues>...>
     : public member_container<MemberPtrTypes, MemberPtrValues>...
 {
 public:
+    typedef T value_type;
+public:
     soa() : member_container<MemberPtrTypes, MemberPtrValues>()...
     {
     }
@@ -84,6 +104,13 @@ public:
     {
         return parent_helper<
             member_container<MemberPtrTypes, MemberPtrValues>...>::size(*this);
+    }
+
+    void
+    push_back(const T& value)
+    {
+        parent_helper<member_container<MemberPtrTypes, MemberPtrValues>...>::
+            push_back(*this, value);
     }
 };
 }

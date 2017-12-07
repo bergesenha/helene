@@ -24,4 +24,12 @@ TEST_CASE("", "[soa]")
 
 
     CHECK(a.size() == 0);
+
+    SECTION("push back a value")
+    {
+        point p{1.1f, 2.2f, 3.3f};
+
+
+        a.push_back(p);
+    }
 }
