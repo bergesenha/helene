@@ -43,6 +43,12 @@ struct parent_helper
 template <class LastParent>
 struct parent_helper<LastParent>
 {
+    template <class SoaType>
+    static std::size_t
+    size(const SoaType& s)
+    {
+        return s.LastParent::members_.size();
+    }
 };
 
 
