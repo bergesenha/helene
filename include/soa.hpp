@@ -28,6 +28,24 @@ using object_type_t =
 }
 
 
+// helper to access respective parents that are multiply inherited
+template <class FirstParent, class... RestParenst>
+struct parent_helper
+{
+    template <class SoaType>
+    static std::size_t
+    size(const SoaType& s)
+    {
+        return s.FirstParent::members_.size();
+    }
+};
+
+template <class LastParent>
+struct parent_helper<LastParent>
+{
+};
+
+
 template <class MemberPointerType, MemberPointerType MemberPointerValue>
 class member_container
 {
@@ -38,30 +56,28 @@ public:
 public:
     member_container() = default;
 
-private:
     std::vector<member_type> members_;
 };
 
 
-// helper to access respective parents that are multiply inherited
-template <class FirstParent, class... RestParenst>
-struct parent_helper
-{
-};
-
-template <class LastParent>
-struct parent_helper<LastParent>
-{
-};
-
 template <class T, class... MemberContainer>
-class soa : public MemberContainer...
+class soa;
+
+template <class T, class... MemberPtrTypes, MemberPtrTypes... MemberPtrValues>
+class soa<T, member_container<MemberPtrTypes, MemberPtrValues>...>
+    : public member_container<MemberPtrTypes, MemberPtrValues>...
 {
 public:
-    soa() : MemberContainer::MemberContainer()...
+    soa() : member_container<MemberPtrTypes, MemberPtrValues>()...
     {
     }
 
-private:
+
+    std::size_t
+    size() const
+    {
+        return parent_helper<
+            member_container<MemberPtrTypes, MemberPtrValues>...>::size(*this);
+    }
 };
 }

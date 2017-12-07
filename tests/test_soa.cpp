@@ -19,4 +19,9 @@ TEST_CASE("", "[soa]")
         helene::member_container<decltype(&point::y), &point::y>,
         helene::member_container<decltype(&point::z), &point::z>>
         mysoa;
+
+    mysoa a;
+
+
+    CHECK(a.size() == 0);
 }
