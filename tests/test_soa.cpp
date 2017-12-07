@@ -31,6 +31,15 @@ TEST_CASE("", "[soa]")
 
 
         a.push_back(p);
+
+        SECTION("access first element by array access")
+        {
+            point pp = a[0];
+
+            CHECK(pp.x == Approx(1.1f));
+            CHECK(pp.y == Approx(2.2f));
+            CHECK(pp.z == Approx(3.3f));
+        }
     }
 }
 
@@ -61,7 +70,7 @@ TEST_CASE("create element_proxy with some values", "[element_proxy]")
 
     SECTION("assign point to element_proxy")
     {
-        point pp{ 2.2f, 3.3f, 4.4f};
+        point pp{2.2f, 3.3f, 4.4f};
 
         p = pp;
 

@@ -172,6 +172,9 @@ class soa<T, member_container<MemberPtrTypes, MemberPtrValues>...>
 {
 public:
     typedef T value_type;
+    typedef element_proxy<T,
+                          member_reference<MemberPtrTypes, MemberPtrValues>...>
+        proxy_value_type;
 
 public:
     soa() : member_container<MemberPtrTypes, MemberPtrValues>()...
@@ -190,6 +193,12 @@ public:
     {
         parent_helper<member_container<MemberPtrTypes, MemberPtrValues>...>::
             push_back(*this, value);
+    }
+
+    proxy_value_type operator[](std::size_t n)
+    {
+        return proxy_value_type(
+            member_container<MemberPtrTypes, MemberPtrValues>::members_[n]...);
     }
 };
 }
