@@ -25,13 +25,14 @@ TEST_CASE("", "[soa]")
 
     CHECK(a.size() == 0);
 
-    SECTION("push back a value")
+    SECTION("push back values")
     {
         point p{1.1f, 2.2f, 3.3f};
 
 
         a.push_back(p);
-        CHECK(a.size() == 1);
+        a.push_back({4.4f, 5.5f, 6.6f});
+        REQUIRE(a.size() == 2);
 
         SECTION("access first element by array access")
         {
@@ -47,6 +48,7 @@ TEST_CASE("", "[soa]")
             auto x_data = a.data<decltype(&point::x), &point::x>();
 
             CHECK(*x_data == Approx(1.1f));
+            CHECK(x_data[1] == Approx(4.4f));
         }
     }
 }
