@@ -58,4 +58,15 @@ TEST_CASE("create element_proxy with some values", "[element_proxy]")
         CHECK(pp.y == Approx(2.1f));
         CHECK(pp.z == Approx(3.1f));
     }
+
+    SECTION("assign point to element_proxy")
+    {
+        point pp{ 2.2f, 3.3f, 4.4f};
+
+        p = pp;
+
+        CHECK(x == Approx(2.2f));
+        CHECK(y == Approx(3.3f));
+        CHECK(z == Approx(4.4f));
+    }
 }

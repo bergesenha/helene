@@ -50,6 +50,37 @@ class element_proxy<T, member_reference<PointerTypes, PointerValues>...>
         return T{*std::get<S>(pointers_)...};
     }
 
+    template <class FirstRef, class... RestRefs>
+    struct assignment_helper
+    {
+        template <std::size_t S, std::size_t... Ss>
+        static void
+        assign(std::tuple<soa_detail::member_type_t<PointerTypes>*...>& tpl,
+               const T& value,
+               std::index_sequence<S, Ss...>)
+        {
+            *std::get<S>(tpl) = value.*FirstRef::pointer_value;
+
+            assignment_helper<RestRefs...>::assign(
+                tpl, value, std::index_sequence<Ss...>());
+        }
+    };
+
+    template <class LastRef>
+    struct assignment_helper<LastRef>
+    {
+
+        template <std::size_t S>
+        static void
+        assign(std::tuple<soa_detail::member_type_t<PointerTypes>*...>& tpl,
+               const T& value,
+               std::index_sequence<S>)
+        {
+
+            *std::get<S>(tpl) = value.*LastRef::pointer_value;
+        }
+    };
+
 public:
     element_proxy(soa_detail::member_type_t<PointerTypes>&... args)
         : pointers_(&args...)
@@ -59,6 +90,16 @@ public:
     operator T()
     {
         return make_dispatch(std::index_sequence_for<PointerTypes...>());
+    }
+
+    element_proxy&
+    operator=(const T& value)
+    {
+        assignment_helper<member_reference<PointerTypes, PointerValues>...>::
+            assign(
+                pointers_, value, std::index_sequence_for<PointerTypes...>());
+
+        return *this;
     }
 
 private:
