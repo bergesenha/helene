@@ -1,6 +1,8 @@
 #pragma once
 
 #include <vector>
+#include <tuple>
+#include <utility>
 
 
 namespace helene
@@ -26,6 +28,42 @@ template <class MemberPointerType>
 using object_type_t =
     typename deduce_member_pointer<MemberPointerType>::object_type;
 }
+
+
+template <class PointerType, PointerType PointerValue>
+struct member_reference
+{
+    static constexpr PointerType pointer_value = PointerValue;
+};
+
+
+template <class T, class... MemberRefs>
+class element_proxy;
+
+template <class T, class... PointerTypes, PointerTypes... PointerValues>
+class element_proxy<T, member_reference<PointerTypes, PointerValues>...>
+{
+    template <std::size_t... S>
+    T
+    make_dispatch(std::index_sequence<S...>)
+    {
+        return T{*std::get<S>(pointers_)...};
+    }
+
+public:
+    element_proxy(soa_detail::member_type_t<PointerTypes>&... args)
+        : pointers_(&args...)
+    {
+    }
+
+    operator T()
+    {
+        return make_dispatch(std::index_sequence_for<PointerTypes...>());
+    }
+
+private:
+    std::tuple<soa_detail::member_type_t<PointerTypes>*...> pointers_;
+};
 
 
 // helper to access respective parents that are multiply inherited
@@ -93,6 +131,7 @@ class soa<T, member_container<MemberPtrTypes, MemberPtrValues>...>
 {
 public:
     typedef T value_type;
+
 public:
     soa() : member_container<MemberPtrTypes, MemberPtrValues>()...
     {
