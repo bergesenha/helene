@@ -200,5 +200,11 @@ public:
         return proxy_value_type(
             member_container<MemberPtrTypes, MemberPtrValues>::members_[n]...);
     }
+
+    const proxy_value_type operator[](std::size_t n) const
+    {
+        return proxy_value_type(
+            member_container<MemberPtrTypes, MemberPtrValues>::members_[n]...);
+    }
 };
 }
