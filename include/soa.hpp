@@ -45,7 +45,7 @@ class element_proxy<T, member_reference<PointerTypes, PointerValues>...>
 {
     template <std::size_t... S>
     T
-    make_dispatch(std::index_sequence<S...>)
+    make_dispatch(std::index_sequence<S...>) const
     {
         return T{*std::get<S>(pointers_)...};
     }
@@ -87,7 +87,7 @@ public:
     {
     }
 
-    operator T()
+    operator T() const
     {
         return make_dispatch(std::index_sequence_for<PointerTypes...>());
     }
@@ -177,7 +177,6 @@ public:
     soa() : member_container<MemberPtrTypes, MemberPtrValues>()...
     {
     }
-
 
     std::size_t
     size() const
