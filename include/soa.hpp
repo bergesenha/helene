@@ -146,6 +146,14 @@ struct parent_helper
         parent_helper<RestParents...>::push_back_members(
             s, std::forward<RestElems>(rest)...);
     }
+
+    template <class SoaType>
+    static void
+    reserve(SoaType& s, std::size_t n)
+    {
+        s.FirstParent::members_.reserve(n);
+        parent_helper<RestParents...>::reserve(s, n);
+    }
 };
 
 
@@ -171,6 +179,13 @@ struct parent_helper<LastParent>
     push_back_members(SoaType& s, LastElem&& elem)
     {
         s.LastParent::members_.push_back(std::forward<LastElem>(elem));
+    }
+
+    template <class SoaType>
+    static void
+    reserve(SoaType& s, std::size_t n)
+    {
+        s.LastParent::members_.reserve(n);
     }
 };
 
@@ -255,6 +270,13 @@ public:
     data() const
     {
         return member_container<MemberPtrType, MemberPtrValue>::members_.data();
+    }
+
+    void
+    reserve(std::size_t n)
+    {
+        parent_helper<member_container<MemberPtrTypes,
+                                       MemberPtrValues>...>::reserve(*this, n);
     }
 };
 }
