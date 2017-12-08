@@ -56,6 +56,22 @@ TEST_CASE("create an soa with points", "[soa]")
             CHECK(x_data[1] == Approx(4.4f));
         }
     }
+
+    SECTION("push back by members")
+    {
+        a.push_back_members(1.1f, 2.2f, 3.3f);
+        a.push_back_members(4.4f, 5.5f, 6.6f);
+
+        point pp1 = a[0];
+        point pp2 = a[1];
+
+        CHECK(pp1.x == Approx(1.1f));
+        CHECK(pp1.y == Approx(2.2f));
+        CHECK(pp1.z == Approx(3.3f));
+        CHECK(pp2.x == Approx(4.4f));
+        CHECK(pp2.y == Approx(5.5f));
+        CHECK(pp2.z == Approx(6.6f));
+    }
 }
 
 TEST_CASE("create an soa with members of price out of order", "[soa]")

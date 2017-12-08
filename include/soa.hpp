@@ -137,6 +137,15 @@ struct parent_helper
         s.FirstParent::members_.push_back(value.*FirstParent::pointer_value);
         parent_helper<RestParents...>::push_back(s, value);
     }
+
+    template <class SoaType, class FirstElem, class... RestElems>
+    static void
+    push_back_members(SoaType& s, FirstElem&& f_elm, RestElems&&... rest)
+    {
+        s.FirstParent::members_.push_back(std::forward<FirstElem>(f_elm));
+        parent_helper<RestParents...>::push_back_members(
+            s, std::forward<RestElems>(rest)...);
+    }
 };
 
 
@@ -155,6 +164,13 @@ struct parent_helper<LastParent>
     push_back(SoaType& s, const typename SoaType::value_type& value)
     {
         s.LastParent::members_.push_back(value.*LastParent::pointer_value);
+    }
+
+    template <class SoaType, class LastElem>
+    static void
+    push_back_members(SoaType& s, LastElem&& elem)
+    {
+        s.LastParent::members_.push_back(std::forward<LastElem>(elem));
     }
 };
 
@@ -207,6 +223,13 @@ public:
             push_back(*this, value);
     }
 
+    template <class... Elems>
+    void
+    push_back_members(Elems&&... elems)
+    {
+        parent_helper<member_container<MemberPtrTypes, MemberPtrValues>...>::
+            push_back_members(*this, std::forward<Elems>(elems)...);
+    }
 
     proxy_value_type operator[](std::size_t n)
     {
