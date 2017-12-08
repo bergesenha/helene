@@ -207,11 +207,6 @@ public:
             push_back(*this, value);
     }
 
-    template <class... Args>
-    void emplace_back(Args&&... args)
-    {
-
-    }
 
     proxy_value_type operator[](std::size_t n)
     {
