@@ -10,8 +10,13 @@ struct point
     float z;
 };
 
+struct price
+{
+    double datetime;
+    int value;
+};
 
-TEST_CASE("", "[soa]")
+TEST_CASE("create an soa with points", "[soa]")
 {
     typedef helene::soa<
         point,
@@ -53,6 +58,31 @@ TEST_CASE("", "[soa]")
     }
 }
 
+TEST_CASE("create an soa with members of price out of order", "[soa]")
+{
+    typedef helene::soa<
+        price,
+        helene::member_container<decltype(&price::value), &price::value>,
+        helene::member_container<decltype(&price::datetime), &price::datetime>>
+        price_soa;
+
+    price_soa pa;
+
+    SECTION("push back values")
+    {
+        price p1{1.34, 10};
+        price p2{2.34, 20};
+
+        pa.push_back(p1);
+        pa.push_back(p2);
+
+        SECTION("access elements")
+        {
+            price pp1 = pa[0];
+        }
+
+    }
+}
 
 TEST_CASE("create element_proxy with some values", "[element_proxy]")
 {

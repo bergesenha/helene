@@ -43,12 +43,7 @@ class element_proxy;
 template <class T, class... PointerTypes, PointerTypes... PointerValues>
 class element_proxy<T, member_reference<PointerTypes, PointerValues>...>
 {
-    template <std::size_t... S>
-    T
-    make_dispatch(std::index_sequence<S...>) const
-    {
-        return T{*std::get<S>(pointers_)...};
-    }
+    typedef std::tuple<soa_detail::member_type_t<PointerTypes>*...> tuple_type;
 
     template <std::size_t S, class FirstRef, class... RestRefs>
     struct assignment_helper
@@ -75,6 +70,27 @@ class element_proxy<T, member_reference<PointerTypes, PointerValues>...>
         }
     };
 
+    template <std::size_t S, class FirstRef, class... RestRefs>
+    struct make_helper
+    {
+        static void
+        apply(T& v, const tuple_type& tpl)
+        {
+            v.*FirstRef::pointer_value = *std::get<S>(tpl);
+            make_helper<S + 1, RestRefs...>::apply(v, tpl);
+        }
+    };
+
+    template <std::size_t S, class LastRef>
+    struct make_helper<S, LastRef>
+    {
+        static void
+        apply(T& v, const tuple_type& tpl)
+        {
+            v.*LastRef::pointer_value = *std::get<S>(tpl);
+        }
+    };
+
 public:
     element_proxy(soa_detail::member_type_t<PointerTypes>&... args)
         : pointers_(&args...)
@@ -83,7 +99,10 @@ public:
 
     operator T() const
     {
-        return make_dispatch(std::index_sequence_for<PointerTypes...>());
+        T out{};
+        make_helper<0, member_reference<PointerTypes, PointerValues>...>::apply(
+            out, pointers_);
+        return out;
     }
 
     element_proxy&
@@ -96,7 +115,7 @@ public:
     }
 
 private:
-    std::tuple<soa_detail::member_type_t<PointerTypes>*...> pointers_;
+    tuple_type pointers_;
 };
 
 
