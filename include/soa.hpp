@@ -134,7 +134,7 @@ struct parent_helper
     static void
     push_back(SoaType& s, const typename SoaType::value_type& value)
     {
-        s.FirstParent::members_.push_back(value.*FirstParent::pointer);
+        s.FirstParent::members_.push_back(value.*FirstParent::pointer_value);
         parent_helper<RestParents...>::push_back(s, value);
     }
 };
@@ -154,7 +154,7 @@ struct parent_helper<LastParent>
     static void
     push_back(SoaType& s, const typename SoaType::value_type& value)
     {
-        s.LastParent::members_.push_back(value.*LastParent::pointer);
+        s.LastParent::members_.push_back(value.*LastParent::pointer_value);
     }
 };
 
@@ -166,7 +166,7 @@ public:
     typedef soa_detail::member_type_t<MemberPointerType> member_type;
     typedef soa_detail::object_type_t<MemberPointerType> object_type;
 
-    static constexpr MemberPointerType pointer = MemberPointerValue;
+    static constexpr MemberPointerType pointer_value = MemberPointerValue;
 
 public:
     member_container() = default;
