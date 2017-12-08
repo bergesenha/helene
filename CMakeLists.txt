@@ -19,13 +19,8 @@ if(HELENE_BUILD_TESTS)
 
     set(HELENE_TEST_SRC
         tests/test_main.cpp
-        tests/test_dag.cpp
-        tests/test_iterators.cpp
-        tests/test_labeled_dag.cpp
         tests/test_member_iterator.cpp
         tests/test_member_iterator2.cpp
-        tests/test_algorithms.cpp
-        tests/test_algorithms.cpp
         tests/test_array_view.cpp
         tests/test_soa.cpp
         )
