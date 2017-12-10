@@ -17,17 +17,15 @@ if(HELENE_BUILD_TESTS)
     add_subdirectory(external/Catch)
 
 
-    set(HELENE_TEST_SRC
-        tests/test_main.cpp
-        tests/test_member_iterator.cpp
-        tests/test_member_iterator2.cpp
-        tests/test_array_view.cpp
-        tests/test_soa.cpp
-        )
-
-    add_executable(unit_tests ${HELENE_TEST_SRC})
+    add_executable(unit_tests tests/test_main.cpp)
     target_link_libraries(unit_tests helene)
     target_include_directories(unit_tests
         PRIVATE external/Catch/include/
+        )
+    target_sources(unit_tests
+        PRIVATE tests/test_member_iterator.cpp
+        PRIVATE tests/test_member_iterator2.cpp
+        PRIVATE tests/test_array_view.cpp
+        PRIVATE tests/test_soa.cpp
         )
 endif(HELENE_BUILD_TESTS)
