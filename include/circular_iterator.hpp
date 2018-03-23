@@ -24,6 +24,54 @@ constexpr bool is_at_least_iterator_of_category_v = std::is_base_of<
 template <class UnderlyingIterator, class = void>
 class circular_iterator_base;
 
+
+// specialization for UnderlyingIterator satisfying ForwardIterator
+template <class UnderlyingIterator>
+class circular_iterator_base<
+    UnderlyingIterator,
+    std::enable_if_t<is_iterator_of_category_v<UnderlyingIterator,
+                                               std::forward_iterator_tag>>>
+{
+public:
+    // inherited access to types from traits
+    typedef typename std::iterator_traits<UnderlyingIterator>::value_type
+        value_type;
+    typedef typename std::iterator_traits<UnderlyingIterator>::difference_type
+        difference_type;
+    typedef
+        typename std::iterator_traits<UnderlyingIterator>::reference reference;
+    typedef typename std::iterator_traits<UnderlyingIterator>::pointer pointer;
+    typedef typename std::iterator_traits<UnderlyingIterator>::iterator_category
+        iterator_category;
+
+public:
+    // ForwardIterator conformance
+    bool
+    operator==(const circular_iterator_base& other) const
+    {
+        return current_ == other.current_;
+    }
+
+    bool
+    operator!=(const circular_iterator_base& other) const
+    {
+        return current_ != other.current_;
+    }
+
+    reference operator*()
+    {
+        return *current_;
+    }
+
+    pointer operator->()
+    {
+        return current_.operator->();
+    }
+
+
+protected:
+    UnderlyingIterator current_;
+};
 } // namespace detail
 /** \class circular_iterator circular_iterator.hpp <circular_iterator.hpp>
  *
