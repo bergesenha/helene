@@ -20,6 +20,10 @@ constexpr bool is_at_least_iterator_of_category_v = std::is_base_of<
     IteratorTag,
     typename std::iterator_traits<Iterator>::iterator_category>::value;
 
+// undefined base, specialized for each iterator category
+template <class UnderlyingIterator, class = void>
+class circular_iterator_base;
+
 } // namespace detail
 /** \class circular_iterator circular_iterator.hpp <circular_iterator.hpp>
  *
@@ -28,6 +32,7 @@ constexpr bool is_at_least_iterator_of_category_v = std::is_base_of<
  */
 template <class UnderlyingIterator>
 class circular_iterator
+    : public detail::circular_iterator_base<UnderlyingIterator>
 {
 public:
     static_assert(
