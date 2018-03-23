@@ -63,21 +63,29 @@ TEST_CASE("construct a circular_iterator to a forward_list",
 
     CHECK(*cit1 == 1);
 
-    SECTION("increment")
+    SECTION("pre increment")
     {
         ++cit1;
 
         CHECK(*cit1 == 2);
 
-        SECTION("increment")
+        SECTION("post increment")
         {
-            ++cit1;
+            auto t = *cit1++;
             CHECK(*cit1 == 3);
+            CHECK(t == 2);
 
-            SECTION("increment")
+            SECTION("pre increment")
             {
                 ++cit1;
                 CHECK(*cit1 == 1);
+            }
+
+            SECTION("post increment")
+            {
+                auto t2 = *cit1++;
+                CHECK(*cit1 == 1);
+                CHECK(t2 == 3);
             }
         }
     }

@@ -123,6 +123,14 @@ public:
         return *this;
     }
 
+    circular_iterator
+    operator++(int)
+    {
+        auto temp = *this;
+        ++(*this);
+        return temp;
+    }
+
 private:
     UnderlyingIterator first_;
     UnderlyingIterator last_;
