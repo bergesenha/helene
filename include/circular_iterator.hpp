@@ -99,6 +99,17 @@ public:
 public:
     circular_iterator() = default;
 
+    circular_iterator(UnderlyingIterator first,
+                      UnderlyingIterator last,
+                      UnderlyingIterator current)
+        : detail::circular_iterator_base<UnderlyingIterator>(current),
+          first_(first),
+          last_(last)
+    {
+    }
+
 private:
+    UnderlyingIterator first_;
+    UnderlyingIterator last_;
 };
 } // namespace helene

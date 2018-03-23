@@ -51,3 +51,15 @@ TEST_CASE("default construct a circular_iterator", "[circular_iterator]")
 {
     helene::circular_iterator<std::forward_list<int>::iterator> ci1;
 }
+
+
+TEST_CASE("construct a circular_iterator to a forward_list",
+          "[circular_iterator]")
+{
+    std::forward_list<int> mylist{1, 2, 3};
+
+    helene::circular_iterator<std::forward_list<int>::iterator> cit1(
+        mylist.begin(), mylist.end(), mylist.begin());
+
+    CHECK(*cit1 == 1);
+}
