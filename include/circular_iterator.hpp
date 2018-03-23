@@ -89,6 +89,9 @@ public:
         "UnderlyingIterator needs to at least satisfy ForwardIterator for its "
         "multipass ability");
 
+public:
+    circular_iterator() = default;
+
 private:
 };
 } // namespace helene
