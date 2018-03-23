@@ -62,4 +62,23 @@ TEST_CASE("construct a circular_iterator to a forward_list",
         mylist.begin(), mylist.end(), mylist.begin());
 
     CHECK(*cit1 == 1);
+
+    SECTION("increment")
+    {
+        ++cit1;
+
+        CHECK(*cit1 == 2);
+
+        SECTION("increment")
+        {
+            ++cit1;
+            CHECK(*cit1 == 3);
+
+            SECTION("increment")
+            {
+                ++cit1;
+                CHECK(*cit1 == 1);
+            }
+        }
+    }
 }

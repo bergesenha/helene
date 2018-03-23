@@ -108,6 +108,21 @@ public:
     {
     }
 
+    circular_iterator&
+    operator++()
+    {
+        ++detail::circular_iterator_base<UnderlyingIterator>::current_;
+
+        if(detail::circular_iterator_base<UnderlyingIterator>::current_ ==
+           last_)
+        {
+            detail::circular_iterator_base<UnderlyingIterator>::current_ =
+                first_;
+        }
+
+        return *this;
+    }
+
 private:
     UnderlyingIterator first_;
     UnderlyingIterator last_;
