@@ -47,6 +47,10 @@ public:
 public:
     circular_iterator_base() = default;
 
+    circular_iterator_base(UnderlyingIterator current) : current_(current)
+    {
+    }
+
 public:
     // ForwardIterator conformance
     bool
