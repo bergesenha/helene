@@ -89,4 +89,18 @@ TEST_CASE("construct a circular_iterator to a forward_list",
             }
         }
     }
+
+    SECTION("copy iterator")
+    {
+        auto cit2 = cit1;
+
+        CHECK(cit1 == cit2);
+
+        SECTION("increment first")
+        {
+            ++cit1;
+
+            CHECK(cit1 != cit2);
+        }
+    }
 }
