@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <iterator>
+#include <utility>
 
 
 namespace helene
@@ -14,16 +15,27 @@ constexpr bool is_iterator_of_category_v =
     std::is_same<typename std::iterator_traits<Iterator>::iterator_category,
                  IteratorTag>::value;
 
+template <class Iterator, class IteratorTag>
+constexpr bool is_at_least_iterator_of_category_v = std::is_base_of<
+    IteratorTag,
+    typename std::iterator_traits<Iterator>::iterator_category>::value;
+
 } // namespace detail
 /** \class circular_iterator circular_iterator.hpp <circular_iterator.hpp>
  *
  * \brief An iterator adaptor that adapts any iterator to wrap around when
  * incremented beyond a range determined on construction
  */
-template <class BaseIterator>
+template <class UnderlyingIterator>
 class circular_iterator
 {
 public:
+    static_assert(
+        detail::is_at_least_iterator_of_category_v<UnderlyingIterator,
+                                                   std::forward_iterator_tag>,
+        "UnderlyingIterator needs to at least satisfy ForwardIterator for its "
+        "multipass ability");
+
 private:
 };
 } // namespace helene
