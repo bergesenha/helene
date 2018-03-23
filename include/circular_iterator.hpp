@@ -45,6 +45,9 @@ public:
         iterator_category;
 
 public:
+    circular_iterator_base() = default;
+
+public:
     // ForwardIterator conformance
     bool
     operator==(const circular_iterator_base& other) const
