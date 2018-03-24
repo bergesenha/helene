@@ -56,12 +56,19 @@ TEST_CASE("default construct a circular_iterator", "[circular_iterator]")
 TEST_CASE("construct a circular_iterator to a forward_list",
           "[circular_iterator]")
 {
+    typedef helene::circular_iterator<std::forward_list<int>::iterator>
+        cil_type;
+
     std::forward_list<int> mylist{1, 2, 3};
 
-    helene::circular_iterator<std::forward_list<int>::iterator> cit1(
-        mylist.begin(), mylist.end(), mylist.begin());
+    cil_type cit1(mylist.begin(), mylist.end(), mylist.begin());
+
+    constexpr bool is_forward_iterator =
+        helene::detail::is_iterator_of_category_v<cil_type,
+                                                  std::forward_iterator_tag>;
 
     CHECK(*cit1 == 1);
+    CHECK(is_forward_iterator);
 
     SECTION("pre increment")
     {
@@ -111,9 +118,29 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
 {
     typedef helene::circular_iterator<std::vector<int>::iterator> civ_type;
 
+    constexpr bool is_random_access = helene::detail::
+        is_iterator_of_category_v<civ_type, std::random_access_iterator_tag>;
+
     std::vector<int> v{1, 2, 3};
 
     civ_type cit1{v.begin(), v.end(), v.begin()};
 
     CHECK(*cit1 == 1);
+    CHECK(is_random_access);
+
+    SECTION("preincrement iterator")
+    {
+        auto it = ++cit1;
+        CHECK(*it == 2);
+        CHECK(*cit1 == 2);
+        CHECK(it == cit1);
+    }
+
+    SECTION("postincrement iterator")
+    {
+        auto it = cit1++;
+        CHECK(*it == 1);
+        CHECK(*cit1 == 2);
+        CHECK(it != cit1);
+    }
 }
