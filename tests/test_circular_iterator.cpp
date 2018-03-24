@@ -104,3 +104,16 @@ TEST_CASE("construct a circular_iterator to a forward_list",
         }
     }
 }
+
+
+TEST_CASE("construct a circular_iterator pointing to a vector",
+          "[circular_iterator]")
+{
+    typedef helene::circular_iterator<std::vector<int>::iterator> civ_type;
+
+    std::vector<int> v{1, 2, 3};
+
+    civ_type cit1{v.begin(), v.end(), v.begin()};
+
+    CHECK(*cit1 == 1);
+}
