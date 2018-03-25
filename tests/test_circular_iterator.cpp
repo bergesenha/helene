@@ -258,6 +258,9 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
         auto it = cit1 + 2;
 
         CHECK(*it == 3);
+
+        CHECK(cit1 < it);
+        CHECK((cit1 - 2) < (cit1 + 2));
     }
 
     SECTION("add 10 to iterator")

@@ -209,5 +209,11 @@ public:
     {
         return *(*this + n);
     }
+
+    bool
+    operator<(const circular_iterator& other)
+    {
+        return circular_iterator::current_ < other.current_;
+    }
 };
 } // namespace helene
