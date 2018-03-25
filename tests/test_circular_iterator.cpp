@@ -222,4 +222,25 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
 
         CHECK(*cit1 == 3);
     }
+
+    SECTION("assign-decrement by 3")
+    {
+        cit1 -= 3;
+
+        CHECK(*cit1 == 1);
+    }
+
+    SECTION("assign-decrement by 13")
+    {
+        cit1 -= 13;
+
+        CHECK(*cit1 == 3);
+    }
+
+    SECTION("assign-decrement by -5")
+    {
+        cit1 -= -5;
+
+        CHECK(*cit1 == 3);
+    }
 }

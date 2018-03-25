@@ -168,5 +168,11 @@ public:
 
         return *this;
     }
+
+    circular_iterator&
+    operator-=(typename circular_iterator::difference_type n)
+    {
+        return operator+=(-n);
+    }
 };
 } // namespace helene
