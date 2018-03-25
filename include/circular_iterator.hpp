@@ -27,7 +27,9 @@ constexpr bool is_at_least_iterator_of_category_v = std::is_base_of<
  * \brief An iterator adaptor that adapts any iterator to wrap around when
  * incremented beyond a range determined on construction
  */
-template <class UnderlyingIterator>
+template <class UnderlyingIterator,
+          class Category = typename std::iterator_traits<
+              UnderlyingIterator>::iterator_category>
 class circular_iterator
 {
 public:
