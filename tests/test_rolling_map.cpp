@@ -1,5 +1,5 @@
 #include <catch.hpp>
-#include <rolling_map.hpp>
+#include <sliding_window_buffer.hpp>
 
 
 typedef helene::sliding_window_buffer<int, 4> swb_type;
