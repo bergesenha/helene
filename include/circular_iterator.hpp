@@ -134,4 +134,34 @@ public:
         return temp;
     }
 };
+
+
+template <class UnderlyingIterator>
+class circular_iterator<UnderlyingIterator, std::random_access_iterator_tag>
+    : public circular_iterator<UnderlyingIterator,
+                               std::bidirectional_iterator_tag>
+{
+public:
+    using circular_iterator<UnderlyingIterator,
+                            std::bidirectional_iterator_tag>::circular_iterator;
+
+    circular_iterator&
+    operator+=(typename circular_iterator::difference_type n)
+    {
+        // determine by how much incrementing by n will overflow the end
+        const auto overflow =
+            n - (circular_iterator::last_ - circular_iterator::current_);
+
+        if(overflow > 0)
+        {
+            circular_iterator::current_ = circular_iterator::first_ + overflow;
+        }
+        else
+        {
+            circular_iterator::current_ += n;
+        }
+
+        return *this;
+    }
+};
 } // namespace helene
