@@ -148,17 +148,22 @@ public:
     circular_iterator&
     operator+=(typename circular_iterator::difference_type n)
     {
-        // determine by how much incrementing by n will overflow the end
-        const auto overflow =
-            n - (circular_iterator::last_ - circular_iterator::current_);
+        // find remainder in case of several round trips
+        const auto length =
+            circular_iterator::last_ - circular_iterator::first_;
 
-        if(overflow > 0)
+        const auto current_index =
+            circular_iterator::current_ - circular_iterator::first_;
+
+        const auto new_index = (current_index + n) % length;
+
+        if(new_index < 0)
         {
-            circular_iterator::current_ = circular_iterator::first_ + overflow;
+            circular_iterator::current_ = circular_iterator::last_ + new_index;
         }
         else
         {
-            circular_iterator::current_ += n;
+            circular_iterator::current_ = circular_iterator::first_ + new_index;
         }
 
         return *this;

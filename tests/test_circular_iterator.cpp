@@ -188,17 +188,38 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
         CHECK(it != cit1);
     }
 
-    SECTION("increment by 2")
+    SECTION("assign-increment by 2")
     {
         cit1 += 2;
 
         CHECK(*cit1 == 3);
     }
 
-    SECTION("increment by 4")
+    SECTION("assign-increment by 4")
     {
         cit1 += 4;
 
         CHECK(*cit1 == 2);
+    }
+
+    SECTION("assign-increment by 10")
+    {
+        cit1 += 10;
+
+        CHECK(*cit1 == 2);
+    }
+
+    SECTION("assign-increment by -2")
+    {
+        cit1 += -2;
+
+        CHECK(*cit1 == 2);
+    }
+
+    SECTION("assign-increment by -10")
+    {
+        cit1 += -10;
+
+        CHECK(*cit1 == 3);
     }
 }
