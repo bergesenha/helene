@@ -1,5 +1,6 @@
 #include "catch.hpp"
 #include <vector>
+#include <list>
 #include <forward_list>
 
 #include <circular_iterator.hpp>
@@ -112,6 +113,49 @@ TEST_CASE("construct a circular_iterator to a forward_list",
     }
 }
 
+TEST_CASE("construct a circular_iterator pointing to a list",
+          "[circular_iterator]")
+{
+    typedef helene::circular_iterator<std::list<int>::iterator> cil_type;
+
+    constexpr bool is_bidirectional = helene::detail::
+        is_iterator_of_category_v<cil_type, std::bidirectional_iterator_tag>;
+
+    CHECK(is_bidirectional);
+
+    std::list<int> l{1, 2, 3};
+
+    cil_type cit1{l.begin(), l.end(), l.begin()};
+
+    CHECK(*cit1 == 1);
+
+    SECTION("preincrement")
+    {
+        auto it = ++cit1;
+
+        CHECK(*it == 2);
+        CHECK(*cit1 == 2);
+        CHECK(it == cit1);
+    }
+
+    SECTION("predecrement")
+    {
+        auto it = --cit1;
+
+        CHECK(*it == 3);
+        CHECK(*cit1 == 3);
+        CHECK(it == cit1);
+    }
+
+    SECTION("postdecrement")
+    {
+        auto it = cit1--;
+
+        CHECK(*it == 1);
+        CHECK(*cit1 == 3);
+        CHECK(it != cit1);
+    }
+}
 
 TEST_CASE("construct a circular_iterator pointing to a vector",
           "[circular_iterator]")

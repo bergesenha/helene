@@ -97,9 +97,41 @@ public:
         return temp;
     }
 
-private:
+protected:
     UnderlyingIterator first_;
     UnderlyingIterator last_;
     UnderlyingIterator current_;
+};
+
+
+template <class UnderlyingIterator>
+class circular_iterator<UnderlyingIterator, std::bidirectional_iterator_tag>
+    : public circular_iterator<UnderlyingIterator, std::forward_iterator_tag>
+{
+public:
+    using circular_iterator<UnderlyingIterator,
+                            std::forward_iterator_tag>::circular_iterator;
+
+    circular_iterator&
+    operator--()
+    {
+        if(circular_iterator::current_ == circular_iterator::first_)
+        {
+            // needs to point to last element, not one past last
+            circular_iterator::current_ = circular_iterator::last_;
+        }
+
+        --circular_iterator::current_;
+
+        return *this;
+    }
+
+    circular_iterator
+    operator--(int)
+    {
+        auto temp = *this;
+        --(*this);
+        return temp;
+    }
 };
 } // namespace helene
