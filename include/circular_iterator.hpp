@@ -203,5 +203,11 @@ public:
     {
         return circular_iterator::current_ - other.current_;
     }
+
+    typename circular_iterator::reference
+    operator[](typename circular_iterator::difference_type n)
+    {
+        return *(*this + n);
+    }
 };
 } // namespace helene

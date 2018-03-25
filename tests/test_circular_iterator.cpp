@@ -172,6 +172,15 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
     CHECK(*cit1 == 1);
     CHECK(is_random_access);
 
+    CHECK(cit1[0] == 1);
+    CHECK(cit1[1] == 2);
+    CHECK(cit1[2] == 3);
+    CHECK(cit1[3] == 1);
+    CHECK(cit1[10] == 2);
+    CHECK(cit1[-1] == 3);
+    CHECK(cit1[-8] == 2);
+
+
     SECTION("preincrement iterator")
     {
         auto it = ++cit1;
