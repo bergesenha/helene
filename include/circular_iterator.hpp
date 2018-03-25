@@ -174,5 +174,21 @@ public:
     {
         return operator+=(-n);
     }
+
+    friend circular_iterator
+    operator+(const circular_iterator& lhs,
+              typename circular_iterator::difference_type rhs)
+    {
+        auto temp = lhs;
+        temp += rhs;
+        return temp;
+    }
+
+    friend circular_iterator
+    operator+(typename circular_iterator::difference_type lhs,
+              const circular_iterator& rhs)
+    {
+        return rhs + lhs;
+    }
 };
 } // namespace helene

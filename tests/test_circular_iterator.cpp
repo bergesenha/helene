@@ -243,4 +243,39 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
 
         CHECK(*cit1 == 3);
     }
+
+    SECTION("add 2 to iterator")
+    {
+        auto it = cit1 + 2;
+
+        CHECK(*it == 3);
+    }
+
+    SECTION("add 10 to iterator")
+    {
+        auto it = cit1 + 10;
+
+        CHECK(*it == 2);
+    }
+
+    SECTION("add -1 to iterator")
+    {
+        auto it = cit1 + -1;
+
+        CHECK(*it == 3);
+    }
+
+    SECTION("add -10 to iterator")
+    {
+        auto it = cit1 + -10;
+
+        CHECK(*it == 3);
+    }
+
+    SECTION("add iterator to 2")
+    {
+        auto it = 2 + cit1;
+
+        CHECK(*it == 3);
+    }
 }
