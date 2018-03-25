@@ -256,6 +256,20 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
         auto it = cit1 + 10;
 
         CHECK(*it == 2);
+
+        SECTION("take difference of iterators")
+        {
+            const auto diff = it - cit1;
+
+            CHECK(diff == 1);
+        }
+
+        SECTION("take difference of iterators")
+        {
+            const auto diff = cit1 - it;
+
+            CHECK(diff == -1);
+        }
     }
 
     SECTION("add -1 to iterator")
@@ -270,6 +284,13 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
         auto it = cit1 + -10;
 
         CHECK(*it == 3);
+
+        SECTION("take difference of iterators")
+        {
+            const auto diff = it - cit1;
+
+            CHECK(diff == 2);
+        }
     }
 
     SECTION("add iterator to 2")
