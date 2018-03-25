@@ -215,5 +215,23 @@ public:
     {
         return circular_iterator::current_ < other.current_;
     }
+
+    bool
+    operator>(const circular_iterator& other)
+    {
+        return circular_iterator::current_ > other.current_;
+    }
+
+    bool
+    operator<=(const circular_iterator& other)
+    {
+        return circular_iterator::current_ <= other.current_;
+    }
+
+    bool
+    operator>=(const circular_iterator& other)
+    {
+        return circular_iterator::current_ >= other.current_;
+    }
 };
 } // namespace helene
