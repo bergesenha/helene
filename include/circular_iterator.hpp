@@ -190,5 +190,12 @@ public:
     {
         return rhs + lhs;
     }
+
+    friend circular_iterator
+    operator-(const circular_iterator& lhs,
+              typename circular_iterator::difference_type rhs)
+    {
+        return lhs + -rhs;
+    }
 };
 } // namespace helene

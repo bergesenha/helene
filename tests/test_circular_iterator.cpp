@@ -278,4 +278,12 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
 
         CHECK(*it == 3);
     }
+
+
+    SECTION("subtract 5 from iterator")
+    {
+        auto it = cit1 - 5;
+
+        CHECK(*it == 2);
+    }
 }
