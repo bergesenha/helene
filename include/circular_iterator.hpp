@@ -27,17 +27,15 @@ constexpr bool is_at_least_iterator_of_category_v = std::is_base_of<
  * \brief An iterator adaptor that adapts any iterator to wrap around when
  * incremented beyond a range determined on construction
  */
-template <class UnderlyingIterator,
-          class Category = typename std::iterator_traits<
-              UnderlyingIterator>::iterator_category>
+template <class UnderlyingIterator>
 class circular_iterator
 {
 public:
     static_assert(
-        detail::is_at_least_iterator_of_category_v<UnderlyingIterator,
-                                                   std::forward_iterator_tag>,
-        "UnderlyingIterator needs to at least satisfy ForwardIterator for its "
-        "multipass ability");
+        detail::is_at_least_iterator_of_category_v<
+            UnderlyingIterator,
+            std::random_access_iterator_tag>,
+        "circular_iterator requires random access underlying iterator");
 
     typedef typename std::iterator_traits<UnderlyingIterator>::value_type
         value_type;
@@ -55,37 +53,33 @@ public:
     circular_iterator(UnderlyingIterator first,
                       UnderlyingIterator last,
                       UnderlyingIterator current)
-        : first_(first), last_(last), current_(current)
+        : wrap_size_(std::distance(first, last)),
+          index_(std::distance(current, first)),
+          base_(current)
     {
     }
 
     bool
     operator==(const circular_iterator& other)
     {
-        return current_ == other.current_;
+        return base_ + index_ == other.base_ + other.index_;
     }
 
     bool
     operator!=(const circular_iterator& other)
     {
-        return current_ != other.current_;
+        return base_ + index_ != other.base_ + other.index_;
     }
 
     reference operator*()
     {
-        return *current_;
+        return base_[local_index(index_)];
     }
 
     circular_iterator&
     operator++()
     {
-        ++current_;
-
-        if(current_ == last_)
-        {
-            current_ = first_;
-        }
-
+        ++index_;
         return *this;
     }
 
@@ -97,32 +91,10 @@ public:
         return temp;
     }
 
-protected:
-    UnderlyingIterator first_;
-    UnderlyingIterator last_;
-    UnderlyingIterator current_;
-};
-
-
-template <class UnderlyingIterator>
-class circular_iterator<UnderlyingIterator, std::bidirectional_iterator_tag>
-    : public circular_iterator<UnderlyingIterator, std::forward_iterator_tag>
-{
-public:
-    using circular_iterator<UnderlyingIterator,
-                            std::forward_iterator_tag>::circular_iterator;
-
     circular_iterator&
     operator--()
     {
-        if(circular_iterator::current_ == circular_iterator::first_)
-        {
-            // needs to point to last element, not one past last
-            circular_iterator::current_ = circular_iterator::last_;
-        }
-
-        --circular_iterator::current_;
-
+        --index_;
         return *this;
     }
 
@@ -133,51 +105,24 @@ public:
         --(*this);
         return temp;
     }
-};
 
-
-template <class UnderlyingIterator>
-class circular_iterator<UnderlyingIterator, std::random_access_iterator_tag>
-    : public circular_iterator<UnderlyingIterator,
-                               std::bidirectional_iterator_tag>
-{
-public:
-    using circular_iterator<UnderlyingIterator,
-                            std::bidirectional_iterator_tag>::circular_iterator;
 
     circular_iterator&
-    operator+=(typename circular_iterator::difference_type n)
+    operator+=(difference_type n)
     {
-        // find remainder in case of several round trips
-        const auto length =
-            circular_iterator::last_ - circular_iterator::first_;
-
-        const auto current_index =
-            circular_iterator::current_ - circular_iterator::first_;
-
-        const auto new_index = (current_index + n) % length;
-
-        if(new_index < 0)
-        {
-            circular_iterator::current_ = circular_iterator::last_ + new_index;
-        }
-        else
-        {
-            circular_iterator::current_ = circular_iterator::first_ + new_index;
-        }
-
+        index_ += n;
         return *this;
     }
 
     circular_iterator&
-    operator-=(typename circular_iterator::difference_type n)
+    operator-=(difference_type n)
     {
-        return operator+=(-n);
+        index_ -= n;
+        return *this;
     }
 
     friend circular_iterator
-    operator+(const circular_iterator& lhs,
-              typename circular_iterator::difference_type rhs)
+    operator+(const circular_iterator& lhs, difference_type rhs)
     {
         auto temp = lhs;
         temp += rhs;
@@ -185,53 +130,73 @@ public:
     }
 
     friend circular_iterator
-    operator+(typename circular_iterator::difference_type lhs,
-              const circular_iterator& rhs)
+    operator+(difference_type lhs, const circular_iterator& rhs)
     {
         return rhs + lhs;
     }
 
     friend circular_iterator
-    operator-(const circular_iterator& lhs,
-              typename circular_iterator::difference_type rhs)
+    operator-(const circular_iterator& lhs, difference_type rhs)
     {
-        return lhs + -rhs;
+        auto temp = lhs;
+        temp -= rhs;
+        return temp;
     }
 
-    typename circular_iterator::difference_type
+    difference_type
     operator-(const circular_iterator& other)
     {
-        return circular_iterator::current_ - other.current_;
+        return index_ - other.index_;
     }
 
     typename circular_iterator::reference
     operator[](typename circular_iterator::difference_type n)
     {
-        return *(*this + n);
+        return base_[local_index(index_ + n)];
     }
 
     bool
     operator<(const circular_iterator& other)
     {
-        return circular_iterator::current_ < other.current_;
+        return index_ < other.index_;
     }
 
     bool
     operator>(const circular_iterator& other)
     {
-        return circular_iterator::current_ > other.current_;
+        return index_ > other.index_;
     }
 
     bool
     operator<=(const circular_iterator& other)
     {
-        return circular_iterator::current_ <= other.current_;
+        return index_ <= other.index_;
     }
 
     bool
     operator>=(const circular_iterator& other)
     {
-        return circular_iterator::current_ >= other.current_;
+        return index_ >= other.index_;
     }
+
+private:
+    difference_type
+    local_index(difference_type index) const
+    {
+        const auto remainder = index % wrap_size_;
+        if(remainder < 0)
+        {
+            return wrap_size_ + remainder;
+        }
+        else
+        {
+            return remainder;
+        }
+    }
+
+private:
+    difference_type wrap_size_;
+    difference_type index_;
+    UnderlyingIterator base_;
 };
 } // namespace helene
