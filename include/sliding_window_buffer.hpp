@@ -50,6 +50,18 @@ public:
         return Size;
     }
 
+    iterator
+    begin()
+    {
+        return origin_;
+    }
+
+    iterator
+    end()
+    {
+        return origin_ + Size;
+    }
+
 private:
     T buffer_[Size];
     iterator origin_;
