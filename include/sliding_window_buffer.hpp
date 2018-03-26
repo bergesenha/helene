@@ -12,6 +12,8 @@ class sliding_window_buffer
 public:
     typedef std::size_t size_type;
     typedef circular_iterator<T*> iterator;
+    typedef T& reference;
+    typedef const T& const_reference;
 
 public:
     sliding_window_buffer()
@@ -42,6 +44,30 @@ public:
     {
         --origin_;
         *origin_ = value;
+    }
+
+    reference
+    back()
+    {
+        return origin_[Size - 1];
+    }
+
+    const_reference
+    back() const
+    {
+        return origin_[Size - 1];
+    }
+
+    reference
+    front()
+    {
+        return *origin_;
+    }
+
+    const_reference
+    front() const
+    {
+        return *origin_;
     }
 
     constexpr size_type

@@ -27,6 +27,9 @@ TEST_CASE("default construct a sliding_window_buffer",
         CHECK(swb[2] == 3);
         CHECK(swb[3] == 4);
 
+        CHECK(swb.front() == 1);
+        CHECK(swb.back() == 4);
+
         SECTION("push back another value")
         {
             swb.push_back(5);
@@ -35,6 +38,9 @@ TEST_CASE("default construct a sliding_window_buffer",
             CHECK(swb[1] == 3);
             CHECK(swb[2] == 4);
             CHECK(swb[3] == 5);
+
+            CHECK(swb.front() == 2);
+            CHECK(swb.back() == 5);
         }
 
         SECTION("push front a value")
@@ -45,6 +51,9 @@ TEST_CASE("default construct a sliding_window_buffer",
             CHECK(swb[1] == 1);
             CHECK(swb[2] == 2);
             CHECK(swb[3] == 3);
+
+            CHECK(swb.front() == 10);
+            CHECK(swb.back() == 3);
 
 
             SECTION("copy full range into vector")
