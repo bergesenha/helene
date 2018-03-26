@@ -22,6 +22,13 @@ public:
     {
     }
 
+    template <class Iterator>
+    sliding_window_buffer(Iterator first, Iterator last)
+        : sliding_window_buffer()
+    {
+        std::copy(first, last, origin_);
+    }
+
     T& operator[](size_type n)
     {
         return origin_[static_cast<typename iterator::difference_type>(n)];
