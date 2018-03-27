@@ -44,8 +44,7 @@ public:
     typedef
         typename std::iterator_traits<UnderlyingIterator>::reference reference;
     typedef typename std::iterator_traits<UnderlyingIterator>::pointer pointer;
-    typedef typename std::iterator_traits<UnderlyingIterator>::iterator_category
-        iterator_category;
+    typedef std::random_access_iterator_tag iterator_category;
 
 public:
     circular_iterator() = default;
