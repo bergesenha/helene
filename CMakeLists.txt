@@ -28,6 +28,5 @@ if(HELENE_BUILD_TESTS)
         PRIVATE tests/test_array_view.cpp
         PRIVATE tests/test_soa.cpp
         PRIVATE tests/test_circular_iterator.cpp
-        PRIVATE tests/test_sliding_window_buffer.cpp
         )
 endif(HELENE_BUILD_TESTS)
