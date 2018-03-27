@@ -148,6 +148,16 @@ TEST_CASE("construct sliding_window_buffer with range",
             CHECK(res[2] == 2);
             CHECK(res[3] == 3);
         }
+
+        SECTION("copy construct a sliding_window_buffer from first")
+        {
+            swb_type swb2(swb);
+
+            CHECK(swb2[0] == 10);
+            CHECK(swb2[1] == 1);
+            CHECK(swb2[2] == 2);
+            CHECK(swb2[3] == 3);
+        }
     }
 
     SECTION("copy full range into vector")
@@ -178,10 +188,16 @@ TEST_CASE("construct sliding_window_buffer with range",
 
             CHECK(swb2[0] == 10);
             CHECK(swb2[2] == 30);
+            CHECK(swb[0] == 1);
+            CHECK(swb[2] == 3);
 
             SECTION("assign first to it again")
             {
                 swb2 = swb;
+                CHECK(swb2[0] == 1);
+                CHECK(swb2[1] == 2);
+                CHECK(swb2[2] == 3);
+                CHECK(swb2[3] == 4);
             }
         }
     }

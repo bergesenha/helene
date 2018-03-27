@@ -40,6 +40,14 @@ public:
     }
 
 
+    sliding_window_buffer(const sliding_window_buffer& other)
+        : buffer_{},
+          origin_(std::begin(buffer_), std::end(buffer_), std::begin(buffer_))
+    {
+        // copy buffer over
+        std::copy(other.cbegin(), other.cend(), std::begin(buffer_));
+    }
+
 public:
     T& operator[](size_type n)
     {
