@@ -82,6 +82,12 @@ TEST_CASE("default construct a sliding_window_buffer",
             CHECK(res[2] == 3);
             CHECK(res[3] == 4);
         }
+
+        SECTION("access values through const_iterators")
+        {
+            auto cb = swb.cbegin();
+            auto ce = swb.cend();
+        }
     }
 }
 

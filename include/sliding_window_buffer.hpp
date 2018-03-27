@@ -97,6 +97,18 @@ public:
         return origin_ + Size;
     }
 
+    const_iterator
+    cbegin() const
+    {
+        return origin_;
+    }
+
+    const_iterator
+    cend() const
+    {
+        return origin_ + Size;
+    }
+
 private:
     T buffer_[Size];
     iterator origin_;
