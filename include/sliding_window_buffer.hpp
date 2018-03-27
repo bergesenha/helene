@@ -127,7 +127,6 @@ public:
         return origin_ + Size;
     }
 
-
     bool
     operator==(const sliding_window_buffer& other)
     {
@@ -138,6 +137,7 @@ public:
     operator!=(const sliding_window_buffer& other)
     {
         return !operator==(other);
+    }
 
     void
     swap(sliding_window_buffer& other)
@@ -147,6 +147,10 @@ public:
         swap(*this, other);
     }
 
+    constexpr bool
+    empty() const
+    {
+        return !Size;
     }
 
 private:
