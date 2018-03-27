@@ -74,13 +74,14 @@ public:
     bool
     operator==(const circular_iterator& other)
     {
-        return base_ + index_ == other.base_ + other.index_;
+        const auto base_diff = base_ - other.base_;
+        return base_diff == other.index_ - index_;
     }
 
     bool
     operator!=(const circular_iterator& other)
     {
-        return base_ + index_ != other.base_ + other.index_;
+        return !operator==(other);
     }
 
     reference operator*()
