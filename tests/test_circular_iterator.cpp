@@ -147,4 +147,12 @@ TEST_CASE("construct a circular_iterator pointing to a vector",
 
         CHECK(*it == 2);
     }
+
+    SECTION("modify first element through iterator")
+    {
+        *cit1 = 10;
+
+        CHECK(*cit1 == 10);
+        CHECK(v.front() == 10);
+    }
 }
