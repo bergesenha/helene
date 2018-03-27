@@ -87,6 +87,12 @@ TEST_CASE("default construct a sliding_window_buffer",
         {
             auto cb = swb.cbegin();
             auto ce = swb.cend();
+
+            CHECK(*cb == 1);
+            CHECK(cb[1] == 2);
+            CHECK(cb[2] == 3);
+            CHECK(cb[3] == 4);
+            CHECK(cb + 4 == ce);
         }
     }
 }
