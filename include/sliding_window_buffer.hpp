@@ -10,10 +10,12 @@ template <class T, std::size_t Size>
 class sliding_window_buffer
 {
 public:
-    typedef std::size_t size_type;
-    typedef circular_iterator<T*> iterator;
+    typedef T value_type;
     typedef T& reference;
     typedef const T& const_reference;
+    typedef circular_iterator<T*> iterator;
+    typedef circular_iterator<const T*> const_iterator;
+    typedef std::size_t size_type;
 
 public:
     sliding_window_buffer()
