@@ -159,6 +159,11 @@ TEST_CASE("construct sliding_window_buffer with range",
             CHECK(swb2[1] == 1);
             CHECK(swb2[2] == 2);
             CHECK(swb2[3] == 3);
+
+            SECTION("swap sliding_window_buffers")
+            {
+                swb2.swap(swb);
+            }
         }
     }
 

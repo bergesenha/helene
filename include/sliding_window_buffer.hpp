@@ -138,6 +138,15 @@ public:
     operator!=(const sliding_window_buffer& other)
     {
         return !operator==(other);
+
+    void
+    swap(sliding_window_buffer& other)
+    {
+        using std::swap;
+
+        swap(*this, other);
+    }
+
     }
 
 private:
