@@ -48,6 +48,19 @@ public:
         std::copy(other.cbegin(), other.cend(), std::begin(buffer_));
     }
 
+
+    sliding_window_buffer&
+    operator=(const sliding_window_buffer& other)
+    {
+        // copy values
+        std::copy(other.cbegin(), other.cend(), std::begin(buffer_));
+        // reset origin_
+        origin_ = iterator(
+            std::begin(buffer_), std::end(buffer_), std::begin(buffer_));
+
+        return *this;
+    }
+
 public:
     T& operator[](size_type n)
     {

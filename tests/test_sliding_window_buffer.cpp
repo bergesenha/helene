@@ -163,6 +163,12 @@ TEST_CASE("construct sliding_window_buffer with range",
             SECTION("swap sliding_window_buffers")
             {
                 swb2.swap(swb);
+
+                CHECK(swb == swb2);
+                CHECK(swb[0] == swb2[0]);
+                CHECK(swb[1] == swb2[1]);
+                CHECK(swb[2] == swb2[2]);
+                CHECK(swb[3] == swb2[3]);
             }
         }
     }
