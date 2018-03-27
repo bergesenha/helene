@@ -162,4 +162,27 @@ TEST_CASE("construct sliding_window_buffer with range",
         CHECK(res[2] == 3);
         CHECK(res[3] == 4);
     }
+
+    SECTION("copy construct sliding_window_buffer from first")
+    {
+        swb_type swb2(swb);
+        CHECK(swb2[0] == 1);
+        CHECK(swb2[1] == 2);
+        CHECK(swb2[2] == 3);
+        CHECK(swb2[3] == 4);
+
+        SECTION("modify copy")
+        {
+            swb2[0] = 10;
+            swb2[2] = 30;
+
+            CHECK(swb2[0] == 10);
+            CHECK(swb2[2] == 30);
+
+            SECTION("assign first to it again")
+            {
+                swb2 = swb;
+            }
+        }
+    }
 }
