@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstddef>
+#include <algorithm>
+#include <initializer_list>
 
 #include "circular_iterator.hpp"
 
@@ -36,7 +38,7 @@ public:
     sliding_window_buffer(Iterator first, Iterator last)
         : sliding_window_buffer()
     {
-        std::copy(first, last, origin_);
+        std::for_each(first, last, [this](const T& val) { push_back(val); });
     }
 
 
