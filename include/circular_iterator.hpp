@@ -30,6 +30,11 @@ constexpr bool is_at_least_iterator_of_category_v = std::is_base_of<
 template <class UnderlyingIterator>
 class circular_iterator
 {
+    // friend declarations primary purose to allow private member access when
+    // converting to const_iterator version of UnderlyingIterator
+    template <class OtherUnderlying>
+    friend class circular_iterator;
+
 public:
     static_assert(
         detail::is_at_least_iterator_of_category_v<
@@ -55,6 +60,14 @@ public:
         : wrap_size_(std::distance(first, last)),
           index_(std::distance(current, first)),
           base_(current)
+    {
+    }
+
+    // converting constructor primary purpose for conversion to const_iterator
+    // underlying
+    template <class OtherUnderlying>
+    circular_iterator(const circular_iterator<OtherUnderlying>& other)
+        : wrap_size_(other.wrap_size_), index_(other.index_), base_(other.base_)
     {
     }
 
