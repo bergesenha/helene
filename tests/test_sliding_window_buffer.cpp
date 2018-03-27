@@ -229,3 +229,20 @@ TEST_CASE("construct sliding_window_buffer with range",
         }
     }
 }
+
+TEST_CASE("construct sliding_window_buffer with initializer_list",
+          "[sliding_window_buffer]")
+{
+
+    swb_type swb1{10, 20, 30, 40, 50, 60};
+
+    swb_type swb2;
+    swb2.push_back(10);
+    swb2.push_back(20);
+    swb2.push_back(30);
+    swb2.push_back(40);
+    swb2.push_back(50);
+    swb2.push_back(60);
+
+    CHECK(swb1 == swb2);
+}

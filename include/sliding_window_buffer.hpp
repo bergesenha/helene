@@ -41,6 +41,11 @@ public:
         std::for_each(first, last, [this](const T& val) { push_back(val); });
     }
 
+    sliding_window_buffer(std::initializer_list<T> il) : sliding_window_buffer()
+    {
+        std::for_each(
+            il.begin(), il.end(), [this](const T& val) { push_back(val); });
+    }
 
     sliding_window_buffer(const sliding_window_buffer& other)
         : buffer_{},
