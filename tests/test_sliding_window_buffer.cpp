@@ -153,6 +153,8 @@ TEST_CASE("construct sliding_window_buffer with range",
         {
             swb_type swb2(swb);
 
+            CHECK(swb2 == swb);
+
             CHECK(swb2[0] == 10);
             CHECK(swb2[1] == 1);
             CHECK(swb2[2] == 2);
@@ -190,6 +192,8 @@ TEST_CASE("construct sliding_window_buffer with range",
             CHECK(swb2[2] == 30);
             CHECK(swb[0] == 1);
             CHECK(swb[2] == 3);
+
+            CHECK(swb2 != swb);
 
             SECTION("assign first to it again")
             {

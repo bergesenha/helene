@@ -127,6 +127,19 @@ public:
         return origin_ + Size;
     }
 
+
+    bool
+    operator==(const sliding_window_buffer& other)
+    {
+        return std::equal(cbegin(), cend(), other.cbegin(), other.cend());
+    }
+
+    bool
+    operator!=(const sliding_window_buffer& other)
+    {
+        return !operator==(other);
+    }
+
 private:
     T buffer_[Size];
     iterator origin_;
