@@ -18,12 +18,20 @@ public:
     typedef std::size_t size_type;
 
 public:
+    /**
+     * \brief default constructor
+     */
     sliding_window_buffer()
         : buffer_{},
           origin_(std::begin(buffer_), std::end(buffer_), std::begin(buffer_))
     {
     }
 
+    /**
+     * \brief constructor taking range, if std::distance(first, last) exceeds
+     * Size, the resulting sliding_window_buffer constructed will contain the
+     * Size last elements from range.
+     */
     template <class Iterator>
     sliding_window_buffer(Iterator first, Iterator last)
         : sliding_window_buffer()
@@ -31,6 +39,8 @@ public:
         std::copy(first, last, origin_);
     }
 
+
+public:
     T& operator[](size_type n)
     {
         return origin_[static_cast<typename iterator::difference_type>(n)];
