@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <functional>
 
 #include <circular_iterator.hpp>
 
@@ -147,4 +148,15 @@ using stack_sliding_window = sliding_window<T, Size, stack_storage>;
 
 template <class T, std::size_t Size>
 using static_heap_sliding_window = sliding_window<T, Size, static_heap_storage>;
+
+
+template <class KeyType,
+          class ValueType,
+          std::size_t Size,
+          class Compare = std::less<KeyType>>
+class sliding_window_map
+{
+public:
+private:
+};
 } // namespace helene
