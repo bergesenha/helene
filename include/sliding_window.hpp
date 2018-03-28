@@ -21,6 +21,8 @@ public:
     static const std::size_t size = Size;
 
     typedef T value_type;
+    typedef T& reference;
+    typedef const T& const_reference;
     typedef std::size_t size_type;
     typedef circular_iterator<T*> iterator;
     typedef circular_iterator<const T*> const_iterator;
@@ -39,11 +41,27 @@ public:
     void
     push_back(const T& value)
     {
+        *tail_ = value;
+        ++tail_;
     }
 
     void
     push_front(const T& value)
     {
+        --head_;
+        *head_ = value;
+    }
+
+    reference
+    front()
+    {
+        return *head_;
+    }
+
+    reference
+    back()
+    {
+        return *(tail_ - 1);
     }
 
 private:
