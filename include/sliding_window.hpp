@@ -43,6 +43,7 @@ public:
     {
         *tail_ = value;
         ++tail_;
+        ++head_;
     }
 
     void
@@ -50,6 +51,7 @@ public:
     {
         --head_;
         *head_ = value;
+        --tail_;
     }
 
     reference
@@ -66,12 +68,12 @@ public:
 
     reference operator[](size_type n)
     {
-        return storage_policy::buffer_[n];
+        return head_[n];
     }
 
     const_reference operator[](size_type n) const
     {
-        return storage_policy::buffer_[n];
+        return head_[n];
     }
 
 private:
