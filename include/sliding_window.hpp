@@ -155,6 +155,10 @@ namespace detail
 {
 struct runtime_ratio
 {
+    runtime_ratio() : num(1), den(1)
+    {
+    }
+
     template <std::intmax_t Num, std::intmax_t Denom>
     constexpr runtime_ratio(std::ratio<Num, Denom>) : num(Num), den(Denom)
     {
@@ -163,6 +167,18 @@ struct runtime_ratio
     std::intmax_t num;
     std::intmax_t den;
 };
+
+template <class Numeric>
+Numeric operator*(const runtime_ratio& lhs, Numeric rhs)
+{
+    return rhs * static_cast<Numeric>(lhs.num) / static_cast<Numeric>(lhs.den);
+}
+
+template <class Numeric>
+Numeric operator*(Numeric lhs, const runtime_ratio& rhs)
+{
+    return rhs * lhs;
+}
 } // namespace detail
 
 
