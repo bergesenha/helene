@@ -158,5 +158,7 @@ class sliding_window_map
 {
 public:
 private:
+    static_heap_sliding_window<ValueType, Size> sliding_buffer_;
+    KeyType origin_;
 };
 } // namespace helene
