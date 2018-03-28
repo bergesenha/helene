@@ -60,8 +60,20 @@ public:
         return *head_;
     }
 
+    const_reference
+    front() const
+    {
+        return *head_;
+    }
+
     reference
     back()
+    {
+        return *(tail_ - 1);
+    }
+
+    const_reference
+    back() const
     {
         return *(tail_ - 1);
     }
