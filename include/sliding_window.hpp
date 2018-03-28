@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <memory>
 #include <functional>
+#include <ratio>
 
 #include <circular_iterator.hpp>
 
@@ -148,6 +149,21 @@ using stack_sliding_window = sliding_window<T, Size, stack_storage>;
 
 template <class T, std::size_t Size>
 using static_heap_sliding_window = sliding_window<T, Size, static_heap_storage>;
+
+
+namespace detail
+{
+struct runtime_ratio
+{
+    template <std::intmax_t Num, std::intmax_t Denom>
+    constexpr runtime_ratio(std::ratio<Num, Denom>) : num(Num), den(Denom)
+    {
+    }
+
+    std::intmax_t num;
+    std::intmax_t den;
+};
+} // namespace detail
 
 
 template <class KeyType,
