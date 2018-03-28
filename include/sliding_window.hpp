@@ -217,7 +217,7 @@ public:
     {
         const auto index = index_of_key(k);
         const Compare c;
-        if(c(index, 0) || (!c(index, origin_ + Size * precision_)))
+        if(c(index, 0) || (!c(index, Size)))
         {
             throw std::out_of_range("Key outside of current window");
         }
