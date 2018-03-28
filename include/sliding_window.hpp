@@ -179,6 +179,14 @@ Numeric operator*(Numeric lhs, const runtime_ratio& rhs)
 {
     return rhs * lhs;
 }
+
+
+template <class Numeric>
+Numeric
+operator/(Numeric lhs, const runtime_ratio& rhs)
+{
+    return lhs * static_cast<Numeric>(rhs.den) / static_cast<Numeric>(rhs.num);
+}
 } // namespace detail
 
 
