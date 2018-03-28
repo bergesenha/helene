@@ -3,6 +3,8 @@
 #include <cstddef>
 #include <memory>
 
+#include <circular_iterator.hpp>
+
 
 namespace helene
 {
@@ -16,6 +18,8 @@ public:
     static const std::size_t size = Size;
     typedef T value_type;
     typedef std::size_t size_type;
+    typedef circular_iterator<T*> iterator;
+    typedef circular_iterator<const T*> const_iterator;
 
 public:
     sliding_window() = default;
@@ -31,8 +35,8 @@ public:
     }
 
 private:
-    size_type head_;
-    size_type tail_;
+    iterator head_;
+    iterator tail_;
 };
 
 template <class Derived, class T, std::size_t Size>
