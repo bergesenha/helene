@@ -59,7 +59,7 @@ public:
                       UnderlyingIterator current)
         : wrap_size_(std::distance(first, last)),
           index_(std::distance(first, current)),
-          base_(current)
+          base_(first)
     {
     }
 
