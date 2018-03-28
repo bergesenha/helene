@@ -19,6 +19,7 @@ class sliding_window
 
 public:
     static const std::size_t size = Size;
+
     typedef T value_type;
     typedef std::size_t size_type;
     typedef circular_iterator<T*> iterator;
@@ -26,6 +27,12 @@ public:
 
 public:
     sliding_window()
+        : head_(storage_policy::begin(),
+                storage_policy::end(),
+                storage_policy::begin()),
+          tail_(storage_policy::begin(),
+                storage_policy::end(),
+                storage_policy::end())
     {
     }
 
