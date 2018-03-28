@@ -196,6 +196,12 @@ public:
     {
     }
 
+    std::pair<KeyType, KeyType>
+    extent() const
+    {
+        return std::make_pair(origin_, origin_ + Size * precision_);
+    }
+
 private:
     static_heap_sliding_window<ValueType, Size> sliding_buffer_;
     KeyType origin_;

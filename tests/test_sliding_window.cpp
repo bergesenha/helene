@@ -28,3 +28,14 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
         CHECK(ssw[2] == 0);
     }
 }
+
+
+TEST_CASE("default construct sliding_window_map", "[sliding_window_map]")
+{
+    helene::sliding_window_map<double, int, 20> swm;
+
+    const auto ex = swm.extent();
+
+    CHECK(ex.first == Approx(0.0));
+    CHECK(ex.second == Approx(20.0));
+}
