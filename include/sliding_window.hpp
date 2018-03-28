@@ -22,7 +22,9 @@ public:
     typedef circular_iterator<const T*> const_iterator;
 
 public:
-    sliding_window() = default;
+    sliding_window()
+    {
+    }
 
     void
     push_back(const T& value)
@@ -47,6 +49,18 @@ public:
     {
     }
 
+    T*
+    begin()
+    {
+        return buffer_;
+    }
+
+    T*
+    end()
+    {
+        return buffer_ + Size;
+    }
+
 protected:
     T buffer_[Size];
 };
@@ -57,6 +71,18 @@ class static_heap_storage
 public:
     static_heap_storage() : buffer_(new T[Size]{})
     {
+    }
+
+    T*
+    begin()
+    {
+        return buffer_.get();
+    }
+
+    T*
+    end()
+    {
+        return buffer_.get() + Size;
     }
 
 protected:
