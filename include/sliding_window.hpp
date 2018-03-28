@@ -14,6 +14,9 @@ template <class T,
 class sliding_window
     : public StoragePolicy<sliding_window<T, Size, StoragePolicy>, T, Size>
 {
+    typedef StoragePolicy<sliding_window<T, Size, StoragePolicy>, T, Size>
+        storage_policy;
+
 public:
     static const std::size_t size = Size;
     typedef T value_type;
