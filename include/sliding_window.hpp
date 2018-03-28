@@ -210,6 +210,29 @@ public:
         return std::make_pair(origin_, origin_ + Size * precision_);
     }
 
+    ////////////////////////////////////////////////////////////////////////////
+    // map like interface
+    ValueType&
+    at(KeyType k)
+    {
+        const auto index = index_of_key(k);
+        const Compare c;
+        if(c(index, 0) || (!c(index, origin_ + Size * precision_)))
+        {
+            throw std::out_of_range("Key outside of current window");
+        }
+
+        return sliding_buffer_[index];
+    }
+
+
+private:
+    std::size_t
+    index_of_key(KeyType k)
+    {
+        return (k - origin_) / precision_;
+    }
+
 private:
     static_heap_sliding_window<ValueType, Size> sliding_buffer_;
     KeyType origin_;

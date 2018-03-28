@@ -38,4 +38,6 @@ TEST_CASE("default construct sliding_window_map", "[sliding_window_map]")
 
     CHECK(ex.first == Approx(0.0));
     CHECK(ex.second == Approx(20.0));
+
+    CHECK(swm.at(10.0) == 0);
 }
