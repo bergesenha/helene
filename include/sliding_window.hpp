@@ -64,6 +64,16 @@ public:
         return *(tail_ - 1);
     }
 
+    reference operator[](size_type n)
+    {
+        return storage_policy::buffer_[n];
+    }
+
+    const_reference operator[](size_type n) const
+    {
+        return storage_policy::buffer_[n];
+    }
+
 private:
     iterator head_;
     iterator tail_;

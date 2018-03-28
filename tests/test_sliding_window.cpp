@@ -14,5 +14,7 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
 
         CHECK(ssw.back() == 1);
         CHECK(shsw.back() == 1);
+
+        CHECK(ssw[0] == 0);
     }
 }
