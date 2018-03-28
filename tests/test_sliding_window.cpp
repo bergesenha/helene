@@ -40,4 +40,11 @@ TEST_CASE("default construct sliding_window_map", "[sliding_window_map]")
     CHECK(ex.second == Approx(20.0));
 
     CHECK(swm.at(10.0) == 0);
+
+    SECTION("set value at key 10.0 to 100")
+    {
+        swm.at(10.0) = 100;
+
+        CHECK(swm.at(10.0) == 100);
+    }
 }
