@@ -173,8 +173,16 @@ template <class KeyType,
 class sliding_window_map
 {
 public:
+    sliding_window_map() = default;
+    template <std::intmax_t Num, std::intmax_t Denom>
+    sliding_window_map(std::ratio<Num, Denom>)
+        : sliding_buffer_(), origin_(), precision_(std::ratio<Num, Denom>())
+    {
+    }
+
 private:
     static_heap_sliding_window<ValueType, Size> sliding_buffer_;
     KeyType origin_;
+    detail::runtime_ratio precision_;
 };
 } // namespace helene
