@@ -309,6 +309,28 @@ public:
     }
 
 
+    void
+    insert_or_assign(KeyType k, const ValueType& v)
+    {
+        const auto index = index_of_key(k);
+        const Compare c;
+
+        if(c(index, 0))
+        {
+            // below current window
+        }
+        else if(!c(index, Size))
+        {
+            // above current window
+        }
+        else
+        {
+            // within current window
+            sliding_buffer_[index] = v;
+        }
+    }
+
+
 private:
     std::size_t
     index_of_key(KeyType k)

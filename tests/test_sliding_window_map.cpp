@@ -13,16 +13,25 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
         CHECK(ext.second == Approx(20.0f));
     }
 
-    SECTION("refer to a key within the extents shouldn't throw")
+    SECTION("refer to a key within the extents, range checked, shouldn't throw")
     {
         CHECK_NOTHROW(swm.at(10.0f) == 0);
         CHECK_THROWS_AS(swm.at(20.0f), std::out_of_range);
     }
 
-    SECTION("assign to an element")
+    SECTION("assign to an element, range checked")
     {
         swm.at(10.5f) = 100;
 
         CHECK(swm.at(10.5f) == 100);
+    }
+
+    SECTION("assign to an element within window, not range checked")
+    {
+        swm.insert_or_assign(9.5f, 112);
+
+        CHECK(swm.at(9.5f) == 112);
+        CHECK(swm.extent().first == Approx(0.0f));
+        CHECK(swm.extent().second == Approx(20.0f));
     }
 }
