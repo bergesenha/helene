@@ -88,6 +88,18 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
         CHECK(ssw[0] == 12);
         CHECK(ssw[1] == 12);
         CHECK(ssw[2] == 12);
+
+        SECTION("copy construct")
+        {
+            decltype(ssw) ssw2 = ssw;
+
+            CHECK(ssw[0] == 12);
+            CHECK(ssw[1] == 12);
+            CHECK(ssw[2] == 12);
+            CHECK(ssw2[0] == 12);
+            CHECK(ssw2[1] == 12);
+            CHECK(ssw2[2] == 12);
+        }
     }
 }
 
