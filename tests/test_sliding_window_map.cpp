@@ -67,3 +67,15 @@ TEST_CASE("construct a sliding_window_map with origin", "[sliding_window_map]")
     CHECK(swm.window().first == Approx(-2.0));
     CHECK(swm.window().second == Approx(3.0));
 }
+
+
+TEST_CASE("construct a sliding_window_map with milli precision",
+          "[sliding_window_map]")
+{
+    helene::sliding_window_map<double, std::size_t, 1500> swm{std::milli()};
+
+    const auto win = swm.window();
+
+    CHECK(win.first == Approx(0.0));
+    CHECK(win.second == Approx(1.5));
+}

@@ -306,7 +306,9 @@ public:
     std::pair<KeyType, KeyType>
     window() const
     {
-        return std::make_pair(origin_, origin_ + Size * precision_);
+        return std::make_pair(static_cast<KeyType>(origin_) * precision_,
+                              static_cast<KeyType>(origin_ + Size) *
+                                  precision_);
     }
 
     ////////////////////////////////////////////////////////////////////////////
