@@ -32,7 +32,8 @@ public:
 
 public:
     sliding_window()
-        : head_(storage_policy::begin(),
+        : storage_policy(),
+          head_(storage_policy::begin(),
                 storage_policy::end(),
                 storage_policy::begin()),
           tail_(storage_policy::begin(),
