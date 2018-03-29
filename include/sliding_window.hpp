@@ -348,12 +348,12 @@ private:
     difference_type
     index_of_key(KeyType k)
     {
-        return (k - origin_) / precision_;
+        return (k - origin_ * precision_) / precision_;
     }
 
 private:
     static_heap_sliding_window<ValueType, Size> sliding_buffer_;
-    KeyType origin_;
+    difference_type origin_;
     detail::runtime_ratio precision_;
 };
 } // namespace helene
