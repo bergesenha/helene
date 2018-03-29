@@ -277,6 +277,9 @@ template <class KeyType,
 class sliding_window_map
 {
 public:
+    typedef std::ptrdiff_t difference_type;
+
+public:
     sliding_window_map() : sliding_buffer_(), origin_(), precision_()
     {
     }
@@ -318,6 +321,9 @@ public:
         if(c(index, 0))
         {
             // below current window
+            sliding_buffer_.push_front(ValueType(), -index);
+            sliding_buffer_.front() = v;
+            origin_ += index * precision_;
         }
         else if(!c(index, Size))
         {
@@ -335,7 +341,7 @@ public:
 
 
 private:
-    std::size_t
+    difference_type
     index_of_key(KeyType k)
     {
         return (k - origin_) / precision_;

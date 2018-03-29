@@ -44,4 +44,14 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
         CHECK(swm.extent().second == Approx(22.0f));
         CHECK(swm.extent().first == Approx(2.0f));
     }
+
+    SECTION("insert to an element below current window")
+    {
+        swm.insert_or_assign(-3.0f, 50);
+
+        CHECK(swm.at(-3.0f) == 50);
+
+        CHECK(swm.extent().first == Approx(-3.0f));
+        CHECK(swm.extent().second == Approx(17.0f));
+    }
 }
