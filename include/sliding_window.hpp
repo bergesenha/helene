@@ -188,7 +188,7 @@ public:
             other.buffer_.get(), other.buffer_.get() + Size, buffer_.get());
     }
 
-    static_heap_storage(static_heap_storage&& other) = default;
+    static_heap_storage(static_heap_storage&&) = default;
 
     static_heap_storage&
     operator=(const static_heap_storage& other)
@@ -197,6 +197,8 @@ public:
         swap(*this, temp);
         return *this;
     }
+
+    static_heap_storage& operator=(static_heap_storage&&) = default;
 
     void
     swap(static_heap_storage& other)
