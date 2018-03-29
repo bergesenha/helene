@@ -50,6 +50,14 @@ public:
     }
 
     void
+    push_back(const T& value, size_type n)
+    {
+        std::fill_n(tail_, n, value);
+        tail_ += n;
+        head_ += n;
+    }
+
+    void
     push_front(const T& value)
     {
         --head_;

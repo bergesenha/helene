@@ -1,3 +1,5 @@
+#include <numeric>
+
 #include <catch.hpp>
 #include <sliding_window.hpp>
 
@@ -27,24 +29,28 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
         CHECK(ssw[1] == 0);
         CHECK(ssw[2] == 0);
     }
-}
 
-
-TEST_CASE("default construct sliding_window_map", "[sliding_window_map]")
-{
-    helene::sliding_window_map<double, int, 20> swm;
-
-    const auto ex = swm.extent();
-
-    CHECK(ex.first == Approx(0.0));
-    CHECK(ex.second == Approx(20.0));
-
-    CHECK(swm.at(10.0) == 0);
-
-    SECTION("set value at key 10.0 to 100")
+    SECTION("set all elements in window by iterators")
     {
-        swm.at(10.0) = 100;
+        auto beg_it = ssw.begin();
+        auto end_it = ssw.end();
 
-        CHECK(swm.at(10.0) == 100);
+        CHECK(std::distance(beg_it, end_it) == 3);
+
+        std::iota(beg_it, end_it, 10);
+
+
+        CHECK(ssw[0] == 10);
+        CHECK(ssw[1] == 11);
+        CHECK(ssw[2] == 12);
+
+        SECTION("push_back 2 elements")
+        {
+            ssw.push_back(int(), 2);
+
+            CHECK(ssw[0] == 12);
+            CHECK(ssw[1] == int());
+            CHECK(ssw[2] == int());
+        }
     }
 }
