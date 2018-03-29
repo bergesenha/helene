@@ -295,6 +295,14 @@ public:
     {
     }
 
+    template <std::intmax_t Num, std::intmax_t Denom>
+    sliding_window_map(KeyType origin, std::ratio<Num, Denom>)
+        : sliding_buffer_(),
+          precision_(std::ratio<Num, Denom>()),
+          origin_(origin / precision_)
+    {
+    }
+
     std::pair<KeyType, KeyType>
     window() const
     {
