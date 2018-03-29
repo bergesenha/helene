@@ -37,17 +37,14 @@ public:
         : storage_policy(),
           head_(storage_policy::begin(),
                 storage_policy::end(),
-                storage_policy::begin()),
-          tail_(storage_policy::begin(),
-                storage_policy::end(),
-                storage_policy::end())
+                storage_policy::begin())
     {
     }
 
     template <class Iterator>
     sliding_window(Iterator first, Iterator last) : sliding_window()
     {
-        for(; first != last; ++first, ++head_, ++tail_)
+        for(; first != last; ++first, ++head_)
         {
             *head_ = *first;
         }
@@ -61,16 +58,14 @@ public:
     void
     push_back(const T& value)
     {
-        *tail_ = value;
-        ++tail_;
+        *head_ = value;
         ++head_;
     }
 
     void
     push_back(const T& value, size_type n)
     {
-        std::fill_n(tail_, n, value);
-        tail_ += n;
+        std::fill_n(head_, n, value);
         head_ += n;
     }
 
@@ -79,7 +74,13 @@ public:
     {
         --head_;
         *head_ = value;
-        --tail_;
+    }
+
+    void
+    push_front(const T& value, size_type n)
+    {
+        std::fill_n(std::make_reverse_iterator(head_), n, value);
+        head_ -= n;
     }
 
     reference
@@ -97,13 +98,13 @@ public:
     reference
     back()
     {
-        return *(tail_ - 1);
+        return *(head_ + Size - 1);
     }
 
     const_reference
     back() const
     {
-        return *(tail_ - 1);
+        return *(head_ + Size - 1);
     }
 
     reference operator[](size_type n)
@@ -125,12 +126,11 @@ public:
     iterator
     end()
     {
-        return tail_;
+        return head_ + Size;
     }
 
 private:
     iterator head_;
-    iterator tail_;
 };
 
 template <class Derived, class T, std::size_t Size>
@@ -141,6 +141,22 @@ public:
     {
     }
 
+    stack_storage(const stack_storage& other)
+    {
+        std::copy(std::begin(other.buffer_),
+                  std::end(other.buffer_),
+                  std::begin(buffer_));
+    }
+
+    stack_storage&
+    operator=(const stack_storage& other)
+    {
+        std::copy(std::begin(other.buffer_),
+                  std::end(other.buffer_),
+                  std::begin(buffer_));
+    }
+
+public:
     T*
     begin()
     {
@@ -165,6 +181,32 @@ public:
     {
     }
 
+    static_heap_storage(const static_heap_storage& other)
+        : static_heap_storage()
+    {
+        std::copy(
+            other.buffer_.get(), other.buffer_.get() + Size, buffer_.get());
+    }
+
+    static_heap_storage(static_heap_storage&&) = default;
+
+    static_heap_storage&
+    operator=(const static_heap_storage& other)
+    {
+        auto temp = other;
+        swap(*this, temp);
+        return *this;
+    }
+
+    static_heap_storage& operator=(static_heap_storage&&) = default;
+
+    void
+    swap(static_heap_storage& other)
+    {
+        std::swap(buffer_, other.buffer_);
+    }
+
+public:
     T*
     begin()
     {
@@ -235,7 +277,13 @@ template <class KeyType,
 class sliding_window_map
 {
 public:
-    sliding_window_map() = default;
+    typedef std::ptrdiff_t difference_type;
+
+public:
+    sliding_window_map() : sliding_buffer_(), origin_(), precision_()
+    {
+    }
+
     template <std::intmax_t Num, std::intmax_t Denom>
     sliding_window_map(std::ratio<Num, Denom>)
         : sliding_buffer_(), origin_(), precision_(std::ratio<Num, Denom>())
@@ -263,9 +311,41 @@ public:
         return sliding_buffer_[index];
     }
 
+    ValueType& operator[](KeyType k)
+    {
+        return sliding_buffer_[(k - origin_) / precision_];
+    }
+
+    void
+    insert_or_assign(KeyType k, const ValueType& v)
+    {
+        const auto index = index_of_key(k);
+        const Compare c;
+
+        if(c(index, 0))
+        {
+            // below current window
+            sliding_buffer_.push_front(ValueType(), -index);
+            sliding_buffer_.front() = v;
+            origin_ += index * precision_;
+        }
+        else if(!c(index, Size))
+        {
+            // above current window
+            sliding_buffer_.push_back(ValueType(), index - Size + 1);
+            sliding_buffer_.back() = v;
+            origin_ += (index - Size + 1) * precision_;
+        }
+        else
+        {
+            // within current window
+            sliding_buffer_[index] = v;
+        }
+    }
+
 
 private:
-    std::size_t
+    difference_type
     index_of_key(KeyType k)
     {
         return (k - origin_) / precision_;

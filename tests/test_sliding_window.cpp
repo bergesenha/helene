@@ -53,6 +53,54 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
             CHECK(ssw[2] == int());
         }
     }
+
+    SECTION("push back 2 values")
+    {
+        ssw.push_back(100, 2);
+
+        CHECK(ssw[0] == 0);
+        CHECK(ssw[1] == 100);
+        CHECK(ssw[2] == 100);
+    }
+
+    SECTION("push back 10 values")
+    {
+        ssw.push_back(100, 10);
+
+        CHECK(ssw[0] == 100);
+        CHECK(ssw[1] == 100);
+        CHECK(ssw[2] == 100);
+    }
+
+    SECTION("push_front 2 values")
+    {
+        ssw.push_front(11, 2);
+
+        CHECK(ssw[0] == 11);
+        CHECK(ssw[1] == 11);
+        CHECK(ssw[2] == 0);
+    }
+
+    SECTION("push_front 10 values")
+    {
+        ssw.push_front(12, 10);
+
+        CHECK(ssw[0] == 12);
+        CHECK(ssw[1] == 12);
+        CHECK(ssw[2] == 12);
+
+        SECTION("copy construct")
+        {
+            decltype(ssw) ssw2 = ssw;
+
+            CHECK(ssw[0] == 12);
+            CHECK(ssw[1] == 12);
+            CHECK(ssw[2] == 12);
+            CHECK(ssw2[0] == 12);
+            CHECK(ssw2[1] == 12);
+            CHECK(ssw2[2] == 12);
+        }
+    }
 }
 
 
@@ -73,4 +121,30 @@ TEST_CASE("construct static_heap_sliding_window with iterators to range")
     CHECK(message[8] == 'r');
     CHECK(message[9] == 'l');
     CHECK(message[10] == 'd');
+}
+
+TEST_CASE("construct static_heap_sliding_window with iterators to range bigger "
+          "than Size")
+{
+    std::vector<int> range{1, 2, 3, 4, 5};
+
+    helene::static_heap_sliding_window<int, 3> shsw(range.begin(), range.end());
+
+    CHECK(shsw[0] == 3);
+    CHECK(shsw[1] == 4);
+    CHECK(shsw[2] == 5);
+}
+
+TEST_CASE("construct static_heap_sliding_window with iterators to range "
+          "smaller than Size")
+{
+    std::vector<int> range{1, 2, 3};
+
+    helene::static_heap_sliding_window<int, 5> shsw(range.begin(), range.end());
+
+    CHECK(shsw[0] == 0);
+    CHECK(shsw[1] == 0);
+    CHECK(shsw[2] == 1);
+    CHECK(shsw[3] == 2);
+    CHECK(shsw[4] == 3);
 }
