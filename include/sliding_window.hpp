@@ -37,17 +37,14 @@ public:
         : storage_policy(),
           head_(storage_policy::begin(),
                 storage_policy::end(),
-                storage_policy::begin()),
-          tail_(storage_policy::begin(),
-                storage_policy::end(),
-                storage_policy::end())
+                storage_policy::begin())
     {
     }
 
     template <class Iterator>
     sliding_window(Iterator first, Iterator last) : sliding_window()
     {
-        for(; first != last; ++first, ++head_, ++tail_)
+        for(; first != last; ++first, ++head_)
         {
             *head_ = *first;
         }
@@ -61,16 +58,14 @@ public:
     void
     push_back(const T& value)
     {
-        *tail_ = value;
-        ++tail_;
+        *head_ = value;
         ++head_;
     }
 
     void
     push_back(const T& value, size_type n)
     {
-        std::fill_n(tail_, n, value);
-        tail_ += n;
+        std::fill_n(head_, n, value);
         head_ += n;
     }
 
@@ -79,7 +74,6 @@ public:
     {
         --head_;
         *head_ = value;
-        --tail_;
     }
 
     reference
@@ -97,13 +91,13 @@ public:
     reference
     back()
     {
-        return *(tail_ - 1);
+        return *(head_ + Size - 1);
     }
 
     const_reference
     back() const
     {
-        return *(tail_ - 1);
+        return *(head_ + Size - 1);
     }
 
     reference operator[](size_type n)
@@ -125,12 +119,11 @@ public:
     iterator
     end()
     {
-        return tail_;
+        return head_ + Size;
     }
 
 private:
     iterator head_;
-    iterator tail_;
 };
 
 template <class Derived, class T, std::size_t Size>
