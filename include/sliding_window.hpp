@@ -91,6 +91,18 @@ public:
         return head_[n];
     }
 
+    iterator
+    begin()
+    {
+        return head_;
+    }
+
+    iterator
+    end()
+    {
+        return tail_;
+    }
+
 private:
     iterator head_;
     iterator tail_;
