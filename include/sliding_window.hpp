@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include <ratio>
+#include <iterator>
 
 #include <circular_iterator.hpp>
 
@@ -40,6 +41,15 @@ public:
                 storage_policy::end(),
                 storage_policy::end())
     {
+    }
+
+    template <class Iterator>
+    sliding_window(Iterator first, Iterator last) : sliding_window()
+    {
+        for(; first != last; ++first, ++head_, ++tail_)
+        {
+            *head_ = *first;
+        }
     }
 
     void

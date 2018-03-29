@@ -54,3 +54,23 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
         }
     }
 }
+
+
+TEST_CASE("construct static_heap_sliding_window with iterators to range")
+{
+    std::string initial_message("hello world");
+    helene::static_heap_sliding_window<std::string::value_type, 11> message(
+        initial_message.begin(), initial_message.end());
+
+    CHECK(message[0] == 'h');
+    CHECK(message[1] == 'e');
+    CHECK(message[2] == 'l');
+    CHECK(message[3] == 'l');
+    CHECK(message[4] == 'o');
+    CHECK(message[5] == ' ');
+    CHECK(message[6] == 'w');
+    CHECK(message[7] == 'o');
+    CHECK(message[8] == 'r');
+    CHECK(message[9] == 'l');
+    CHECK(message[10] == 'd');
+}
