@@ -26,6 +26,7 @@ public:
     typedef T& reference;
     typedef const T& const_reference;
     typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
     typedef circular_iterator<T*> iterator;
     typedef circular_iterator<const T*> const_iterator;
 
