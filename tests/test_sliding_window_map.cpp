@@ -18,4 +18,11 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
         CHECK_NOTHROW(swm.at(10.0f) == 0);
         CHECK_THROWS_AS(swm.at(20.0f), std::out_of_range);
     }
+
+    SECTION("assign to an element")
+    {
+        swm.at(10.5f) = 100;
+
+        CHECK(swm.at(10.5f) == 100);
+    }
 }

@@ -277,7 +277,10 @@ template <class KeyType,
 class sliding_window_map
 {
 public:
-    sliding_window_map() = default;
+    sliding_window_map() : sliding_buffer_(), origin_(), precision_()
+    {
+    }
+
     template <std::intmax_t Num, std::intmax_t Denom>
     sliding_window_map(std::ratio<Num, Denom>)
         : sliding_buffer_(), origin_(), precision_(std::ratio<Num, Denom>())
