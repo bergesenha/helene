@@ -322,6 +322,9 @@ public:
         else if(!c(index, Size))
         {
             // above current window
+            sliding_buffer_.push_back(ValueType(), index - Size + 1);
+            sliding_buffer_.back() = v;
+            origin_ += (index - Size + 1) * precision_;
         }
         else
         {
