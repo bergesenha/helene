@@ -71,6 +71,24 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
         CHECK(ssw[1] == 100);
         CHECK(ssw[2] == 100);
     }
+
+    SECTION("push_front 2 values")
+    {
+        ssw.push_front(11, 2);
+
+        CHECK(ssw[0] == 11);
+        CHECK(ssw[1] == 11);
+        CHECK(ssw[2] == 0);
+    }
+
+    SECTION("push_front 10 values")
+    {
+        ssw.push_front(12, 10);
+
+        CHECK(ssw[0] == 12);
+        CHECK(ssw[1] == 12);
+        CHECK(ssw[2] == 12);
+    }
 }
 
 

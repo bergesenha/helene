@@ -76,6 +76,13 @@ public:
         *head_ = value;
     }
 
+    void
+    push_front(const T& value, size_type n)
+    {
+        std::fill_n(std::make_reverse_iterator(head_), n, value);
+        head_ -= n;
+    }
+
     reference
     front()
     {
