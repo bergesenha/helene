@@ -296,7 +296,7 @@ public:
     }
 
     std::pair<KeyType, KeyType>
-    extent() const
+    window() const
     {
         return std::make_pair(origin_, origin_ + Size * precision_);
     }

@@ -6,9 +6,9 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 {
     helene::sliding_window_map<float, int, 20> swm;
 
-    SECTION("extent of default constructed should be 0 - size")
+    SECTION("window of default constructed should be 0 - size")
     {
-        const auto ext = swm.extent();
+        const auto ext = swm.window();
         CHECK(ext.first == Approx(0.0f));
         CHECK(ext.second == Approx(20.0f));
     }
@@ -32,8 +32,8 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
         CHECK(swm.at(9.5f) == 112);
         CHECK(swm[9.5f] == 112);
-        CHECK(swm.extent().first == Approx(0.0f));
-        CHECK(swm.extent().second == Approx(20.0f));
+        CHECK(swm.window().first == Approx(0.0f));
+        CHECK(swm.window().second == Approx(20.0f));
     }
 
     SECTION("assign to an element above the current window")
@@ -43,8 +43,8 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
         CHECK(swm.at(21.0f) == 113);
         CHECK(swm[21.0f] == 113);
 
-        CHECK(swm.extent().second == Approx(22.0f));
-        CHECK(swm.extent().first == Approx(2.0f));
+        CHECK(swm.window().second == Approx(22.0f));
+        CHECK(swm.window().first == Approx(2.0f));
     }
 
     SECTION("insert to an element below current window")
@@ -54,7 +54,16 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
         CHECK(swm.at(-3.0f) == 50);
         CHECK(swm[-3.0f] == 50);
 
-        CHECK(swm.extent().first == Approx(-3.0f));
-        CHECK(swm.extent().second == Approx(17.0f));
+        CHECK(swm.window().first == Approx(-3.0f));
+        CHECK(swm.window().second == Approx(17.0f));
     }
+}
+
+
+TEST_CASE("construct a sliding_window_map with origin", "[sliding_window_map]")
+{
+    helene::sliding_window_map<double, char, 5> swm(-2.0);
+
+    CHECK(swm.window().first == Approx(-2.0));
+    CHECK(swm.window().second == Approx(3.0));
 }
