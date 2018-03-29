@@ -280,13 +280,18 @@ public:
     typedef std::ptrdiff_t difference_type;
 
 public:
-    sliding_window_map() : sliding_buffer_(), origin_(), precision_()
+    sliding_window_map() : sliding_buffer_(), precision_(), origin_()
     {
     }
 
     template <std::intmax_t Num, std::intmax_t Denom>
     sliding_window_map(std::ratio<Num, Denom>)
-        : sliding_buffer_(), origin_(), precision_(std::ratio<Num, Denom>())
+        : sliding_buffer_(), precision_(std::ratio<Num, Denom>()), origin_()
+    {
+    }
+
+    sliding_window_map(KeyType origin)
+        : sliding_buffer_(), precision_(), origin_(origin / precision_)
     {
     }
 
@@ -353,7 +358,7 @@ private:
 
 private:
     static_heap_sliding_window<ValueType, Size> sliding_buffer_;
-    difference_type origin_;
     detail::runtime_ratio precision_;
+    difference_type origin_;
 };
 } // namespace helene
