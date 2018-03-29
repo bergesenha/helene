@@ -311,6 +311,10 @@ public:
         return sliding_buffer_[index];
     }
 
+    ValueType& operator[](KeyType k)
+    {
+        return sliding_buffer_[(k - origin_) / precision_];
+    }
 
     void
     insert_or_assign(KeyType k, const ValueType& v)
