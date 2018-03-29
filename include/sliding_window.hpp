@@ -180,6 +180,22 @@ public:
             other.buffer_.get(), other.buffer_.get() + Size, buffer_.get());
     }
 
+    static_heap_storage(static_heap_storage&& other) = default;
+
+    static_heap_storage&
+    operator=(const static_heap_storage& other)
+    {
+        auto temp = other;
+        swap(*this, temp);
+        return *this;
+    }
+
+    void
+    swap(static_heap_storage& other)
+    {
+        std::swap(buffer_, other.buffer_);
+    }
+
 public:
     T*
     begin()
