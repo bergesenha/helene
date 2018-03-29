@@ -328,7 +328,7 @@ public:
 
     ValueType& operator[](KeyType k)
     {
-        return sliding_buffer_[(k - origin_) / precision_];
+        return sliding_buffer_[k / precision_ - origin_];
     }
 
     void
