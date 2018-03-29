@@ -5,6 +5,7 @@
 #include <functional>
 #include <ratio>
 #include <iterator>
+#include <initializer_list>
 
 #include <circular_iterator.hpp>
 
@@ -50,6 +51,11 @@ public:
         {
             *head_ = *first;
         }
+    }
+
+    sliding_window(std::initializer_list<T> il)
+        : sliding_window(il.begin(), il.end())
+    {
     }
 
     void
