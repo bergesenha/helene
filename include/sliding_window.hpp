@@ -141,6 +141,14 @@ public:
     {
     }
 
+    stack_storage(const stack_storage& other)
+    {
+        std::copy(std::begin(other.buffer_),
+                  std::end(other.buffer_),
+                  std::begin(buffer_));
+    }
+
+public:
     T*
     begin()
     {
@@ -165,6 +173,14 @@ public:
     {
     }
 
+    static_heap_storage(const static_heap_storage& other)
+        : static_heap_storage()
+    {
+        std::copy(
+            other.buffer_.get(), other.buffer_.get() + Size, buffer_.get());
+    }
+
+public:
     T*
     begin()
     {
