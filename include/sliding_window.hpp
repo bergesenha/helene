@@ -148,6 +148,14 @@ public:
                   std::begin(buffer_));
     }
 
+    stack_storage&
+    operator=(const stack_storage& other)
+    {
+        std::copy(std::begin(other.buffer_),
+                  std::end(other.buffer_),
+                  std::begin(buffer_));
+    }
+
 public:
     T*
     begin()
