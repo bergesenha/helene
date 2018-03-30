@@ -7,6 +7,7 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
     helene::sliding_window_map<float, int, 20> swm;
 
     CHECK(swm == swm);
+    CHECK(swm.size() == 20);
 
     SECTION("window of default constructed should be 0 - size")
     {

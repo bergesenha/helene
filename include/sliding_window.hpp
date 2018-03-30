@@ -481,6 +481,12 @@ public:
         return !operator==(other);
     }
 
+    constexpr size_type
+    size() const
+    {
+        return Size;
+    }
+
 private:
     difference_type
     index_of_key(KeyType k)
