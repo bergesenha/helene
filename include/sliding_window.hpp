@@ -175,6 +175,8 @@ public:
         std::copy(std::begin(other.buffer_),
                   std::end(other.buffer_),
                   std::begin(buffer_));
+
+        return *this;
     }
 
 public:
