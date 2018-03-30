@@ -112,6 +112,7 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
                 CHECK(ssw2[2] == 12);
             }
         }
+
         SECTION("copy assign")
         {
             decltype(ssw) ssw2;
@@ -135,6 +136,25 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
                 CHECK(ssw2[1] == 12);
                 CHECK(ssw2[2] == 12);
             }
+        }
+
+        SECTION("move construct")
+        {
+            decltype(ssw) ssw2(std::move(ssw));
+
+            CHECK(ssw2[0] == 12);
+            CHECK(ssw2[1] == 12);
+            CHECK(ssw2[2] == 12);
+        }
+
+        SECTION("move assign")
+        {
+            decltype(ssw) ssw2;
+            ssw2 = std::move(ssw);
+
+            CHECK(ssw2[0] == 12);
+            CHECK(ssw2[1] == 12);
+            CHECK(ssw2[2] == 12);
         }
     }
 }
