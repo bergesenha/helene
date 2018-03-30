@@ -55,6 +55,15 @@ public:
     {
     }
 
+    sliding_window(const sliding_window& other)
+        : storage_policy(other),
+          head_(storage_policy::begin(),
+                storage_policy::end(),
+                storage_policy::begin() + other.head_.underlying_position())
+    {
+    }
+
+public:
     void
     push_back(const T& value)
     {
