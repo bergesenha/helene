@@ -157,6 +157,19 @@ public:
         return head_ + Size;
     }
 
+
+    bool
+    operator==(const sliding_window& other) const
+    {
+        return std::equal(cbegin(), cend(), other.cbegin());
+    }
+
+    bool
+    operator!=(const sliding_window& other) const
+    {
+        return !operator==(other);
+    }
+
 private:
     iterator head_;
 };

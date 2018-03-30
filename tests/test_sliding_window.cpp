@@ -110,6 +110,8 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
                 CHECK(ssw2[0] == 12);
                 CHECK(ssw2[1] == 12);
                 CHECK(ssw2[2] == 12);
+
+                CHECK(ssw != ssw2);
             }
         }
 
@@ -124,6 +126,8 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
             CHECK(ssw2[0] == 12);
             CHECK(ssw2[1] == 12);
             CHECK(ssw2[2] == 12);
+
+            CHECK(ssw == ssw2);
 
             SECTION("modify original")
             {
