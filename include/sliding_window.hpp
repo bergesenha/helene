@@ -63,6 +63,13 @@ public:
     {
     }
 
+    sliding_window&
+    operator=(const sliding_window& other)
+    {
+        std::copy(other.cbegin(), other.cend(), begin());
+        return *this;
+    }
+
 public:
     void
     push_back(const T& value)
