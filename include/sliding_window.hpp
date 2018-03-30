@@ -291,16 +291,19 @@ public:
     {
     }
 
+
     template <std::intmax_t Num, std::intmax_t Denom>
     sliding_window_map(std::ratio<Num, Denom>)
         : sliding_buffer_(), precision_(std::ratio<Num, Denom>()), origin_()
     {
     }
 
+
     sliding_window_map(KeyType origin)
         : sliding_buffer_(), precision_(), origin_(origin / precision_)
     {
     }
+
 
     template <std::intmax_t Num, std::intmax_t Denom>
     sliding_window_map(KeyType origin, std::ratio<Num, Denom>)
@@ -310,6 +313,7 @@ public:
     {
     }
 
+
     std::pair<KeyType, KeyType>
     window() const
     {
@@ -318,8 +322,7 @@ public:
                                   precision_);
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // map like interface
+
     ValueType&
     at(KeyType k)
     {
@@ -333,10 +336,12 @@ public:
         return sliding_buffer_[index];
     }
 
+
     ValueType& operator[](KeyType k)
     {
         return sliding_buffer_[k / precision_ - origin_];
     }
+
 
     void
     insert_or_assign(KeyType k, const ValueType& v)
