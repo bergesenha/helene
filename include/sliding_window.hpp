@@ -194,7 +194,7 @@ public:
     operator=(const static_heap_storage& other)
     {
         auto temp = other;
-        swap(*this, temp);
+        swap(temp);
         return *this;
     }
 
