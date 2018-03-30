@@ -432,13 +432,13 @@ public:
     }
 
     const_iterator
-    cbegin()
+    cbegin() const
     {
         return sliding_buffer_.cbegin();
     }
 
     const_iterator
-    cend()
+    cend() const
     {
         return sliding_buffer_.cend();
     }
