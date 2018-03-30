@@ -192,6 +192,19 @@ public:
         return index_ >= other.index_;
     }
 
+public:
+    difference_type
+    underlying_position() const
+    {
+        return index_;
+    }
+
+    difference_type
+    wrap_size() const
+    {
+        return wrap_size_;
+    }
+
 private:
     difference_type
     local_index(difference_type index) const
