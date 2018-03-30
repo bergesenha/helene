@@ -316,6 +316,18 @@ operator/(Numeric lhs, const runtime_ratio& rhs)
 {
     return lhs * static_cast<Numeric>(rhs.den) / static_cast<Numeric>(rhs.num);
 }
+
+inline bool
+operator==(const runtime_ratio& lhs, const runtime_ratio& rhs)
+{
+    return lhs.num == rhs.num && lhs.den == rhs.den;
+}
+
+inline bool
+operator!=(const runtime_ratio& lhs, const runtime_ratio& rhs)
+{
+    return lhs.num != rhs.num || lhs.den != rhs.den;
+}
 } // namespace detail
 
 
@@ -441,6 +453,32 @@ public:
     cend() const
     {
         return sliding_buffer_.cend();
+    }
+
+    bool
+    operator==(const sliding_window_map& other) const
+    {
+        if(origin_ == other.origin_)
+        {
+            if(precision_ == other.precision_)
+            {
+                return sliding_buffer_ == other.sliding_buffer_;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    bool
+    operator!=(const sliding_window_map& other) const
+    {
+        return !operator==(other);
     }
 
 private:

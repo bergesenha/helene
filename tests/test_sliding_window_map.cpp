@@ -6,6 +6,8 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 {
     helene::sliding_window_map<float, int, 20> swm;
 
+    CHECK(swm == swm);
+
     SECTION("window of default constructed should be 0 - size")
     {
         const auto ext = swm.window();
@@ -55,6 +57,15 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
             CHECK(swm2.window().second == Approx(22.0f));
             CHECK(swm2.window().first == Approx(2.0f));
+
+            CHECK(swm2 == swm);
+
+            SECTION("modify original")
+            {
+                swm[20.0] = 123;
+
+                CHECK(swm2 != swm);
+            }
         }
 
         SECTION("assigned should pass same tests as original")
@@ -67,6 +78,15 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
             CHECK(swm2.window().second == Approx(22.0f));
             CHECK(swm2.window().first == Approx(2.0f));
+
+            CHECK(swm2 == swm);
+
+            SECTION("modify original")
+            {
+                swm[20.0] = 123;
+
+                CHECK(swm2 != swm);
+            }
         }
     }
 
