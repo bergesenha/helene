@@ -278,7 +278,13 @@ template <class KeyType,
 class sliding_window_map
 {
 public:
-    typedef std::ptrdiff_t difference_type;
+    typedef ValueType value_type;
+    typedef ValueType& reference;
+    typedef const ValueType& const_reference;
+    typedef typename SlidingWindowType::iterator iterator;
+    typedef typename SlidingWindowType::const_iterator const_iterator;
+    typedef typename SlidingWindowType::difference_type difference_type;
+    typedef typename SlidingWindowType::size_type size_type;
 
 public:
     sliding_window_map() : sliding_buffer_(), precision_(), origin_()
