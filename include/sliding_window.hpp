@@ -129,6 +129,18 @@ public:
         return head_ + Size;
     }
 
+    const_iterator
+    cbegin() const
+    {
+        return head_;
+    }
+
+    const_iterator
+    cend() const
+    {
+        return head_ + Size;
+    }
+
 private:
     iterator head_;
 };
