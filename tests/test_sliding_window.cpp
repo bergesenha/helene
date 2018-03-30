@@ -112,6 +112,30 @@ TEST_CASE("default construct sliding_windows", "[sliding_window]")
                 CHECK(ssw2[2] == 12);
             }
         }
+        SECTION("copy assign")
+        {
+            decltype(ssw) ssw2;
+            ssw2 = ssw;
+
+            CHECK(ssw[0] == 12);
+            CHECK(ssw[1] == 12);
+            CHECK(ssw[2] == 12);
+            CHECK(ssw2[0] == 12);
+            CHECK(ssw2[1] == 12);
+            CHECK(ssw2[2] == 12);
+
+            SECTION("modify original")
+            {
+                ssw[0] = 50;
+
+                CHECK(ssw[0] == 50);
+                CHECK(ssw[1] == 12);
+                CHECK(ssw[2] == 12);
+                CHECK(ssw2[0] == 12);
+                CHECK(ssw2[1] == 12);
+                CHECK(ssw2[2] == 12);
+            }
+        }
     }
 }
 
