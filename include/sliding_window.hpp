@@ -6,6 +6,7 @@
 #include <ratio>
 #include <iterator>
 #include <initializer_list>
+#include <limits>
 
 #include <circular_iterator.hpp>
 
@@ -485,6 +486,18 @@ public:
     size() const
     {
         return Size;
+    }
+
+    constexpr size_type
+    max_size() const
+    {
+        return std::numeric_limits<size_type>::max;
+    }
+
+    constexpr bool
+    empty() const
+    {
+        return false;
     }
 
 private:
