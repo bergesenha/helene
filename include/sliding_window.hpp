@@ -273,7 +273,8 @@ operator/(Numeric lhs, const runtime_ratio& rhs)
 template <class KeyType,
           class ValueType,
           std::size_t Size,
-          class Compare = std::less<KeyType>>
+          class Compare = std::less<KeyType>,
+          class SlidingWindowType = static_heap_sliding_window<ValueType, Size>>
 class sliding_window_map
 {
 public:
@@ -367,7 +368,7 @@ private:
     }
 
 private:
-    static_heap_sliding_window<ValueType, Size> sliding_buffer_;
+    SlidingWindowType sliding_buffer_;
     detail::runtime_ratio precision_;
     difference_type origin_;
 };
