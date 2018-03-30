@@ -79,6 +79,24 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
         CHECK(swm.window().first == Approx(-3.0f));
         CHECK(swm.window().second == Approx(17.0f));
+
+        SECTION("get iterators to begin and end")
+        {
+            auto beg = swm.begin();
+            auto end = swm.end();
+
+            auto cbeg = swm.cbegin();
+            auto cend = swm.cend();
+
+            CHECK(*beg == Approx(50.0f));
+            CHECK(*cbeg == Approx(50.0f));
+
+            CHECK(std::distance(beg, end) == 20);
+            CHECK(std::distance(cbeg, cend) == 20);
+
+            CHECK(*(beg + 10) == Approx(0.0f));
+            CHECK(*(cbeg + 10) == Approx(0.0f));
+        }
     }
 }
 

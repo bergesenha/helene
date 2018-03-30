@@ -382,6 +382,29 @@ public:
         }
     }
 
+    iterator
+    begin()
+    {
+        return sliding_buffer_.begin();
+    }
+
+    iterator
+    end()
+    {
+        return sliding_buffer_.end();
+    }
+
+    const_iterator
+    cbegin()
+    {
+        return sliding_buffer_.cbegin();
+    }
+
+    const_iterator
+    cend()
+    {
+        return sliding_buffer_.cend();
+    }
 
 private:
     difference_type
