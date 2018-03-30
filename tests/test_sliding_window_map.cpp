@@ -45,6 +45,17 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
         CHECK(swm.window().second == Approx(22.0f));
         CHECK(swm.window().first == Approx(2.0f));
+
+        SECTION("copy constructed should pass same tests as original")
+        {
+            helene::sliding_window_map<float, int, 20> swm2(swm);
+
+            CHECK(swm2.at(21.0f) == 113);
+            CHECK(swm2[21.0f] == 113);
+
+            CHECK(swm2.window().second == Approx(22.0f));
+            CHECK(swm2.window().first == Approx(2.0f));
+        }
     }
 
     SECTION("insert to an element below current window")
