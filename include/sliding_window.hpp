@@ -447,4 +447,12 @@ swap(helene::stack_storage<Derived, T, Size>& lhs,
 {
     lhs.swap(rhs);
 }
+
+template <class Derived, class T, std::size_t Size>
+void
+swap(helene::static_heap_storage<Derived, T, Size>& lhs,
+     helene::static_heap_storage<Derived, T, Size>& rhs)
+{
+    lhs.swap(rhs);
+}
 } // namespace std
