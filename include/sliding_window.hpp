@@ -179,6 +179,12 @@ public:
         return *this;
     }
 
+    void
+    swap(stack_storage& other)
+    {
+        std::swap(buffer_, other.buffer_);
+    }
+
 public:
     T*
     begin()
@@ -430,3 +436,15 @@ private:
     difference_type origin_;
 };
 } // namespace helene
+
+
+namespace std
+{
+template <class Derived, class T, std::size_t Size>
+void
+swap(helene::stack_storage<Derived, T, Size>& lhs,
+     helene::stack_storage<Derived, T, Size>& rhs)
+{
+    lhs.swap(rhs);
+}
+} // namespace std
