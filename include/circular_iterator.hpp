@@ -58,8 +58,8 @@ public:
                       UnderlyingIterator last,
                       UnderlyingIterator current)
         : wrap_size_(std::distance(first, last)),
-          index_(std::distance(current, first)),
-          base_(current)
+          index_(std::distance(first, current)),
+          base_(first)
     {
     }
 
@@ -190,6 +190,19 @@ public:
     operator>=(const circular_iterator& other)
     {
         return index_ >= other.index_;
+    }
+
+public:
+    difference_type
+    underlying_position() const
+    {
+        return index_;
+    }
+
+    difference_type
+    wrap_size() const
+    {
+        return wrap_size_;
     }
 
 private:
