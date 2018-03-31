@@ -6,6 +6,9 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 {
     helene::sliding_window_map<float, int, 20> swm;
 
+    CHECK(swm == swm);
+    CHECK(swm.size() == 20);
+
     SECTION("window of default constructed should be 0 - size")
     {
         const auto ext = swm.window();
@@ -45,6 +48,61 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
         CHECK(swm.window().second == Approx(22.0f));
         CHECK(swm.window().first == Approx(2.0f));
+
+        SECTION("copy constructed should pass same tests as original")
+        {
+            helene::sliding_window_map<float, int, 20> swm2(swm);
+
+            CHECK(swm2.at(21.0f) == 113);
+            CHECK(swm2[21.0f] == 113);
+
+            CHECK(swm2.window().second == Approx(22.0f));
+            CHECK(swm2.window().first == Approx(2.0f));
+
+            CHECK(swm2 == swm);
+
+            SECTION("modify original")
+            {
+                swm[20.0] = 123;
+
+                CHECK(swm2 != swm);
+            }
+        }
+
+        SECTION("assigned should pass same tests as original")
+        {
+            helene::sliding_window_map<float, int, 20> swm2;
+            swm2 = swm;
+
+            CHECK(swm2.at(21.0f) == 113);
+            CHECK(swm2[21.0f] == 113);
+
+            CHECK(swm2.window().second == Approx(22.0f));
+            CHECK(swm2.window().first == Approx(2.0f));
+
+            CHECK(swm2 == swm);
+
+            SECTION("modify original")
+            {
+                swm[20.0] = 123;
+
+                CHECK(swm2 != swm);
+
+                SECTION("swap the two")
+                {
+                    swm.swap(swm2);
+
+                    CHECK(swm2.at(20.0f) == 123);
+                }
+
+                SECTION("free function swap the two")
+                {
+                    swap(swm, swm2);
+
+                    CHECK(swm2.at(20.0f) == 123);
+                }
+            }
+        }
     }
 
     SECTION("insert to an element below current window")
@@ -56,6 +114,24 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
         CHECK(swm.window().first == Approx(-3.0f));
         CHECK(swm.window().second == Approx(17.0f));
+
+        SECTION("get iterators to begin and end")
+        {
+            auto beg = swm.begin();
+            auto end = swm.end();
+
+            auto cbeg = swm.cbegin();
+            auto cend = swm.cend();
+
+            CHECK(*beg == Approx(50.0f));
+            CHECK(*cbeg == Approx(50.0f));
+
+            CHECK(std::distance(beg, end) == 20);
+            CHECK(std::distance(cbeg, cend) == 20);
+
+            CHECK(*(beg + 10) == Approx(0.0f));
+            CHECK(*(cbeg + 10) == Approx(0.0f));
+        }
     }
 }
 

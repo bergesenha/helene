@@ -6,6 +6,7 @@
 #include <ratio>
 #include <iterator>
 #include <initializer_list>
+#include <limits>
 
 #include <circular_iterator.hpp>
 
@@ -55,6 +56,22 @@ public:
     {
     }
 
+    sliding_window(const sliding_window& other)
+        : storage_policy(other),
+          head_(storage_policy::begin(),
+                storage_policy::end(),
+                storage_policy::begin() + other.head_.underlying_position())
+    {
+    }
+
+    sliding_window&
+    operator=(const sliding_window& other)
+    {
+        std::copy(other.cbegin(), other.cend(), begin());
+        return *this;
+    }
+
+public:
     void
     push_back(const T& value)
     {
@@ -129,6 +146,31 @@ public:
         return head_ + Size;
     }
 
+    const_iterator
+    cbegin() const
+    {
+        return head_;
+    }
+
+    const_iterator
+    cend() const
+    {
+        return head_ + Size;
+    }
+
+
+    bool
+    operator==(const sliding_window& other) const
+    {
+        return std::equal(cbegin(), cend(), other.cbegin());
+    }
+
+    bool
+    operator!=(const sliding_window& other) const
+    {
+        return !operator==(other);
+    }
+
 private:
     iterator head_;
 };
@@ -154,6 +196,14 @@ public:
         std::copy(std::begin(other.buffer_),
                   std::end(other.buffer_),
                   std::begin(buffer_));
+
+        return *this;
+    }
+
+    void
+    swap(stack_storage& other)
+    {
+        std::swap(buffer_, other.buffer_);
     }
 
 public:
@@ -194,7 +244,7 @@ public:
     operator=(const static_heap_storage& other)
     {
         auto temp = other;
-        swap(*this, temp);
+        swap(temp);
         return *this;
     }
 
@@ -267,22 +317,42 @@ operator/(Numeric lhs, const runtime_ratio& rhs)
 {
     return lhs * static_cast<Numeric>(rhs.den) / static_cast<Numeric>(rhs.num);
 }
+
+inline bool
+operator==(const runtime_ratio& lhs, const runtime_ratio& rhs)
+{
+    return lhs.num == rhs.num && lhs.den == rhs.den;
+}
+
+inline bool
+operator!=(const runtime_ratio& lhs, const runtime_ratio& rhs)
+{
+    return lhs.num != rhs.num || lhs.den != rhs.den;
+}
 } // namespace detail
 
 
 template <class KeyType,
           class ValueType,
           std::size_t Size,
-          class Compare = std::less<KeyType>>
+          class Compare = std::less<KeyType>,
+          class SlidingWindowType = static_heap_sliding_window<ValueType, Size>>
 class sliding_window_map
 {
 public:
-    typedef std::ptrdiff_t difference_type;
+    typedef ValueType value_type;
+    typedef ValueType& reference;
+    typedef const ValueType& const_reference;
+    typedef typename SlidingWindowType::iterator iterator;
+    typedef typename SlidingWindowType::const_iterator const_iterator;
+    typedef typename SlidingWindowType::difference_type difference_type;
+    typedef typename SlidingWindowType::size_type size_type;
 
 public:
     sliding_window_map() : sliding_buffer_(), precision_(), origin_()
     {
     }
+
 
     template <std::intmax_t Num, std::intmax_t Denom>
     sliding_window_map(std::ratio<Num, Denom>)
@@ -290,10 +360,12 @@ public:
     {
     }
 
+
     sliding_window_map(KeyType origin)
         : sliding_buffer_(), precision_(), origin_(origin / precision_)
     {
     }
+
 
     template <std::intmax_t Num, std::intmax_t Denom>
     sliding_window_map(KeyType origin, std::ratio<Num, Denom>)
@@ -303,6 +375,7 @@ public:
     {
     }
 
+
     std::pair<KeyType, KeyType>
     window() const
     {
@@ -311,8 +384,7 @@ public:
                                   precision_);
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // map like interface
+
     ValueType&
     at(KeyType k)
     {
@@ -326,10 +398,12 @@ public:
         return sliding_buffer_[index];
     }
 
+
     ValueType& operator[](KeyType k)
     {
         return sliding_buffer_[k / precision_ - origin_];
     }
+
 
     void
     insert_or_assign(KeyType k, const ValueType& v)
@@ -358,6 +432,83 @@ public:
         }
     }
 
+    iterator
+    begin()
+    {
+        return sliding_buffer_.begin();
+    }
+
+    iterator
+    end()
+    {
+        return sliding_buffer_.end();
+    }
+
+    const_iterator
+    cbegin() const
+    {
+        return sliding_buffer_.cbegin();
+    }
+
+    const_iterator
+    cend() const
+    {
+        return sliding_buffer_.cend();
+    }
+
+    bool
+    operator==(const sliding_window_map& other) const
+    {
+        if(origin_ == other.origin_)
+        {
+            if(precision_ == other.precision_)
+            {
+                return sliding_buffer_ == other.sliding_buffer_;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    bool
+    operator!=(const sliding_window_map& other) const
+    {
+        return !operator==(other);
+    }
+
+    constexpr size_type
+    size() const
+    {
+        return Size;
+    }
+
+    constexpr size_type
+    max_size() const
+    {
+        return std::numeric_limits<size_type>::max;
+    }
+
+    constexpr bool
+    empty() const
+    {
+        return false;
+    }
+
+    void
+    swap(sliding_window_map& other)
+    {
+        using std::swap;
+
+        swap(sliding_buffer_, other.sliding_buffer_);
+        swap(precision_, other.precision_);
+        swap(origin_, other.origin_);
+    }
 
 private:
     difference_type
@@ -367,8 +518,28 @@ private:
     }
 
 private:
-    static_heap_sliding_window<ValueType, Size> sliding_buffer_;
+    SlidingWindowType sliding_buffer_;
     detail::runtime_ratio precision_;
     difference_type origin_;
 };
 } // namespace helene
+
+
+namespace std
+{
+template <class Derived, class T, std::size_t Size>
+void
+swap(helene::stack_storage<Derived, T, Size>& lhs,
+     helene::stack_storage<Derived, T, Size>& rhs)
+{
+    lhs.swap(rhs);
+}
+
+template <class Derived, class T, std::size_t Size>
+void
+swap(helene::static_heap_storage<Derived, T, Size>& lhs,
+     helene::static_heap_storage<Derived, T, Size>& rhs)
+{
+    lhs.swap(rhs);
+}
+} // namespace std
