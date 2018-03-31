@@ -510,6 +510,14 @@ public:
         swap(origin_, other.origin_);
     }
 
+    KeyType
+    get_key(const_iterator it)
+    {
+        const auto index = it - cbegin();
+
+        return static_cast<KeyType>(origin_ + index) * precision_;
+    }
+
 private:
     difference_type
     index_of_key(KeyType k)
