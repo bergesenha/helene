@@ -131,6 +131,9 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
 
             CHECK(*(beg + 10) == Approx(0.0f));
             CHECK(*(cbeg + 10) == Approx(0.0f));
+
+            CHECK(swm.get_key(beg) == Approx(-3.0f));
+            CHECK(swm.get_key(end) == Approx(17.0f));
         }
     }
 }
