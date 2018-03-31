@@ -500,6 +500,16 @@ public:
         return false;
     }
 
+    void
+    swap(sliding_window_map& other)
+    {
+        using std::swap;
+
+        swap(sliding_buffer_, other.sliding_buffer_);
+        swap(precision_, other.precision_);
+        swap(origin_, other.origin_);
+    }
+
 private:
     difference_type
     index_of_key(KeyType k)

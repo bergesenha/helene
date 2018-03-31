@@ -87,6 +87,20 @@ TEST_CASE("default construct a sliding_window_map", "[sliding_window_map]")
                 swm[20.0] = 123;
 
                 CHECK(swm2 != swm);
+
+                SECTION("swap the two")
+                {
+                    swm.swap(swm2);
+
+                    CHECK(swm2.at(20.0f) == 123);
+                }
+
+                SECTION("free function swap the two")
+                {
+                    swap(swm, swm2);
+
+                    CHECK(swm2.at(20.0f) == 123);
+                }
             }
         }
     }
