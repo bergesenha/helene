@@ -30,5 +30,6 @@ if(HELENE_BUILD_TESTS)
         PRIVATE tests/test_circular_iterator.cpp
         PRIVATE tests/test_sliding_window.cpp
         PRIVATE tests/test_sliding_window_map.cpp
+        PRIVATE tests/test_ecs.cpp
         )
 endif(HELENE_BUILD_TESTS)
