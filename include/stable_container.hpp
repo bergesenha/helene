@@ -16,37 +16,36 @@ class stable_vector
 {
     typedef std::vector<T, Allocator> vector_type;
 
-    enum class element_state
-    {
-        occupied,
-        vacant
-    };
-
 
 public:
     typedef typename vector_type::size_type size_type;
 
 public:
-    void
+    size_type
     add(const T& value)
     {
-        // find next vacant position
-        auto found =
-            std::find(index_.begin(), index_.end(), element_state::vacant);
-
-        if(found != index_.end())
+        // check for vacant position
+        if(erased_.size())
         {
-            const auto elm_index = found - index_.begin();
+            const auto vacant_index = erased_.back();
+            erased_.pop_back();
 
-            new(&data_[elm_index]) T(value);
+            new(&data_[vacant_index]) T(value);
 
-            *found = element_state::occupied;
+            return vacant_index;
         }
-        else
-        {
-            data_.push_back(value);
-            index_.push_back(element_state::occupied);
-        }
+
+        const auto new_index = size();
+        data_.push_back(value);
+
+        return new_index;
+    }
+
+    void
+    erase(size_type index)
+    {
+        (&data_[index])->~T();
+        erased_.push_back(index);
     }
 
     T& operator[](size_type n)
@@ -54,9 +53,15 @@ public:
         return data_[n];
     }
 
+    size_type
+    size() const
+    {
+        return data_.size() - erased_.size();
+    }
+
 
 private:
     vector_type data_;
-    std::vector<element_state, Allocator> index_;
+    std::vector<size_type, Allocator> erased_;
 };
 } // namespace helene
