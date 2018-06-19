@@ -28,8 +28,8 @@ protected:
 } // namespace detail
 
 
-template <class... TableTags>
-class database : public detail::container<TableTags>...
+template <class... TableDescriptions>
+class database : public detail::container<TableDescriptions>...
 {
 public:
 private:
