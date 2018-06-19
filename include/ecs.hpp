@@ -7,31 +7,48 @@
 
 namespace helene
 {
-template <class TableTagType, TableTagType TableTag, class T>
+template <class TagType, TagType Tag, class T>
 struct table_description
 {
 };
 
+template <class TagType, TagType Tag, class... TableDescriptions>
+struct type_from_tag;
 
-namespace detail
+template <class TagType,
+          TagType Tag,
+          TagType FirstTag,
+          TagType... RestTags,
+          class FirstT,
+          class... RestTs>
+struct type_from_tag<TagType,
+                     Tag,
+                     table_description<TagType, FirstTag, FirstT>,
+                     table_description<TagType, RestTags, RestTs>...>
+    : type_from_tag<TagType,
+                    Tag,
+                    table_description<TagType, RestTags, RestTs>...>
 {
-template <class T>
-class container;
-
-
-template <class TableTagType, TableTagType TableTag, class T>
-class container<table_description<TableTagType, TableTag, T>>
-{
-protected:
-    stable_vector<T> data_;
 };
-} // namespace detail
 
-
-template <class... TableDescriptions>
-class database : public detail::container<TableDescriptions>...
+template <class TagType,
+          TagType Tag,
+          TagType... RestTags,
+          class FirstT,
+          class... RestTs>
+struct type_from_tag<TagType,
+                     Tag,
+                     table_description<TagType, Tag, FirstT>,
+                     table_description<TagType, RestTags, RestTs>...>
 {
-public:
-private:
+    typedef FirstT type;
+};
+
+template <class TagType, class... TableDescriptions>
+class database;
+
+template <class TagType, TagType... Tags, class... Ts>
+class database<TagType, table_description<TagType, Tags, Ts>...>
+{
 };
 } // namespace helene
