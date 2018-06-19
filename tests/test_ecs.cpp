@@ -12,4 +12,9 @@ enum class TableName
 
 TEST_CASE("", "")
 {
+    helene::database<
+        TableName,
+        helene::table_description<TableName, TableName::Numbers, int>,
+        helene::table_description<TableName, TableName::Names, std::string>>
+        db;
 }

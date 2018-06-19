@@ -44,11 +44,24 @@ struct type_from_tag<TagType,
     typedef FirstT type;
 };
 
+
+template <class TagType, TagType Tag, class T>
+class container
+{
+protected:
+    stable_vector<T> data_;
+};
+
+
 template <class TagType, class... TableDescriptions>
 class database;
 
+
 template <class TagType, TagType... Tags, class... Ts>
 class database<TagType, table_description<TagType, Tags, Ts>...>
+    : public container<TagType, Tags, Ts>...
 {
+public:
+private:
 };
 } // namespace helene
