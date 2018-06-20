@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <stdexcept>
 
 
 namespace helene
@@ -39,6 +40,30 @@ public:
         data_.push_back(value);
 
         return new_index;
+    }
+
+    // access with bounds checking
+    T&
+    at(size_type index)
+    {
+        if(std::find(erased_.begin(), erased_.end(), index) != erased_.end())
+        {
+            throw std::out_of_range("access of deleted element");
+        }
+
+        return data_.at(index);
+    }
+
+    // access with bounds checking
+    const T&
+    at(size_type index) const
+    {
+        if(std::find(erased_.cbegin(), erased_.cend(), index) != erased_.cend())
+        {
+            throw std::out_of_range("access of deleted element");
+        }
+
+        return data_.at(index);
     }
 
     void
