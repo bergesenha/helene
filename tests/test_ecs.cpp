@@ -24,4 +24,6 @@ TEST_CASE("", "")
 
     CHECK(db.at<TableName::Numbers>(number_index_0) == 10);
     CHECK(db.at<TableName::Names>(name_index_0) == std::string("harald"));
+    CHECK(db.get<TableName::Numbers>(number_index_0) == 10);
+    CHECK(db.get<TableName::Names>(name_index_0) == std::string("harald"));
 }
