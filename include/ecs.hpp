@@ -86,7 +86,7 @@ public:
 
     template <TagType Tag>
     type_from_tag_t<TagType, Tag, column_description<TagType, Tags, Ts>...>&
-    get(index_type index)
+    at(index_type index)
     {
         return container<TagType,
                          Tag,
@@ -101,7 +101,7 @@ public:
     const type_from_tag_t<TagType,
                           Tag,
                           column_description<TagType, Tags, Ts>...>&
-    get(index_type index) const
+    at(index_type index) const
     {
         return container<TagType,
                          Tag,
