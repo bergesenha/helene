@@ -2,6 +2,7 @@
 
 
 #include <vector>
+#include <utility>
 
 namespace helene
 {
@@ -31,19 +32,49 @@ public:
     {
         // always insert at end of dense storage
         dense_.push_back(value);
-        // find available handle
+
+        handle_type new_handle;
+        // find new handle
         if(free_.empty())
         {
             // no free handle slots, push back new slot
             sparse_.push_back(dense_.size() - 1);
-            return sparse_.size() - 1;
+
+
+            new_handle = sparse_.size() - 1;
+        }
+        else
+        {
+            // slot is available for new handle
+            new_handle = free_.back();
+            sparse_[new_handle] = dense_.size() - 1;
+            free_.pop_back();
         }
 
-        // slot available
-        handle_type available = free_.back();
-        sparse_[available] = dense_.size() - 1;
-        free_.pop_back();
-        return available;
+
+        return new_handle;
+    }
+
+
+    void
+    erase(handle_type n)
+    {
+        // find handle of dense's back
+        const auto index_of_dense_back = dense_.size() - 1;
+        const auto back_handle = sparse_[index_of_dense_back];
+
+
+        // swap element to erase with back element
+        std::swap(dense_[sparse_[n]], dense_.back());
+
+        // update handle reference to new dense location
+        sparse_[back_handle] = sparse_[n];
+
+        // pop back new back element
+        dense_.pop_back();
+
+        // add handle to free list
+        free_.push_back(n);
     }
 
     size_type
@@ -65,7 +96,6 @@ public:
 private:
     std::vector<T> dense_;
     std::vector<size_type> sparse_;
-    std::vector<handle_type> reverse_;
     std::vector<handle_type> free_;
 };
 } // namespace helene

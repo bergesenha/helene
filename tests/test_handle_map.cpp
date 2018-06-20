@@ -30,14 +30,53 @@ TEST_CASE("", "")
 
         SECTION("remove first element")
         {
+            hm.erase(index_0);
+
+            CHECK(hm.size() == 2);
+
+            SECTION("insert another element")
+            {
+                const auto index_3 = hm.insert(30);
+
+                CHECK(hm.size() == 3);
+                CHECK(hm[index_1] == 10);
+                CHECK(hm[index_2] == 20);
+                CHECK(hm[index_3] == 30);
+            }
         }
 
         SECTION("remove second element")
         {
+            hm.erase(index_1);
+
+            CHECK(hm.size() == 2);
+
+            SECTION("insert another element")
+            {
+                const auto index_3 = hm.insert(30);
+
+                CHECK(hm.size() == 3);
+                CHECK(hm[index_0] == 0);
+                CHECK(hm[index_2] == 20);
+                CHECK(hm[index_3] == 30);
+            }
         }
 
         SECTION("remove third element")
         {
+            hm.erase(index_2);
+
+            CHECK(hm.size() == 2);
+
+            SECTION("insert another element")
+            {
+                const auto index_3 = hm.insert(30);
+
+                CHECK(hm.size() == 3);
+                CHECK(hm[index_0] == 0);
+                CHECK(hm[index_1] == 10);
+                CHECK(hm[index_3] == 30);
+            }
         }
     }
 }
