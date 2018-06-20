@@ -14,7 +14,7 @@ public:
 
 public:
     index_type
-    push_back(const T& value)
+    insert(const T& value)
     {
         dense_.push_back(value);
         sparse_.push_back(dense_.size() - 1);
