@@ -51,6 +51,7 @@ public:
             free_.pop_back();
         }
 
+        reverse_.push_back(new_handle);
 
         return new_handle;
     }
@@ -61,17 +62,19 @@ public:
     {
         // find handle of dense's back
         const auto index_of_dense_back = dense_.size() - 1;
-        const auto back_handle = sparse_[index_of_dense_back];
+        const auto back_handle = reverse_[index_of_dense_back];
 
 
         // swap element to erase with back element
         std::swap(dense_[sparse_[n]], dense_.back());
+        std::swap(reverse_[n], reverse_[index_of_dense_back]);
 
         // update handle reference to new dense location
         sparse_[back_handle] = sparse_[n];
 
-        // pop back new back element
+        // pop back
         dense_.pop_back();
+        reverse_.pop_back();
 
         // add handle to free list
         free_.push_back(n);
@@ -96,6 +99,7 @@ public:
 private:
     std::vector<T> dense_;
     std::vector<size_type> sparse_;
+    std::vector<handle_type> reverse_;
     std::vector<handle_type> free_;
 };
 } // namespace helene

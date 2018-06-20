@@ -19,12 +19,12 @@ TEST_CASE("", "")
 
     SECTION("push back three numbers")
     {
-        const auto index_0 = hm.insert(0);
+        const auto index_0 = hm.insert(3);
         const auto index_1 = hm.insert(10);
         const auto index_2 = hm.insert(20);
 
         CHECK(hm.size() == 3);
-        CHECK(hm[index_0] == 0);
+        CHECK(hm[index_0] == 3);
         CHECK(hm[index_1] == 10);
         CHECK(hm[index_2] == 20);
 
@@ -72,7 +72,7 @@ TEST_CASE("", "")
                 const auto index_3 = hm.insert(30);
 
                 CHECK(hm.size() == 3);
-                CHECK(hm[index_0] == 0);
+                CHECK(hm[index_0] == 3);
                 CHECK(hm[index_2] == 20);
                 CHECK(hm[index_3] == 30);
             }
@@ -90,7 +90,7 @@ TEST_CASE("", "")
                 hm.erase(index_2);
 
                 CHECK(hm.size() == 1);
-                CHECK(hm[index_0] == 0);
+                CHECK(hm[index_0] == 3);
             }
         }
 
@@ -105,7 +105,7 @@ TEST_CASE("", "")
                 const auto index_3 = hm.insert(30);
 
                 CHECK(hm.size() == 3);
-                CHECK(hm[index_0] == 0);
+                CHECK(hm[index_0] == 3);
                 CHECK(hm[index_1] == 10);
                 CHECK(hm[index_3] == 30);
             }
@@ -123,7 +123,7 @@ TEST_CASE("", "")
                 hm.erase(index_1);
 
                 CHECK(hm.size() == 1);
-                CHECK(hm[index_0] == 0);
+                CHECK(hm[index_0] == 3);
             }
         }
 
