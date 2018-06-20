@@ -43,6 +43,22 @@ TEST_CASE("", "")
                 CHECK(hm[index_2] == 20);
                 CHECK(hm[index_3] == 30);
             }
+
+            SECTION("remove second element")
+            {
+                hm.erase(index_1);
+
+                CHECK(hm.size() == 1);
+                CHECK(hm[index_2] == 20);
+            }
+
+            SECTION("remove third element")
+            {
+                hm.erase(index_2);
+
+                CHECK(hm.size() == 1);
+                CHECK(hm[index_1] == 10);
+            }
         }
 
         SECTION("remove second element")
@@ -59,6 +75,22 @@ TEST_CASE("", "")
                 CHECK(hm[index_0] == 0);
                 CHECK(hm[index_2] == 20);
                 CHECK(hm[index_3] == 30);
+            }
+
+            SECTION("remove first element")
+            {
+                hm.erase(index_0);
+
+                CHECK(hm.size() == 1);
+                CHECK(hm[index_2] == 20);
+            }
+
+            SECTION("remove third element")
+            {
+                hm.erase(index_2);
+
+                CHECK(hm.size() == 1);
+                CHECK(hm[index_0] == 0);
             }
         }
 
@@ -77,6 +109,40 @@ TEST_CASE("", "")
                 CHECK(hm[index_1] == 10);
                 CHECK(hm[index_3] == 30);
             }
+
+            SECTION("remove first element")
+            {
+                hm.erase(index_0);
+
+                CHECK(hm.size() == 1);
+                CHECK(hm[index_1] == 10);
+            }
+
+            SECTION("remove second element")
+            {
+                hm.erase(index_1);
+
+                CHECK(hm.size() == 1);
+                CHECK(hm[index_0] == 0);
+            }
+        }
+
+        SECTION("remove all elements")
+        {
+            hm.erase(index_0);
+            hm.erase(index_1);
+            hm.erase(index_2);
+
+            CHECK(hm.size() == 0);
+        }
+
+        SECTION("remove all elements in reverse order")
+        {
+            hm.erase(index_2);
+            hm.erase(index_1);
+            hm.erase(index_0);
+
+            CHECK(hm.size() == 0);
         }
     }
 }
