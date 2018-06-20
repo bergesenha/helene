@@ -12,10 +12,10 @@ enum class TableName
 
 TEST_CASE("", "")
 {
-    helene::database<
+    helene::table<
         TableName,
-        helene::table_description<TableName, TableName::Numbers, int>,
-        helene::table_description<TableName, TableName::Names, std::string>>
+        helene::column_description<TableName, TableName::Numbers, int>,
+        helene::column_description<TableName, TableName::Names, std::string>>
         db;
 
     const auto number_index_0 = db.insert<TableName::Numbers>(10);

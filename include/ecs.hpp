@@ -8,7 +8,7 @@
 namespace helene
 {
 template <class TagType, TagType Tag, class T>
-struct table_description
+struct column_description
 {
 };
 
@@ -23,11 +23,11 @@ template <class TagType,
           class... RestTs>
 struct type_from_tag<TagType,
                      Tag,
-                     table_description<TagType, FirstTag, FirstT>,
-                     table_description<TagType, RestTags, RestTs>...>
+                     column_description<TagType, FirstTag, FirstT>,
+                     column_description<TagType, RestTags, RestTs>...>
     : type_from_tag<TagType,
                     Tag,
-                    table_description<TagType, RestTags, RestTs>...>
+                    column_description<TagType, RestTags, RestTs>...>
 {
 };
 
@@ -38,8 +38,8 @@ template <class TagType,
           class... RestTs>
 struct type_from_tag<TagType,
                      Tag,
-                     table_description<TagType, Tag, FirstT>,
-                     table_description<TagType, RestTags, RestTs>...>
+                     column_description<TagType, Tag, FirstT>,
+                     column_description<TagType, RestTags, RestTs>...>
 {
     typedef FirstT type;
 };
@@ -58,11 +58,11 @@ protected:
 
 
 template <class TagType, class... TableDescriptions>
-class database;
+class table;
 
 
 template <class TagType, TagType... Tags, class... Ts>
-class database<TagType, table_description<TagType, Tags, Ts>...>
+class table<TagType, column_description<TagType, Tags, Ts>...>
     : public container<TagType, Tags, Ts>...
 {
 public:
@@ -72,7 +72,7 @@ public:
     template <TagType Tag>
     index_type
     insert(
-        type_from_tag_t<TagType, Tag, table_description<TagType, Tags, Ts>...>
+        type_from_tag_t<TagType, Tag, column_description<TagType, Tags, Ts>...>
             value)
     {
         return container<TagType,
@@ -80,7 +80,7 @@ public:
                          type_from_tag_t<
                              TagType,
                              Tag,
-                             table_description<TagType, Tags, Ts>...>>::data_
+                             column_description<TagType, Tags, Ts>...>>::data_
             .add(value);
     }
 
