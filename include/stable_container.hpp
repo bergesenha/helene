@@ -78,6 +78,12 @@ public:
         return data_[n];
     }
 
+    const T& operator[](size_type n) const
+    {
+        return data_[n];
+    }
+
+
     size_type
     size() const
     {
