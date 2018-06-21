@@ -1,5 +1,7 @@
 #pragma once
 
+#include <tuple>
+
 #include "handle_map.hpp"
 
 
@@ -59,6 +61,14 @@ template <class LabelType, LabelType Label, class T>
 class column<column_description<LabelType, Label, T>>
 {
 protected:
+    typename handle_map<T>::handle_type
+    erase(typename handle_map<T>::handle_type n)
+    {
+        data_.erase(n);
+        return 0;
+    }
+
+protected:
     handle_map<T> data_;
 };
 
@@ -90,6 +100,12 @@ public:
         row_index_type dummy[] = {get_column_t<Labels>::data_.insert(elms)...};
 
         return dummy[0];
+    }
+
+    void
+    erase_row(row_index_type n)
+    {
+        auto dummy = {get_column_t<Labels>::erase(n)...};
     }
 
     template <LabelType Label>
