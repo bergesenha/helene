@@ -33,6 +33,7 @@ TEST_CASE("", "")
     CHECK(tb.get<ColumnNames::Age>(second_row) == 70);
 
     CHECK(tb.size() == 2);
+    CHECK_FALSE(tb.empty());
 
     SECTION("erase first row")
     {
@@ -42,6 +43,7 @@ TEST_CASE("", "")
         CHECK(tb.get<ColumnNames::Age>(second_row) == 70);
 
         CHECK(tb.size() == 1);
+        CHECK_FALSE(tb.empty());
     }
 
     SECTION("erase second row")
@@ -52,6 +54,16 @@ TEST_CASE("", "")
         CHECK(tb.get<ColumnNames::Age>(first_row) == 35);
 
         CHECK(tb.size() == 1);
+        CHECK_FALSE(tb.empty());
+    }
+
+    SECTION("erase both rows")
+    {
+        tb.erase_row(first_row);
+        tb.erase_row(second_row);
+
+        CHECK(tb.size() == 0);
+        CHECK(tb.empty());
     }
 
     SECTION("get iterator range to Surname column")
