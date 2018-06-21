@@ -51,4 +51,10 @@ TEST_CASE("", "")
 
         CHECK(tb.size() == 1);
     }
+
+    SECTION("get iterator range to Surname column")
+    {
+        auto it_beg = tb.column_begin<ColumnNames::Surname>();
+        auto it_end = tb.column_end<ColumnNames::Surname>();
+    }
 }

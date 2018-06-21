@@ -95,11 +95,11 @@ public:
     typedef std::size_t size_type;
 
     template <LabelType Label>
-    using iterator = typename handle_map<column_type<Label>>::iterator;
+    using iterator = typename handle_map<get_type_t<Label>>::iterator;
 
     template <LabelType Label>
     using const_iterator =
-        typename handle_map<column_type<Label>>::const_iterator;
+        typename handle_map<get_type_t<Label>>::const_iterator;
 
 
 public:
