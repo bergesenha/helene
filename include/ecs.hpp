@@ -87,9 +87,7 @@ public:
     row_index_type
     insert_row(const Ts&... elms)
     {
-        row_index_type dummy[] = {
-            column<column_description<LabelType, Labels, Ts>>::data_.insert(
-                elms)...};
+        row_index_type dummy[] = {get_column_t<Labels>::data_.insert(elms)...};
 
         return dummy[0];
     }
