@@ -14,15 +14,6 @@ public:
     typedef typename std::vector<size_type>::size_type handle_type;
 
 public:
-    class iterator
-    {
-    public:
-    private:
-        std::vector<T>* dense_ref_;
-        std::vector<size_type>* sparse_ref_;
-        handle_type current_;
-    };
-
     typedef typename std::vector<T>::iterator iterator;
     typedef typename std::vector<T>::const_iterator const_iterator;
 
@@ -94,6 +85,30 @@ public:
     const T& operator[](handle_type n) const
     {
         return dense_[sparse_[n]];
+    }
+
+    iterator
+    begin()
+    {
+        return dense_.begin();
+    }
+
+    iterator
+    end()
+    {
+        return dense_.end();
+    }
+
+    const_iterator
+    cbegin() const
+    {
+        return dense_.cbegin();
+    }
+
+    const_iterator
+    cend() const
+    {
+        return dense_.cend();
     }
 
 private:
