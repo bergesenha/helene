@@ -100,6 +100,13 @@ public:
     {
         return get_column_t<Label>::data_[n];
     }
+
+    template <LabelType Label>
+    const get_type_t<Label>&
+    get(row_index_type n) const
+    {
+        return get_column_t<Label>::data_[n];
+    }
 };
 
 } // namespace helene
