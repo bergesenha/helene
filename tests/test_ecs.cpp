@@ -1,3 +1,5 @@
+#include <iterator>
+
 #include <catch.hpp>
 
 #include <ecs.hpp>
@@ -56,5 +58,11 @@ TEST_CASE("", "")
     {
         auto it_beg = tb.column_begin<ColumnNames::Surname>();
         auto it_end = tb.column_end<ColumnNames::Surname>();
+
+        std::vector<std::string> surnames(it_beg, it_end);
+
+        CHECK(std::distance(it_beg, it_end) == 2);
+        CHECK_THAT(surnames, Catch::VectorContains(std::string("Bergesen")));
+        CHECK_THAT(surnames, Catch::VectorContains(std::string("Lund-Hansen")));
     }
 }
