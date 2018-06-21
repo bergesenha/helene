@@ -67,7 +67,18 @@ class table<LabelType, column_description<LabelType, Labels, Ts>...>
     : public column<column_description<LabelType, Labels, Ts>>...
 {
 public:
-private:
+    typedef std::size_t row_index_type;
+
+public:
+    row_index_type
+    insert_row(const Ts&... elms)
+    {
+        row_index_type dummy[] = {
+            column<column_description<LabelType, Labels, Ts>>::data_.insert(
+                elms)...};
+
+        return dummy[0];
+    }
 };
 
 } // namespace helene

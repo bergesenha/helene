@@ -21,4 +21,7 @@ TEST_CASE("", "")
                   mycolumn<ColumnNames::Age, int>,
                   mycolumn<ColumnNames::Height, float>>
         tb;
+
+    const auto first_row = tb.insert_row("Bergesen", 35, 1.83f);
+    const auto second_row = tb.insert_row("Lund-Hansen", 70, 1.80f);
 }
