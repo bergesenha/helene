@@ -2,8 +2,6 @@
 
 #include "stable_container.hpp"
 
-#include <type_list.hpp>
-
 
 namespace helene
 {
