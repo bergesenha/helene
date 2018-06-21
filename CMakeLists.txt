@@ -7,11 +7,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(HELENE_BUILD_TESTS "Build unit tests" OFF)
 
+add_subdirectory(external/metamusil)
+
 add_library(helene INTERFACE)
 target_compile_features(helene INTERFACE cxx_std_14)
 target_include_directories(helene
     INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include/
     )
+target_link_libraries(helene INTERFACE metamusil)
 
 if(HELENE_BUILD_TESTS)
     add_subdirectory(external/Catch)
@@ -30,6 +33,8 @@ if(HELENE_BUILD_TESTS)
         PRIVATE tests/test_circular_iterator.cpp
         PRIVATE tests/test_sliding_window.cpp
         PRIVATE tests/test_sliding_window_map.cpp
+        PRIVATE tests/test_ecs.cpp
+        PRIVATE tests/test_stable_container.cpp
         PRIVATE tests/test_handle_map.cpp
         )
 endif(HELENE_BUILD_TESTS)
