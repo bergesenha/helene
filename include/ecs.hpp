@@ -97,7 +97,7 @@ public:
     row_index_type
     insert_row(const Ts&... elms)
     {
-        row_index_type dummy[] = {get_column_t<Labels>::data_.insert(elms)...};
+        row_index_type dummy[] = {column_type<Labels>::data_.insert(elms)...};
 
         return dummy[0];
     }
@@ -105,21 +105,29 @@ public:
     void
     erase_row(row_index_type n)
     {
-        auto dummy = {get_column_t<Labels>::erase(n)...};
+        auto dummy = {column_type<Labels>::erase(n)...};
     }
 
     template <LabelType Label>
     get_type_t<Label>&
     get(row_index_type n)
     {
-        return get_column_t<Label>::data_[n];
+        return column_type<Label>::data_[n];
     }
 
     template <LabelType Label>
     const get_type_t<Label>&
     get(row_index_type n) const
     {
-        return get_column_t<Label>::data_[n];
+        return column_type<Label>::data_[n];
+    }
+
+    size_type
+    size() const
+    {
+        size_type dummy[] = {column_type<Labels>::data_.size()...};
+
+        return dummy[0];
     }
 };
 
