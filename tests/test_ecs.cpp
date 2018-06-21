@@ -30,12 +30,16 @@ TEST_CASE("", "")
     CHECK(tb.get<ColumnNames::Age>(first_row) == 35);
     CHECK(tb.get<ColumnNames::Age>(second_row) == 70);
 
+    CHECK(tb.size() == 2);
+
     SECTION("erase first row")
     {
         tb.erase_row(first_row);
 
         CHECK(tb.get<ColumnNames::Surname>(second_row) == "Lund-Hansen");
         CHECK(tb.get<ColumnNames::Age>(second_row) == 70);
+
+        CHECK(tb.size() == 1);
     }
 
     SECTION("erase second row")
@@ -44,5 +48,7 @@ TEST_CASE("", "")
 
         CHECK(tb.get<ColumnNames::Surname>(first_row) == "Bergesen");
         CHECK(tb.get<ColumnNames::Age>(first_row) == 35);
+
+        CHECK(tb.size() == 1);
     }
 }

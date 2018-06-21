@@ -87,11 +87,20 @@ class table<LabelType, column_description<LabelType, Labels, Ts>...>
                                 column_description<LabelType, Labels, Ts>...>;
 
     template <LabelType Label>
-    using get_column_t =
+    using column_type =
         column<column_description<LabelType, Label, get_type_t<Label>>>;
 
 public:
     typedef std::size_t row_index_type;
+    typedef std::size_t size_type;
+
+    template <LabelType Label>
+    using iterator = typename handle_map<column_type<Label>>::iterator;
+
+    template <LabelType Label>
+    using const_iterator =
+        typename handle_map<column_type<Label>>::const_iterator;
+
 
 public:
     row_index_type
@@ -128,6 +137,20 @@ public:
         size_type dummy[] = {column_type<Labels>::data_.size()...};
 
         return dummy[0];
+    }
+
+    template <LabelType Label>
+    iterator<Label>
+    column_begin()
+    {
+        return column_type<Label>::data_.begin();
+    }
+
+    template <LabelType Label>
+    iterator<Label>
+    column_end()
+    {
+        return column_type<Label>::data_.end();
     }
 };
 
