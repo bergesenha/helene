@@ -77,6 +77,12 @@ public:
         return dense_.size();
     }
 
+    bool
+    empty() const
+    {
+        return dense_.empty();
+    }
+
     T& operator[](handle_type n)
     {
         return dense_[sparse_[n]];

@@ -139,6 +139,14 @@ public:
         return dummy[0];
     }
 
+    bool
+    empty() const
+    {
+        bool dummy[] = {column_type<Labels>::data_.empty()...};
+
+        return dummy[0];
+    }
+
     template <LabelType Label>
     iterator<Label>
     column_begin()
