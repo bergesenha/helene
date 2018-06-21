@@ -59,8 +59,12 @@ protected:
 };
 
 
-template <class... ColumnDescriptions>
-class table : public column<ColumnDescriptions>...
+template <class LabelType, class... ColumnDescriptions>
+class table;
+
+template <class LabelType, LabelType... Labels, class... Ts>
+class table<LabelType, column_description<LabelType, Labels, Ts>...>
+    : public column<column_description<LabelType, Labels, Ts>>...
 {
 public:
 private:
