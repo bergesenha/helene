@@ -1,143 +1,69 @@
 #pragma once
 
-#include "stable_container.hpp"
+#include "handle_map.hpp"
 
 
 namespace helene
 {
-template <class TagType, TagType Tag, class T>
+template <class LabelType, LabelType Label, class T>
 struct column_description
 {
 };
 
-template <class TagType, TagType Tag, class... TableDescriptions>
-struct type_from_tag;
 
-template <class TagType,
-          TagType Tag,
-          TagType FirstTag,
-          TagType... RestTags,
-          class FirstT,
-          class... RestTs>
-struct type_from_tag<TagType,
-                     Tag,
-                     column_description<TagType, FirstTag, FirstT>,
-                     column_description<TagType, RestTags, RestTs>...>
-    : type_from_tag<TagType,
-                    Tag,
-                    column_description<TagType, RestTags, RestTs>...>
+namespace detail
+{
+template <class LabelType, LabelType Label, class... ColumnDescriptions>
+struct type_by_label;
+
+template <class LabelType,
+          LabelType Label,
+          LabelType FirstLabel,
+          LabelType... RestLabels,
+          class FirstType,
+          class... RestTypes>
+struct type_by_label<LabelType,
+                     Label,
+                     column_description<LabelType, FirstLabel, FirstType>,
+                     column_description<LabelType, RestLabels, RestTypes>...>
+    : type_by_label<LabelType,
+                    Label,
+                    column_description<LabelType, RestLabels, RestTypes>...>
 {
 };
 
-template <class TagType,
-          TagType Tag,
-          TagType... RestTags,
-          class FirstT,
-          class... RestTs>
-struct type_from_tag<TagType,
-                     Tag,
-                     column_description<TagType, Tag, FirstT>,
-                     column_description<TagType, RestTags, RestTs>...>
+
+template <class LabelType,
+          LabelType Label,
+          LabelType... RestLabels,
+          class FirstType,
+          class... RestTypes>
+struct type_by_label<LabelType,
+                     Label,
+                     column_description<LabelType, Label, FirstType>,
+                     column_description<LabelType, RestLabels, RestTypes>...>
 {
-    typedef FirstT type;
+    typedef FirstType type;
 };
-
-template <class TagType, TagType Tag, class... TableDescriptions>
-using type_from_tag_t =
-    typename type_from_tag<TagType, Tag, TableDescriptions...>::type;
+}; // namespace detail
 
 
-template <class TagType, TagType Tag, class T>
-class container
+template <class ColumnDescription>
+class column;
+
+template <class LabelType, LabelType Label, class T>
+class column<column_description<LabelType, Label, T>>
 {
 protected:
-    stable_vector<T> data_;
+    handle_map<T> data_;
 };
 
 
-template <class TagType, class... TableDescriptions>
-class table;
-
-
-template <class TagType, TagType... Tags, class... Ts>
-class table<TagType, column_description<TagType, Tags, Ts>...>
-    : public container<TagType, Tags, Ts>...
+template <class... ColumnDescriptions>
+class table : public column<ColumnDescriptions>...
 {
 public:
-    typedef std::size_t index_type;
-
-public:
-    template <TagType Tag>
-    index_type
-    insert(
-        type_from_tag_t<TagType, Tag, column_description<TagType, Tags, Ts>...>
-            value)
-    {
-        return container<TagType,
-                         Tag,
-                         type_from_tag_t<
-                             TagType,
-                             Tag,
-                             column_description<TagType, Tags, Ts>...>>::data_
-            .add(value);
-    }
-
-    template <TagType Tag>
-    type_from_tag_t<TagType, Tag, column_description<TagType, Tags, Ts>...>&
-    at(index_type index)
-    {
-        return container<TagType,
-                         Tag,
-                         type_from_tag_t<
-                             TagType,
-                             Tag,
-                             column_description<TagType, Tags, Ts>...>>::data_
-            .at(index);
-    }
-
-    template <TagType Tag>
-    const type_from_tag_t<TagType,
-                          Tag,
-                          column_description<TagType, Tags, Ts>...>&
-    at(index_type index) const
-    {
-        return container<TagType,
-                         Tag,
-                         type_from_tag_t<
-                             TagType,
-                             Tag,
-                             column_description<TagType, Tags, Ts>...>>::data_
-            .at(index);
-    }
-
-    template <TagType Tag>
-    type_from_tag_t<TagType, Tag, column_description<TagType, Tags, Ts>...>&
-    get(index_type index)
-    {
-        return container<
-            TagType,
-            Tag,
-            type_from_tag_t<TagType,
-                            Tag,
-                            column_description<TagType, Tags, Ts>...>>::data_
-            [index];
-    }
-
-    template <TagType Tag>
-    const type_from_tag_t<TagType,
-                          Tag,
-                          column_description<TagType, Tags, Ts>...>&
-    get(index_type index) const
-    {
-        return container<
-            TagType,
-            Tag,
-            type_from_tag_t<TagType,
-                            Tag,
-                            column_description<TagType, Tags, Ts>...>>::data_
-            [index];
-    }
-
 private:
 };
+
 } // namespace helene
