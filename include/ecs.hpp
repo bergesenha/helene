@@ -45,6 +45,10 @@ struct type_by_label<LabelType,
 {
     typedef FirstType type;
 };
+
+template <class LabelType, LabelType Label, class... ColumnDescriptions>
+using type_by_label_t =
+    typename type_by_label<LabelType, Label, ColumnDescriptions...>::type;
 }; // namespace detail
 
 
@@ -66,6 +70,16 @@ template <class LabelType, LabelType... Labels, class... Ts>
 class table<LabelType, column_description<LabelType, Labels, Ts>...>
     : public column<column_description<LabelType, Labels, Ts>>...
 {
+    template <LabelType Label>
+    using get_type_t =
+        detail::type_by_label_t<LabelType,
+                                Label,
+                                column_description<LabelType, Labels, Ts>...>;
+
+    template <LabelType Label>
+    using get_column_t =
+        column<column_description<LabelType, Label, get_type_t<Label>>>;
+
 public:
     typedef std::size_t row_index_type;
 
@@ -78,6 +92,13 @@ public:
                 elms)...};
 
         return dummy[0];
+    }
+
+    template <LabelType Label>
+    get_type_t<Label>&
+    get(row_index_type n)
+    {
+        return get_column_t<Label>::data_[n];
     }
 };
 

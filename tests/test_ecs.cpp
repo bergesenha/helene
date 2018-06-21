@@ -24,4 +24,9 @@ TEST_CASE("", "")
 
     const auto first_row = tb.insert_row("Bergesen", 35, 1.83f);
     const auto second_row = tb.insert_row("Lund-Hansen", 70, 1.80f);
+
+    CHECK(tb.get<ColumnNames::Surname>(first_row) == "Bergesen");
+    CHECK(tb.get<ColumnNames::Surname>(second_row) == "Lund-Hansen");
+    CHECK(tb.get<ColumnNames::Age>(first_row) == 35);
+    CHECK(tb.get<ColumnNames::Age>(second_row) == 70);
 }
