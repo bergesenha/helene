@@ -2,7 +2,7 @@
 
 #include <catch.hpp>
 
-#include <ecs.hpp>
+#include <table.hpp>
 
 
 enum class ColumnNames
