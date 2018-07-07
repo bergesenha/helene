@@ -14,15 +14,6 @@ public:
     typedef typename std::vector<size_type>::size_type handle_type;
 
 public:
-    class iterator
-    {
-    public:
-    private:
-        std::vector<T>* dense_ref_;
-        std::vector<size_type>* sparse_ref_;
-        handle_type current_;
-    };
-
     typedef typename std::vector<T>::iterator iterator;
     typedef typename std::vector<T>::const_iterator const_iterator;
 
