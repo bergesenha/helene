@@ -192,6 +192,12 @@ public:
         return size_;
     }
 
+    bool
+    empty() const
+    {
+        return size_ == 0;
+    }
+
     static constexpr size_type
     max_stack_size()
     {
