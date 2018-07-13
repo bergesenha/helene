@@ -140,3 +140,34 @@ TEST_CASE("construct with initializer_list of size above max stack size",
         CHECK(intvec[i] == 10 * (i + 1));
     }
 }
+
+TEST_CASE("construct a const small_vector", "[small_vector]")
+{
+    const helene::small_vector<int> intvec{10, 20, 30};
+
+    SECTION("copy elements via iterators")
+    {
+        std::vector<int> check_vec(intvec.cbegin(), intvec.cend());
+
+        for(auto i = 0ul; i < intvec.size(); ++i)
+        {
+            CHECK(intvec[i] == check_vec[i]);
+        }
+    }
+}
+
+TEST_CASE("construct a const small_vector above stack size", "[small_vector]")
+{
+    const helene::small_vector<int> intvec{
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    SECTION("copy elements via iterators")
+    {
+        std::vector<int> check_vec(intvec.cbegin(), intvec.cend());
+
+        for(auto i = 0ul; i < intvec.size(); ++i)
+        {
+            CHECK(intvec[i] == check_vec[i]);
+        }
+    }
+}
