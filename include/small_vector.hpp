@@ -10,7 +10,7 @@
 namespace helene
 {
 
-template <class T, std::size_t StackBufferSize = sizeof(std::vector<T>*)>
+template <class T, std::size_t StackBufferSize = sizeof(std::vector<T>)>
 class small_vector
 {
     static_assert(std::is_trivial<T>::value,
@@ -20,7 +20,12 @@ public:
     typedef typename std::vector<T>::size_type size_type;
     typedef typename std::vector<T>::difference_type difference_type;
 
-    static constexpr size_type max_stack_size = StackBufferSize / sizeof(T);
+private:
+    static constexpr size_type at_least_size =
+        std::max(StackBufferSize, sizeof(std::vector<T>*));
+
+public:
+    static constexpr size_type max_stack_size = at_least_size / sizeof(T);
 
 public:
     small_vector() : size_()
@@ -37,7 +42,7 @@ public:
     }
 
 private:
-    std::aligned_storage_t<StackBufferSize> storage_;
+    std::aligned_storage_t<at_least_size> storage_;
     size_type size_;
 };
 
