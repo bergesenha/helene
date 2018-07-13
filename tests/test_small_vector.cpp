@@ -50,3 +50,59 @@ TEST_CASE("default construct", "[small_vector]")
         }
     }
 }
+
+TEST_CASE("construct with initializer_list of size below max stack size",
+          "[small_vector]")
+{
+    helene::small_vector<int, 10 * sizeof(int)> intvec{10, 20, 30};
+
+    CHECK(intvec.size() == 3);
+    CHECK(intvec[0] == 10);
+    CHECK(intvec[1] == 20);
+    CHECK(intvec[2] == 30);
+    CHECK(intvec.on_stack());
+}
+
+
+TEST_CASE("construct with initalizer_list of size equalling max stack size",
+          "[small_vector]")
+{
+    helene::small_vector<int, 10 * sizeof(int)> intvec{
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    CHECK(intvec.size() == 10);
+    CHECK(intvec.on_stack());
+
+    for(int i = 0; i < 10; ++i)
+    {
+        CHECK(intvec[i] == 10 * (i + 1));
+    }
+
+    SECTION("push_back element to exceed stack size")
+    {
+        intvec.push_back(110);
+
+        CHECK(!intvec.on_stack());
+
+        for(int i = 0; i < 10; ++i)
+        {
+            CHECK(intvec[i] == 10 * (i + 1));
+        }
+        CHECK(intvec[10] == 110);
+    }
+}
+
+
+TEST_CASE("construct with initializer_list of size above max stack size",
+          "[small_vector]")
+{
+    helene::small_vector<int> intvec{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    CHECK(intvec.size() == 10);
+    CHECK(!intvec.on_stack());
+
+    for(int i = 0; i < 10; ++i)
+    {
+        CHECK(intvec[i] == 10 * (i + 1));
+    }
+}
