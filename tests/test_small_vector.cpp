@@ -2,11 +2,12 @@
 #include <small_vector.hpp>
 
 
-TEST_CASE("", "")
+TEST_CASE("default construct", "[small_vector]")
 {
     helene::small_vector<int> intvec;
 
     CHECK(intvec.size() == 0);
+    CHECK(intvec.on_stack());
 
     SECTION("push back a value")
     {
@@ -14,6 +15,7 @@ TEST_CASE("", "")
 
         CHECK(intvec[0] == 1);
         CHECK(intvec.size() == 1);
+        CHECK(intvec.on_stack());
     }
 
     SECTION("push back 2 values")
@@ -24,6 +26,7 @@ TEST_CASE("", "")
         CHECK(intvec[0] == 1);
         CHECK(intvec[1] == 2);
         CHECK(intvec.size() == 2);
+        CHECK(intvec.on_stack());
     }
 
     SECTION("push back enough values to fill stack size")
@@ -34,6 +37,7 @@ TEST_CASE("", "")
         }
 
         CHECK(intvec.size() == intvec.max_stack_size());
+        CHECK(intvec.on_stack());
 
 
         SECTION("push back another element")
@@ -42,6 +46,7 @@ TEST_CASE("", "")
 
             CHECK(intvec.size() == intvec.max_stack_size() + 1);
             CHECK(intvec[intvec.max_stack_size()] == 100);
+            CHECK(!intvec.on_stack());
         }
     }
 }

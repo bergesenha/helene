@@ -128,6 +128,12 @@ public:
         return max_stack_size_;
     }
 
+    bool
+    on_stack() const
+    {
+        return size_ <= max_stack_size_;
+    }
+
 private:
     std::aligned_storage_t<at_least_size> storage_;
     size_type size_;
