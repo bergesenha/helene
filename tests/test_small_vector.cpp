@@ -30,6 +30,14 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec.size() == 2);
         CHECK(std::distance(intvec.begin(), intvec.end()) == 2);
         CHECK(intvec.on_stack());
+
+        SECTION("copy values via iterators")
+        {
+            std::vector<int> check_vec(intvec.begin(), intvec.end());
+
+            CHECK(check_vec[0] == 1);
+            CHECK(check_vec[1] == 2);
+        }
     }
 
     SECTION("push back enough values to fill stack size")
@@ -44,6 +52,15 @@ TEST_CASE("default construct", "[small_vector]")
               intvec.max_stack_size());
         CHECK(intvec.on_stack());
 
+        SECTION("copy values via iterators")
+        {
+            std::vector<int> check_vec(intvec.begin(), intvec.end());
+
+            for(std::size_t i = 0; i < intvec.size(); ++i)
+            {
+                CHECK(check_vec[i] == intvec[i]);
+            }
+        }
 
         SECTION("push back another element")
         {
@@ -54,6 +71,16 @@ TEST_CASE("default construct", "[small_vector]")
                   intvec.max_stack_size() + 1);
             CHECK(intvec[intvec.max_stack_size()] == 100);
             CHECK(!intvec.on_stack());
+
+            SECTION("copy values via iterators")
+            {
+                std::vector<int> check_vec(intvec.begin(), intvec.end());
+
+                for(std::size_t i = 0; i < intvec.size(); ++i)
+                {
+                    CHECK(check_vec[i] == intvec[i]);
+                }
+            }
         }
     }
 }
