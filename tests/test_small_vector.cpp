@@ -25,4 +25,23 @@ TEST_CASE("", "")
         CHECK(intvec[1] == 2);
         CHECK(intvec.size() == 2);
     }
+
+    SECTION("push back enough values to fill stack size")
+    {
+        for(std::size_t i = 0; i < intvec.max_stack_size(); ++i)
+        {
+            intvec.push_back(i * 10);
+        }
+
+        CHECK(intvec.size() == intvec.max_stack_size());
+
+
+        SECTION("push back another element")
+        {
+            intvec.push_back(100);
+
+            CHECK(intvec.size() == intvec.max_stack_size() + 1);
+            CHECK(intvec[intvec.max_stack_size()] == 100);
+        }
+    }
 }

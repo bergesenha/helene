@@ -54,11 +54,13 @@ public:
             std::copy(buff, buff + size_, std::begin(temp));
 
             new(&storage_) std::vector<T>(std::begin(temp), std::end(temp));
+            reinterpret_cast<std::vector<T>*>(&storage_)->push_back(value);
         }
         else
         {
             reinterpret_cast<T*>(&storage_)[size_] = value;
         }
+
         ++size_;
     }
 
