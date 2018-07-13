@@ -2,6 +2,7 @@
 
 #include <type_traits>
 #include <vector>
+#include <initializer_list>
 #include <cstddef>
 #include <algorithm>
 #include <iterator>
@@ -29,6 +30,20 @@ public:
     small_vector() : size_()
     {
         new(&storage_) T[max_stack_size_];
+    }
+
+    small_vector(std::initializer_list<T> init) : size_(init.size())
+    {
+        if(size_ > max_stack_size_)
+        {
+            new(&storage_) std::vector<T>(init);
+        }
+        else
+        {
+            new(&storage_) T[max_stack_size_];
+            std::copy(
+                init.begin(), init.end(), reinterpret_cast<T*>(&storage_));
+        }
     }
 
     ~small_vector()
