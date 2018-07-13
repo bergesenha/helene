@@ -122,8 +122,8 @@ public:
         return size_;
     }
 
-    constexpr size_type
-    max_stack_size() const
+    static constexpr size_type
+    max_stack_size()
     {
         return max_stack_size_;
     }
