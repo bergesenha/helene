@@ -76,6 +76,18 @@ public:
         }
     }
 
+    const T& operator[](size_type n) const
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<std::vector<T>*>(&storage_)->operator[](n);
+        }
+        else
+        {
+            return reinterpret_cast<T*>(&storage_)[n];
+        }
+    }
+
     size_type
     size() const
     {
