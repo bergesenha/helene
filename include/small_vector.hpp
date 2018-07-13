@@ -145,6 +145,33 @@ public:
         }
     }
 
+    const_iterator
+    cbegin() const
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<const std::vector<T>*>(&storage_)->data();
+        }
+        else
+        {
+            return reinterpret_cast<const T*>(&storage_);
+        }
+    }
+
+    const_iterator
+    cend() const
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<const std::vector<T>*>(&storage_)->data() +
+                   size_;
+        }
+        else
+        {
+            return reinterpret_cast<const T*>(&storage_) + size_;
+        }
+    }
+
     size_type
     size() const
     {
