@@ -124,7 +124,7 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return reinterpret_cast<std::vector<T>*>(&storage_)->begin();
+            return reinterpret_cast<std::vector<T>*>(&storage_)->data();
         }
         else
         {
@@ -137,7 +137,7 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return reinterpret_cast<std::vector<T>*>(&storage_)->end();
+            return reinterpret_cast<std::vector<T>*>(&storage_)->data() + size_;
         }
         else
         {

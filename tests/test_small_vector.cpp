@@ -8,6 +8,7 @@ TEST_CASE("default construct", "[small_vector]")
 
     CHECK(intvec.size() == 0);
     CHECK(intvec.on_stack());
+    CHECK(std::distance(intvec.begin(), intvec.end()) == 0);
 
     SECTION("push back a value")
     {
@@ -15,6 +16,7 @@ TEST_CASE("default construct", "[small_vector]")
 
         CHECK(intvec[0] == 1);
         CHECK(intvec.size() == 1);
+        CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
         CHECK(intvec.on_stack());
     }
 
@@ -26,6 +28,7 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec[0] == 1);
         CHECK(intvec[1] == 2);
         CHECK(intvec.size() == 2);
+        CHECK(std::distance(intvec.begin(), intvec.end()) == 2);
         CHECK(intvec.on_stack());
     }
 
@@ -37,6 +40,8 @@ TEST_CASE("default construct", "[small_vector]")
         }
 
         CHECK(intvec.size() == intvec.max_stack_size());
+        CHECK(std::distance(intvec.begin(), intvec.end()) ==
+              intvec.max_stack_size());
         CHECK(intvec.on_stack());
 
 
@@ -45,6 +50,8 @@ TEST_CASE("default construct", "[small_vector]")
             intvec.push_back(100);
 
             CHECK(intvec.size() == intvec.max_stack_size() + 1);
+            CHECK(std::distance(intvec.begin(), intvec.end()) ==
+                  intvec.max_stack_size() + 1);
             CHECK(intvec[intvec.max_stack_size()] == 100);
             CHECK(!intvec.on_stack());
         }
