@@ -46,6 +46,19 @@ public:
         }
     }
 
+    small_vector(size_type count) : size_(count)
+    {
+        if(size_ > max_stack_size_)
+        {
+            new(&storage_) std::vector<T>(count);
+        }
+        else
+        {
+            new(&storage_) T[max_stack_size_];
+            std::fill_n(reinterpret_cast<T*>(&storage_), size_, T{});
+        }
+    }
+
     ~small_vector()
     {
         if(size_ > max_stack_size_)
