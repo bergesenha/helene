@@ -110,11 +110,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return reinterpret_cast<std::vector<T>*>(&storage_)->operator[](n);
+            return reinterpret_cast<const std::vector<T>*>(&storage_)->
+            operator[](n);
         }
         else
         {
-            return reinterpret_cast<T*>(&storage_)[n];
+            return reinterpret_cast<const T*>(&storage_)[n];
         }
     }
 
