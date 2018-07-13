@@ -20,6 +20,8 @@ class small_vector
 public:
     typedef typename std::vector<T>::size_type size_type;
     typedef typename std::vector<T>::difference_type difference_type;
+    typedef T* iterator;
+    typedef const T* const_iterator;
 
 private:
     static constexpr size_type at_least_size =
@@ -113,6 +115,33 @@ public:
         else
         {
             return reinterpret_cast<T*>(&storage_)[n];
+        }
+    }
+
+
+    iterator
+    begin()
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<std::vector<T>*>(&storage_)->begin();
+        }
+        else
+        {
+            return reinterpret_cast<T*>(&storage_);
+        }
+    }
+
+    iterator
+    end()
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<std::vector<T>*>(&storage_)->end();
+        }
+        else
+        {
+            return reinterpret_cast<T*>(&storage_) + size_;
         }
     }
 
