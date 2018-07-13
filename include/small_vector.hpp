@@ -23,19 +23,17 @@ public:
 private:
     static constexpr size_type at_least_size =
         std::max(StackBufferSize, sizeof(std::vector<T>*));
-
-public:
-    static constexpr size_type max_stack_size = at_least_size / sizeof(T);
+    static constexpr size_type max_stack_size_ = at_least_size / sizeof(T);
 
 public:
     small_vector() : size_()
     {
-        new(&storage_) T[max_stack_size];
+        new(&storage_) T[max_stack_size_];
     }
 
     ~small_vector()
     {
-        if(size_ > max_stack_size)
+        if(size_ > max_stack_size_)
         {
             reinterpret_cast<std::vector<T>*>(&storage_)->~vector();
         }
@@ -45,14 +43,14 @@ public:
     void
     push_back(const T& value)
     {
-        if(size_ > max_stack_size)
+        if(size_ > max_stack_size_)
         {
             reinterpret_cast<std::vector<T>*>(&storage_)->push_back(value);
         }
-        else if(size_ == max_stack_size)
+        else if(size_ == max_stack_size_)
         {
             T* buff = reinterpret_cast<T*>(&storage_);
-            T temp[max_stack_size];
+            T temp[max_stack_size_];
             std::copy(buff, buff + size_, std::begin(temp));
 
             new(&storage_) std::vector<T>(std::begin(temp), std::end(temp));
@@ -66,7 +64,7 @@ public:
 
     T& operator[](size_type n)
     {
-        if(size_ > max_stack_size)
+        if(size_ > max_stack_size_)
         {
             return reinterpret_cast<std::vector<T>*>(&storage_)->operator[](n);
         }
@@ -80,6 +78,12 @@ public:
     size() const
     {
         return size_;
+    }
+
+    constexpr size_type
+    max_stack_size() const
+    {
+        return max_stack_size_;
     }
 
 private:
