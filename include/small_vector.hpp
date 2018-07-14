@@ -287,9 +287,9 @@ public:
         else if(size_ <= max_stack_size_)
         {
             T* buff_beg = reinterpret_cast<T*>(&storage_);
-            if(last + 1 < end()) // if anything left past end of range to erase
+            if(last < end()) // if anything left past end of range to erase
             {
-                std::copy(last + 1, end(), first);
+                std::copy(last, end(), first);
             }
             size_ -= erase_size;
             return first;

@@ -94,6 +94,14 @@ TEST_CASE("default construct", "[small_vector]")
             CHECK(intvec[0] == 1);
             CHECK(intvec.size() == 1);
         }
+
+        SECTION("range erase both elements")
+        {
+            auto res = intvec.erase(intvec.begin(), intvec.end());
+            CHECK(res == intvec.end());
+            CHECK(intvec.empty());
+            CHECK(intvec.on_stack());
+        }
     }
 
     SECTION("push back enough values to fill stack size")
@@ -196,6 +204,15 @@ TEST_CASE("construct with initializer_list of size below max stack size",
     CHECK(intvec[1] == 20);
     CHECK(intvec[2] == 30);
     CHECK(intvec.on_stack());
+
+    SECTION("erase two first elements")
+    {
+        auto res = intvec.erase(intvec.begin(), intvec.begin() + 2);
+
+        CHECK(*res == 30);
+        CHECK(intvec.size() == 1);
+        CHECK(intvec.on_stack());
+    }
 }
 
 
