@@ -6,6 +6,8 @@
 #include <cstddef>
 #include <algorithm>
 #include <iterator>
+#include <utility>
+#include <memory>
 
 
 namespace helene
@@ -18,8 +20,13 @@ class small_vector
                   "small_vector is only compatible with trivial types");
 
 public:
+    typedef T value_type;
     typedef typename std::vector<T>::size_type size_type;
     typedef typename std::vector<T>::difference_type difference_type;
+    typedef T& reference;
+    typedef const T& const_reference;
+    typedef T* pointer;
+    typedef const T* const_pointer;
     typedef T* iterator;
     typedef const T* const_iterator;
 
@@ -72,6 +79,51 @@ public:
             new(&storage_) T[max_stack_size_];
             std::fill_n(reinterpret_cast<T*>(&storage_), size_, value);
         }
+    }
+
+    small_vector(const small_vector& other) : size_(other.size_)
+    {
+        if(size_ > max_stack_size_)
+        {
+            new(&storage_) std::vector<T>(
+                *reinterpret_cast<const std::vector<T>*>(&other.storage_));
+        }
+        else
+        {
+            storage_ = other.storage_;
+        }
+    }
+
+    small_vector(small_vector&& other)
+        : storage_(other.storage_), size_(other.size_)
+    {
+        // disable destruction of potential heap allocated data in other
+        other.size_ = 0;
+    }
+
+    small_vector&
+    operator=(const small_vector& other)
+    {
+        auto temp = other;
+        swap(temp);
+
+        return *this;
+    }
+
+    small_vector&
+    operator=(small_vector&& other)
+    {
+        auto temp = std::move(other);
+        swap(temp);
+
+        return *this;
+    }
+
+    void
+    swap(small_vector& other)
+    {
+        std::swap(storage_, other.storage_);
+        std::swap(size_, other.size_);
     }
 
     ~small_vector()
@@ -135,7 +187,7 @@ public:
         }
     }
 
-    T& operator[](size_type n)
+    reference operator[](size_type n)
     {
         if(size_ > max_stack_size_)
         {
@@ -147,7 +199,7 @@ public:
         }
     }
 
-    const T& operator[](size_type n) const
+    const_reference operator[](size_type n) const
     {
         if(size_ > max_stack_size_)
         {
@@ -160,7 +212,7 @@ public:
         }
     }
 
-    T&
+    reference
     front()
     {
         if(size_ > max_stack_size_)
@@ -173,7 +225,7 @@ public:
         }
     }
 
-    const T&
+    const_reference
     front() const
     {
         if(size_ > max_stack_size_)
@@ -187,7 +239,7 @@ public:
     }
 
 
-    T&
+    reference
     back()
     {
         if(size_ > max_stack_size_)
@@ -200,7 +252,7 @@ public:
         }
     }
 
-    const T&
+    const_reference
     back() const
     {
         if(size_ > max_stack_size_)
@@ -321,7 +373,7 @@ public:
     }
 
 
-    T*
+    pointer
     data()
     {
         if(size_ > max_stack_size_)
@@ -334,7 +386,7 @@ public:
         }
     }
 
-    const T*
+    const_pointer
     data() const
     {
         if(size_ > max_stack_size_)

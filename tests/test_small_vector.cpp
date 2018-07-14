@@ -10,6 +10,34 @@ TEST_CASE("default construct", "[small_vector]")
     CHECK(intvec.on_stack());
     CHECK(std::distance(intvec.begin(), intvec.end()) == 0);
 
+
+    SECTION("copy construct")
+    {
+        helene::small_vector<int> intvec_cp = intvec;
+
+        CHECK(intvec_cp.size() == 0);
+        CHECK(intvec_cp.on_stack());
+
+        SECTION("modify original")
+        {
+            intvec.push_back(55);
+
+            CHECK(intvec_cp.size() == 0);
+            CHECK(intvec_cp.on_stack());
+        }
+    }
+
+    SECTION("copy assign")
+    {
+        helene::small_vector<int> intvec2;
+
+        intvec2 = intvec;
+
+        CHECK(intvec2.size() == 0);
+        CHECK(intvec2.on_stack());
+        CHECK(std::distance(intvec2.begin(), intvec2.end()) == 0);
+    }
+
     SECTION("push back a value")
     {
         intvec.push_back(1);
@@ -20,6 +48,38 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec.on_stack());
         CHECK(intvec.front() == 1);
         CHECK(intvec.back() == 1);
+
+        SECTION("copy construct")
+        {
+            helene::small_vector<int> intvec_cp = intvec;
+
+            CHECK(intvec[0] == 1);
+            CHECK(intvec.size() == 1);
+            CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
+            CHECK(intvec.on_stack());
+            CHECK(intvec.front() == 1);
+            CHECK(intvec.back() == 1);
+
+            CHECK(intvec_cp[0] == 1);
+            CHECK(intvec_cp.size() == 1);
+            CHECK(std::distance(intvec_cp.begin(), intvec_cp.end()) == 1);
+            CHECK(intvec_cp.on_stack());
+            CHECK(intvec_cp.front() == 1);
+            CHECK(intvec_cp.back() == 1);
+        }
+
+        SECTION("copy assign")
+        {
+            helene::small_vector<int> intvec2;
+            intvec2 = intvec;
+
+            CHECK(intvec2[0] == 1);
+            CHECK(intvec2.size() == 1);
+            CHECK(std::distance(intvec2.begin(), intvec2.end()) == 1);
+            CHECK(intvec2.on_stack());
+            CHECK(intvec2.front() == 1);
+            CHECK(intvec2.back() == 1);
+        }
 
         SECTION("pop back the value")
         {
@@ -269,6 +329,47 @@ TEST_CASE("construct with initializer_list of size above max stack size",
         CHECK(intvec[i] == 10 * (i + 1));
     }
 
+    SECTION("copy construct")
+    {
+        helene::small_vector<int, 6 * sizeof(int)> intvec_cp = intvec;
+
+        CHECK(intvec_cp.size() == 10);
+        CHECK(!intvec_cp.on_stack());
+
+        for(int i = 0; i < 10; ++i)
+        {
+            CHECK(intvec_cp[i] == 10 * (i + 1));
+        }
+
+        SECTION("modify original")
+        {
+            intvec.erase(intvec.begin(), intvec.end() - 1);
+
+            CHECK(intvec_cp.size() == 10);
+            CHECK(!intvec_cp.on_stack());
+
+            for(int i = 0; i < 10; ++i)
+            {
+                CHECK(intvec_cp[i] == 10 * (i + 1));
+            }
+        }
+    }
+
+    SECTION("copy assign")
+    {
+        helene::small_vector<int, 6 * sizeof(int)> intvec2;
+
+        intvec2 = intvec;
+
+        CHECK(intvec2.size() == 10);
+        CHECK(!intvec2.on_stack());
+
+        for(int i = 0; i < 10; ++i)
+        {
+            CHECK(intvec2[i] == 10 * (i + 1));
+        }
+    }
+
     SECTION("pop back an element")
     {
         intvec.pop_back();
@@ -327,6 +428,19 @@ TEST_CASE("construct with initializer_list of size above max stack size",
         CHECK(intvec[0] == 10);
         CHECK(intvec[1] == 20);
     }
+
+    SECTION("move construct")
+    {
+        helene::small_vector<int, 6 * sizeof(int)> intvec2(std::move(intvec));
+
+        CHECK(intvec2.size() == 10);
+        CHECK(!intvec2.on_stack());
+
+        for(int i = 0; i < 10; ++i)
+        {
+            CHECK(intvec2[i] == 10 * (i + 1));
+        }
+    }
 }
 
 TEST_CASE("construct a const small_vector", "[small_vector]")
@@ -361,4 +475,49 @@ TEST_CASE("construct a const small_vector above stack size", "[small_vector]")
             CHECK(intvec[i] == check_vec[i]);
         }
     }
+}
+
+
+TEST_CASE(
+    "default construct a small_vector and move assign to it from higher scope",
+    "[small_vector]")
+{
+    helene::small_vector<long, 5 * sizeof(long)> lv;
+
+    {
+        helene::small_vector<long, 5 * sizeof(long)> lv_temp{0l, 1l, 2l, 3l};
+
+        lv = std::move(lv_temp);
+    }
+
+    CHECK(lv.size() == 4);
+    CHECK(lv.on_stack());
+    CHECK(lv[0] == 0l);
+    CHECK(lv[1] == 1l);
+    CHECK(lv[2] == 2l);
+    CHECK(lv[3] == 3l);
+}
+
+
+TEST_CASE("move assign large small_vector from higher scope", "[small_vector]")
+{
+    helene::small_vector<long, 5 * sizeof(long)> lv;
+
+    {
+        helene::small_vector<long, 5 * sizeof(long)> lv_temp{
+            0l, 1l, 2l, 3l, 4l, 5l, 6l, 7l};
+
+        lv = std::move(lv_temp);
+    }
+
+    CHECK(lv.size() == 8);
+    CHECK(!lv.on_stack());
+    CHECK(lv[0] == 0l);
+    CHECK(lv[1] == 1l);
+    CHECK(lv[2] == 2l);
+    CHECK(lv[3] == 3l);
+    CHECK(lv[4] == 4l);
+    CHECK(lv[5] == 5l);
+    CHECK(lv[6] == 6l);
+    CHECK(lv[7] == 7l);
 }
