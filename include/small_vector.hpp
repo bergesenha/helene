@@ -160,6 +160,31 @@ public:
         }
     }
 
+    T*
+    data()
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<std::vector<T>*>(&storage_)->data();
+        }
+        else
+        {
+            return reinterpret_cast<T*>(&storage_);
+        }
+    }
+
+    const T*
+    data() const
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<const std::vector<T>*>(&storage_)->data();
+        }
+        else
+        {
+            return reinterpret_cast<const T*>(&storage_);
+        }
+    }
 
     iterator
     begin()
