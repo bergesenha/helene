@@ -18,7 +18,9 @@ public:
     typedef const T& const_reference;
     typedef typename handle_map<T>::handle_type node_tag_type;
 
-    typedef typename small_vector<node_tag_type>::iterator child_tag_iterator;
+    typedef typename small_vector<node_tag_type,
+                                  4 * sizeof(node_tag_type)>::iterator
+        child_tag_iterator;
 
 private:
     static constexpr inline const node_tag_type inactive_tag =
@@ -86,6 +88,7 @@ public:
 private:
     handle_map<T> nodes_;
     std::vector<node_tag_type> parents_;
-    std::vector<small_vector<node_tag_type>> children_;
+    std::vector<small_vector<node_tag_type, 4 * sizeof(node_tag_type)>>
+        children_;
 };
 } // namespace helene

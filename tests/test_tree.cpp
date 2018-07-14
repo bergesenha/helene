@@ -23,4 +23,8 @@ TEST_CASE("", "")
         CHECK(std::distance(iter_1_gen.first, iter_1_gen.second) == 1);
         CHECK(*iter_1_gen.first == b);
     }
+
+    SECTION("insert three children of root")
+    {
+    }
 }
