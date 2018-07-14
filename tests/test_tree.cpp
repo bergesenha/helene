@@ -7,7 +7,7 @@ TEST_CASE("", "")
     helene::tree<char> mt('a');
 
     const auto root_tag = mt.root_tag();
-    auto children1 = mt.children(root_tag);
+    auto children1 = mt.child_tags(root_tag);
     CHECK(std::distance(children1.first, children1.second) == 0);
 
     CHECK(mt[root_tag] == 'a');
@@ -16,7 +16,7 @@ TEST_CASE("", "")
     {
         const auto b = mt.insert_node('b', root_tag);
 
-        auto iter_1_gen = mt.children(root_tag);
+        auto iter_1_gen = mt.child_tags(root_tag);
 
         CHECK(mt[b] == 'b');
         CHECK(mt[root_tag] == 'a');
@@ -24,13 +24,13 @@ TEST_CASE("", "")
         CHECK(*iter_1_gen.first == b);
     }
 
-    SECTION("insert three children of root")
+    SECTION("insert three child_tags of root")
     {
         const auto b = mt.insert_node('b', root_tag);
         const auto c = mt.insert_node('c', root_tag);
         const auto d = mt.insert_node('d', root_tag);
 
-        auto children2 = mt.children(root_tag);
+        auto children2 = mt.child_tags(root_tag);
 
         CHECK(mt[b] == 'b');
         CHECK(mt[c] == 'c');

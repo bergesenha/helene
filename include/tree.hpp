@@ -22,6 +22,36 @@ public:
                                   4 * sizeof(node_tag_type)>::iterator
         child_tag_iterator;
 
+    class iterator
+    {
+    public:
+        typedef
+            typename std::iterator_traits<child_tag_iterator>::difference_type
+                difference_type;
+        typedef T value_type;
+        typedef T* pointer;
+        typedef T& reference;
+        typedef std::random_access_iterator_tag iterator_category;
+
+    public:
+        iterator() = default;
+
+        iterator(child_tag_iterator current, handle_map<T>& nodes_ref)
+            : current_(current), nodes_ref_(&nodes_ref)
+        {
+        }
+
+        reference operator*()
+        {
+            return nodes_ref_->operator[](*current_);
+        }
+
+
+    private:
+        child_tag_iterator current_;
+        handle_map<T>* nodes_ref_;
+    };
+
 private:
     static constexpr inline const node_tag_type inactive_tag =
         std::numeric_limits<node_tag_type>::max();
@@ -70,7 +100,7 @@ public:
     }
 
     std::pair<child_tag_iterator, child_tag_iterator>
-    children(node_tag_type node)
+    child_tags(node_tag_type node)
     {
         return std::make_pair(children_[node].begin(), children_[node].end());
     }
