@@ -117,6 +117,11 @@ TEST_CASE("default construct", "[small_vector]")
                 intvec.pop_back();
 
                 CHECK(intvec.on_stack());
+
+                for(std::size_t i = 0; i < intvec.size(); ++i)
+                {
+                    CHECK(intvec[i] == i * 10);
+                }
             }
         }
     }
@@ -175,6 +180,13 @@ TEST_CASE("construct with initializer_list of size above max stack size",
     for(int i = 0; i < 10; ++i)
     {
         CHECK(intvec[i] == 10 * (i + 1));
+    }
+
+    SECTION("pop back an element")
+    {
+        intvec.pop_back();
+
+        CHECK(!intvec.on_stack());
     }
 }
 
