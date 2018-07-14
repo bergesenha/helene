@@ -258,10 +258,63 @@ public:
         else
         {
             T* beg = reinterpret_cast<T*>(&storage_);
-            std::copy(pos + 1, beg + size_, pos);
+            std::copy(pos + 1, end(), pos);
 
             --size_;
             return pos;
+        }
+    }
+
+    iterator
+    erase(iterator first, iterator last)
+    {
+        const auto erase_size = std::distance(first, last);
+
+        if(size_ > max_stack_size_ + erase_size)
+        {
+            std::vector<T>* ref = reinterpret_cast<std::vector<T>*>(&storage_);
+
+            // convert to std::vector<T>::iterator
+            auto first_iter = ref->begin() + (first - begin());
+            auto last_iter = ref->begin() + (last - begin());
+
+            auto iter_out = ref->erase(first_iter, last_iter);
+            size_ -= erase_size;
+
+            // convert back to simple pointer
+            return begin() + (iter_out - ref->begin());
+        }
+        else if(size_ <= max_stack_size_)
+        {
+            T* buff_beg = reinterpret_cast<T*>(&storage_);
+            std::copy(last + 1, end(), first);
+            size_ -= erase_size;
+            return first;
+        }
+        else
+        {
+
+            std::vector<T>* ref = reinterpret_cast<std::vector<T>*>(&storage_);
+
+            // convert to std::vector<T>::iterator
+            auto first_iter = ref->begin() + (first - begin());
+            auto last_iter = ref->begin() + (last - begin());
+
+            // carry out erase on vector
+            auto iter_out = ref->erase(first_iter, last_iter);
+            const auto out_diff = iter_out - ref->begin();
+
+            std::vector<T> temp(std::move(*ref));
+            ref->~vector();
+
+            new(&storage_) T[max_stack_size_];
+
+            std::copy(
+                temp.begin(), temp.end(), reinterpret_cast<T*>(&storage_));
+
+            size_ -= erase_size;
+
+            return begin() + out_diff;
         }
     }
 
