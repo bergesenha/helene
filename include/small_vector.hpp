@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <algorithm>
 #include <iterator>
+#include <utility>
 
 
 namespace helene
@@ -90,6 +91,22 @@ public:
         {
             storage_ = other.storage_;
         }
+    }
+
+    small_vector&
+    operator=(const small_vector& other)
+    {
+        auto temp = other;
+        swap(temp);
+
+        return *this;
+    }
+
+    void
+    swap(small_vector& other)
+    {
+        std::swap(storage_, other.storage_);
+        std::swap(size_, other.size_);
     }
 
     ~small_vector()
