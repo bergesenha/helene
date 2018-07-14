@@ -140,7 +140,7 @@ public:
         }
     }
 
-    T& operator[](size_type n)
+    reference operator[](size_type n)
     {
         if(size_ > max_stack_size_)
         {
@@ -152,7 +152,7 @@ public:
         }
     }
 
-    const T& operator[](size_type n) const
+    const_reference operator[](size_type n) const
     {
         if(size_ > max_stack_size_)
         {
@@ -165,7 +165,7 @@ public:
         }
     }
 
-    T&
+    reference
     front()
     {
         if(size_ > max_stack_size_)
@@ -178,7 +178,7 @@ public:
         }
     }
 
-    const T&
+    const_reference
     front() const
     {
         if(size_ > max_stack_size_)
@@ -192,7 +192,7 @@ public:
     }
 
 
-    T&
+    reference
     back()
     {
         if(size_ > max_stack_size_)
@@ -205,7 +205,7 @@ public:
         }
     }
 
-    const T&
+    const_reference
     back() const
     {
         if(size_ > max_stack_size_)
@@ -326,7 +326,7 @@ public:
     }
 
 
-    T*
+    pointer
     data()
     {
         if(size_ > max_stack_size_)
@@ -339,7 +339,7 @@ public:
         }
     }
 
-    const T*
+    const_pointer
     data() const
     {
         if(size_ > max_stack_size_)
