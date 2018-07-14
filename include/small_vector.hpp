@@ -93,10 +93,26 @@ public:
         }
     }
 
+    small_vector(small_vector&& other)
+        : storage_(other.storage_), size_(other.size_)
+    {
+        // disable destruction of potential heap allocated data in other
+        other.size_ = 0;
+    }
+
     small_vector&
     operator=(const small_vector& other)
     {
         auto temp = other;
+        swap(temp);
+
+        return *this;
+    }
+
+    small_vector&
+    operator=(small_vector&& other)
+    {
+        auto temp = std::move(other);
         swap(temp);
 
         return *this;
