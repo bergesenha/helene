@@ -46,6 +46,26 @@ public:
             return nodes_ref_->operator[](*current_);
         }
 
+        pointer operator->()
+        {
+            return &(*(*this));
+        }
+
+        iterator&
+        operator++()
+        {
+            ++current_;
+            return *this;
+        }
+
+        iterator
+        operator++(int)
+        {
+            auto temp = *this;
+            ++(*this);
+            return temp;
+        }
+
 
     private:
         child_tag_iterator current_;

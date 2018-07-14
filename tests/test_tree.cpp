@@ -36,5 +36,12 @@ TEST_CASE("", "")
         CHECK(mt[c] == 'c');
         CHECK(mt[d] == 'd');
         CHECK(std::distance(children2.first, children2.second) == 3);
+
+        SECTION("get child iterators to first generation")
+        {
+            auto children3 = mt.children(root_tag);
+
+            CHECK(*children3.first == 'b');
+        }
     }
 }
