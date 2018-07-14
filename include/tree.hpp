@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <utility>
 
 #include "handle_map.hpp"
 #include "small_vector.hpp"
@@ -16,6 +17,8 @@ public:
     typedef T& reference;
     typedef const T& const_reference;
     typedef typename handle_map<T>::handle_type node_tag_type;
+
+    typedef typename small_vector<node_tag_type>::iterator child_tag_iterator;
 
 private:
     static constexpr inline const node_tag_type inactive_tag =
@@ -60,6 +63,12 @@ public:
     root_tag() const
     {
         return node_tag_type{0};
+    }
+
+    std::pair<child_tag_iterator, child_tag_iterator>
+    children(node_tag_type node)
+    {
+        return std::make_pair(children_[node].begin(), children_[node].end());
     }
 
     reference operator[](node_tag_type n)
