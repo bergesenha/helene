@@ -10,6 +10,23 @@ TEST_CASE("default construct", "[small_vector]")
     CHECK(intvec.on_stack());
     CHECK(std::distance(intvec.begin(), intvec.end()) == 0);
 
+
+    SECTION("copy construct")
+    {
+        helene::small_vector<int> intvec_cp = intvec;
+
+        CHECK(intvec_cp.size() == 0);
+        CHECK(intvec_cp.on_stack());
+
+        SECTION("modify original")
+        {
+            intvec.push_back(55);
+
+            CHECK(intvec_cp.size() == 0);
+            CHECK(intvec_cp.on_stack());
+        }
+    }
+
     SECTION("push back a value")
     {
         intvec.push_back(1);
@@ -20,6 +37,25 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec.on_stack());
         CHECK(intvec.front() == 1);
         CHECK(intvec.back() == 1);
+
+        SECTION("copy construct")
+        {
+            helene::small_vector<int> intvec_cp = intvec;
+
+            CHECK(intvec[0] == 1);
+            CHECK(intvec.size() == 1);
+            CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
+            CHECK(intvec.on_stack());
+            CHECK(intvec.front() == 1);
+            CHECK(intvec.back() == 1);
+
+            CHECK(intvec_cp[0] == 1);
+            CHECK(intvec_cp.size() == 1);
+            CHECK(std::distance(intvec_cp.begin(), intvec_cp.end()) == 1);
+            CHECK(intvec_cp.on_stack());
+            CHECK(intvec_cp.front() == 1);
+            CHECK(intvec_cp.back() == 1);
+        }
 
         SECTION("pop back the value")
         {
