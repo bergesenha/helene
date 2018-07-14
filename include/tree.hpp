@@ -81,6 +81,12 @@ public:
             return temp;
         }
 
+        difference_type
+        operator-(const iterator& other) const
+        {
+            return current_ - other.current_;
+        }
+
 
     private:
         child_tag_iterator current_;

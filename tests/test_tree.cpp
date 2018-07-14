@@ -42,6 +42,14 @@ TEST_CASE("", "")
             auto children3 = mt.children(root_tag);
 
             CHECK(*children3.first == 'b');
+            CHECK(std::distance(children3.first, children3.second) == 3);
+
+            SECTION("increment beginning of range")
+            {
+                ++children3.first;
+
+                CHECK(*children3.first == 'c');
+            }
         }
     }
 }
