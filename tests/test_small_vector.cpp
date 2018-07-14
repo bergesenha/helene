@@ -305,6 +305,32 @@ TEST_CASE("construct with initializer_list of size above max stack size",
         CHECK(intvec[i] == 10 * (i + 1));
     }
 
+    SECTION("copy construct")
+    {
+        helene::small_vector<int, 6 * sizeof(int)> intvec_cp = intvec;
+
+        CHECK(intvec_cp.size() == 10);
+        CHECK(!intvec_cp.on_stack());
+
+        for(int i = 0; i < 10; ++i)
+        {
+            CHECK(intvec_cp[i] == 10 * (i + 1));
+        }
+
+        SECTION("modify original")
+        {
+            intvec.erase(intvec.begin(), intvec.end() - 1);
+
+            CHECK(intvec_cp.size() == 10);
+            CHECK(!intvec_cp.on_stack());
+
+            for(int i = 0; i < 10; ++i)
+            {
+                CHECK(intvec_cp[i] == 10 * (i + 1));
+            }
+        }
+    }
+
     SECTION("pop back an element")
     {
         intvec.pop_back();
