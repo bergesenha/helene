@@ -18,6 +18,15 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec.size() == 1);
         CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
         CHECK(intvec.on_stack());
+
+        SECTION("pop back the value")
+        {
+            intvec.pop_back();
+
+            CHECK(intvec.size() == 0);
+            CHECK(intvec.empty());
+            CHECK(intvec.on_stack());
+        }
     }
 
     SECTION("push back 2 values")
@@ -37,6 +46,15 @@ TEST_CASE("default construct", "[small_vector]")
 
             CHECK(check_vec[0] == 1);
             CHECK(check_vec[1] == 2);
+        }
+
+        SECTION("pop back")
+        {
+            intvec.pop_back();
+
+            CHECK(intvec[0] == 1);
+            CHECK(intvec.size() == 1);
+            CHECK(intvec.on_stack());
         }
     }
 

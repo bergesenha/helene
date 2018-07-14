@@ -107,6 +107,33 @@ public:
         ++size_;
     }
 
+    void
+    pop_back()
+    {
+        if(size_ > max_stack_size_ + 1) // remain on heap
+        {
+            reinterpret_cast<std::vector<T>*>(&storage_)->pop_back();
+            --size_;
+        }
+        else if(size_ == max_stack_size_ + 1) // transition to stack
+        {
+            // reinterpret_cast<std::vector<T>*>(&storage_)->pop_back();
+            // not necessary, trivially destructible
+
+            std::vector<T> temp(
+                std::move(*(reinterpret_cast<std::vector<T>*>(&storage_))));
+            reinterpret_cast<std::vector<T>*>(&storage_)->~vector();
+
+            new(&storage_) T[max_stack_size_];
+            std::copy(
+                temp.begin(), temp.end() - 1, reinterpret_cast<T*>(&storage_));
+        }
+        else // remain on stack
+        {
+            --size_;
+        }
+    }
+
     T& operator[](size_type n)
     {
         if(size_ > max_stack_size_)
