@@ -29,6 +29,15 @@ TEST_CASE("default construct", "[small_vector]")
             CHECK(intvec.empty());
             CHECK(intvec.on_stack());
         }
+
+        SECTION("erase the value")
+        {
+            auto res = intvec.erase(intvec.begin());
+
+            CHECK(intvec.size() == 0);
+            CHECK(intvec.on_stack());
+            CHECK(res == intvec.end());
+        }
     }
 
     SECTION("push back 2 values")
@@ -57,6 +66,24 @@ TEST_CASE("default construct", "[small_vector]")
             CHECK(intvec[0] == 1);
             CHECK(intvec.size() == 1);
             CHECK(intvec.on_stack());
+        }
+
+        SECTION("erase first element")
+        {
+            auto res = intvec.erase(intvec.begin());
+
+            CHECK(intvec.size() == 1);
+            CHECK(intvec[0] == 2);
+            CHECK(*res == 2);
+            CHECK(intvec.on_stack());
+        }
+
+        SECTION("erase last element")
+        {
+            auto res = intvec.erase(intvec.begin() + 1);
+            CHECK(res == intvec.end());
+            CHECK(intvec[0] == 1);
+            CHECK(intvec.size() == 1);
         }
     }
 
@@ -127,6 +154,25 @@ TEST_CASE("default construct", "[small_vector]")
                     CHECK(intvec[i] == i * 10);
                 }
             }
+
+            SECTION("erase 5th element")
+            {
+                auto res = intvec.erase(intvec.begin() + 4);
+
+                CHECK(*res == 50);
+                CHECK(intvec.size() == intvec.max_stack_size());
+                CHECK(intvec.back() == 100);
+                CHECK(intvec.front() == 0);
+                CHECK(intvec.on_stack());
+            }
+
+            SECTION("erase last element")
+            {
+                auto res = intvec.erase(intvec.end() - 1);
+
+                CHECK(res == intvec.end());
+                CHECK(intvec.on_stack());
+            }
         }
     }
 }
@@ -191,6 +237,14 @@ TEST_CASE("construct with initializer_list of size above max stack size",
         intvec.pop_back();
 
         CHECK(!intvec.on_stack());
+    }
+
+    SECTION("erase 5th element")
+    {
+        auto res = intvec.erase(intvec.begin() + 4);
+
+        CHECK(intvec.size() == 9);
+        CHECK(*res == 60);
     }
 }
 

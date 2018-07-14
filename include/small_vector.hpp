@@ -213,6 +213,58 @@ public:
         }
     }
 
+    iterator
+    erase(iterator pos)
+    {
+        if(size_ > max_stack_size_ + 1)
+        {
+            std::vector<T>* ref = reinterpret_cast<std::vector<T>*>(&storage_);
+
+            // convert to std::vector<T>::iterator
+            typename std::vector<T>::iterator iter_pos =
+                ref->begin() + (pos - ref->data());
+
+            auto iter_out = ref->erase(iter_pos);
+            --size_;
+
+            // convert std::vector<T>::iterator to pointer
+            difference_type diff = iter_out - ref->begin();
+
+
+            return ref->data() + diff;
+        }
+        else if(size_ == max_stack_size_ + 1)
+        {
+            std::vector<T>* ref = reinterpret_cast<std::vector<T>*>(&storage_);
+
+            // convert to std::vector<T>::iterator
+            const auto diff = pos - ref->data();
+            typename std::vector<T>::iterator iter_pos =
+                ref->begin() + (pos - ref->data());
+
+
+            auto iter_out = ref->erase(iter_pos);
+
+            std::vector<T> temp(std::move(*ref));
+            ref->~vector();
+
+            new(&storage_) T[max_stack_size_];
+            std::copy(
+                temp.begin(), temp.end(), reinterpret_cast<T*>(&storage_));
+            --size_;
+
+            return reinterpret_cast<T*>(&storage_) + diff;
+        }
+        else
+        {
+            T* beg = reinterpret_cast<T*>(&storage_);
+            std::copy(pos + 1, beg + size_, pos);
+
+            --size_;
+            return pos;
+        }
+    }
+
 
     T*
     data()
