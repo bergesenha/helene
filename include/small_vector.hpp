@@ -287,13 +287,15 @@ public:
         else if(size_ <= max_stack_size_)
         {
             T* buff_beg = reinterpret_cast<T*>(&storage_);
-            std::copy(last + 1, end(), first);
+            if(last + 1 < end()) // if anything left past end of range to erase
+            {
+                std::copy(last + 1, end(), first);
+            }
             size_ -= erase_size;
             return first;
         }
         else
         {
-
             std::vector<T>* ref = reinterpret_cast<std::vector<T>*>(&storage_);
 
             // convert to std::vector<T>::iterator

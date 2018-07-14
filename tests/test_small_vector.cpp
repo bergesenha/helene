@@ -38,6 +38,15 @@ TEST_CASE("default construct", "[small_vector]")
             CHECK(intvec.on_stack());
             CHECK(res == intvec.end());
         }
+
+        SECTION("range erase the value")
+        {
+            auto res = intvec.erase(intvec.begin(), intvec.end());
+
+            CHECK(intvec.size() == 0);
+            CHECK(intvec.on_stack());
+            CHECK(res == intvec.end());
+        }
     }
 
     SECTION("push back 2 values")
