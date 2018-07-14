@@ -25,7 +25,7 @@ public:
 
 private:
     static constexpr size_type at_least_size =
-        std::max(StackBufferSize, sizeof(std::vector<T>*));
+        std::max(StackBufferSize, sizeof(std::vector<T>));
     static constexpr size_type max_stack_size_ = at_least_size / sizeof(T);
 
 public:

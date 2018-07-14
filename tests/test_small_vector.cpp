@@ -213,6 +213,16 @@ TEST_CASE("construct with initializer_list of size below max stack size",
         CHECK(intvec.size() == 1);
         CHECK(intvec.on_stack());
     }
+
+    SECTION("erase middle element")
+    {
+        auto res = intvec.erase(intvec.begin() + 1, intvec.begin() + 2);
+
+        CHECK(*res == 30);
+        CHECK(intvec[0] == 10);
+        CHECK(intvec.size() == 2);
+        CHECK(intvec.on_stack());
+    }
 }
 
 
@@ -248,7 +258,8 @@ TEST_CASE("construct with initalizer_list of size equalling max stack size",
 TEST_CASE("construct with initializer_list of size above max stack size",
           "[small_vector]")
 {
-    helene::small_vector<int> intvec{10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+    helene::small_vector<int, 6 * sizeof(int)> intvec{
+        10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
     CHECK(intvec.size() == 10);
     CHECK(!intvec.on_stack());
@@ -271,6 +282,14 @@ TEST_CASE("construct with initializer_list of size above max stack size",
 
         CHECK(intvec.size() == 9);
         CHECK(*res == 60);
+    }
+
+    SECTION("erase first three elements")
+    {
+        auto res = intvec.erase(intvec.begin(), intvec.begin() + 3);
+
+        CHECK(*res == 40);
+        CHECK(intvec.size() == 7);
     }
 }
 
