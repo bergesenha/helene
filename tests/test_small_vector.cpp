@@ -18,6 +18,8 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec.size() == 1);
         CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
         CHECK(intvec.on_stack());
+        CHECK(intvec.front() == 1);
+        CHECK(intvec.back() == 1);
 
         SECTION("pop back the value")
         {
@@ -26,6 +28,15 @@ TEST_CASE("default construct", "[small_vector]")
             CHECK(intvec.size() == 0);
             CHECK(intvec.empty());
             CHECK(intvec.on_stack());
+        }
+
+        SECTION("erase the value")
+        {
+            auto res = intvec.erase(intvec.begin());
+
+            CHECK(intvec.size() == 0);
+            CHECK(intvec.on_stack());
+            CHECK(res == intvec.end());
         }
     }
 
@@ -55,6 +66,24 @@ TEST_CASE("default construct", "[small_vector]")
             CHECK(intvec[0] == 1);
             CHECK(intvec.size() == 1);
             CHECK(intvec.on_stack());
+        }
+
+        SECTION("erase first element")
+        {
+            auto res = intvec.erase(intvec.begin());
+
+            CHECK(intvec.size() == 1);
+            CHECK(intvec[0] == 2);
+            CHECK(*res == 2);
+            CHECK(intvec.on_stack());
+        }
+
+        SECTION("erase last element")
+        {
+            auto res = intvec.erase(intvec.begin() + 1);
+            CHECK(res == intvec.end());
+            CHECK(intvec[0] == 1);
+            CHECK(intvec.size() == 1);
         }
     }
 
@@ -90,6 +119,7 @@ TEST_CASE("default construct", "[small_vector]")
             }
             CHECK(intvec.size() == intvec.max_stack_size() - 1);
             CHECK(intvec.on_stack());
+            CHECK(intvec.front() == 0);
         }
 
         SECTION("push back another element")
@@ -101,6 +131,7 @@ TEST_CASE("default construct", "[small_vector]")
                   intvec.max_stack_size() + 1);
             CHECK(intvec[intvec.max_stack_size()] == 100);
             CHECK(!intvec.on_stack());
+            CHECK(intvec.back() == 100);
 
             SECTION("copy values via iterators")
             {
@@ -122,6 +153,25 @@ TEST_CASE("default construct", "[small_vector]")
                 {
                     CHECK(intvec[i] == i * 10);
                 }
+            }
+
+            SECTION("erase 5th element")
+            {
+                auto res = intvec.erase(intvec.begin() + 4);
+
+                CHECK(*res == 50);
+                CHECK(intvec.size() == intvec.max_stack_size());
+                CHECK(intvec.back() == 100);
+                CHECK(intvec.front() == 0);
+                CHECK(intvec.on_stack());
+            }
+
+            SECTION("erase last element")
+            {
+                auto res = intvec.erase(intvec.end() - 1);
+
+                CHECK(res == intvec.end());
+                CHECK(intvec.on_stack());
             }
         }
     }
@@ -188,6 +238,14 @@ TEST_CASE("construct with initializer_list of size above max stack size",
 
         CHECK(!intvec.on_stack());
     }
+
+    SECTION("erase 5th element")
+    {
+        auto res = intvec.erase(intvec.begin() + 4);
+
+        CHECK(intvec.size() == 9);
+        CHECK(*res == 60);
+    }
 }
 
 TEST_CASE("construct a const small_vector", "[small_vector]")
@@ -209,6 +267,9 @@ TEST_CASE("construct a const small_vector above stack size", "[small_vector]")
 {
     const helene::small_vector<int> intvec{
         10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    CHECK(intvec.front() == 10);
+    CHECK(intvec.back() == 100);
 
     SECTION("copy elements via iterators")
     {
