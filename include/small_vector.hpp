@@ -187,6 +187,33 @@ public:
     }
 
 
+    T&
+    back()
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<std::vector<T>*>(&storage_)->back();
+        }
+        else
+        {
+            return reinterpret_cast<T*>(&storage_)[size_ - 1];
+        }
+    }
+
+    const T&
+    back() const
+    {
+        if(size_ > max_stack_size_)
+        {
+            return reinterpret_cast<const std::vector<T>*>(&storage_)->back();
+        }
+        else
+        {
+            return reinterpret_cast<const T*>(&storage_)[size_ - 1];
+        }
+    }
+
+
     T*
     data()
     {

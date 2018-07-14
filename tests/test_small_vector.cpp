@@ -19,6 +19,7 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
         CHECK(intvec.on_stack());
         CHECK(intvec.front() == 1);
+        CHECK(intvec.back() == 1);
 
         SECTION("pop back the value")
         {
@@ -103,6 +104,7 @@ TEST_CASE("default construct", "[small_vector]")
                   intvec.max_stack_size() + 1);
             CHECK(intvec[intvec.max_stack_size()] == 100);
             CHECK(!intvec.on_stack());
+            CHECK(intvec.back() == 100);
 
             SECTION("copy values via iterators")
             {
@@ -213,6 +215,7 @@ TEST_CASE("construct a const small_vector above stack size", "[small_vector]")
         10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
 
     CHECK(intvec.front() == 10);
+    CHECK(intvec.back() == 100);
 
     SECTION("copy elements via iterators")
     {
