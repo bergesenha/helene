@@ -79,6 +79,19 @@ public:
         }
     }
 
+    small_vector(const small_vector& other) : size_(other.size_)
+    {
+        if(size_ > max_stack_size_)
+        {
+            new(&storage_) std::vector<T>(
+                *reinterpret_cast<const std::vector<T>*>(&other.storage_));
+        }
+        else
+        {
+            storage_ = other.storage_;
+        }
+    }
+
     ~small_vector()
     {
         if(size_ > max_stack_size_)
