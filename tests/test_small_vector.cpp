@@ -316,6 +316,17 @@ TEST_CASE("construct with initializer_list of size above max stack size",
         CHECK(intvec[2] == 90);
         CHECK(intvec[3] == 100);
     }
+
+    SECTION("erase from 3rd element to last")
+    {
+        auto res = intvec.erase(intvec.begin() + 2, intvec.end());
+
+        CHECK(res == intvec.end());
+        CHECK(intvec.size() == 2);
+        CHECK(intvec.on_stack());
+        CHECK(intvec[0] == 10);
+        CHECK(intvec[1] == 20);
+    }
 }
 
 TEST_CASE("construct a const small_vector", "[small_vector]")
