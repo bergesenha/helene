@@ -18,6 +18,7 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec.size() == 1);
         CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
         CHECK(intvec.on_stack());
+        CHECK(intvec.front() == 1);
 
         SECTION("pop back the value")
         {
@@ -90,6 +91,7 @@ TEST_CASE("default construct", "[small_vector]")
             }
             CHECK(intvec.size() == intvec.max_stack_size() - 1);
             CHECK(intvec.on_stack());
+            CHECK(intvec.front() == 0);
         }
 
         SECTION("push back another element")
@@ -209,6 +211,8 @@ TEST_CASE("construct a const small_vector above stack size", "[small_vector]")
 {
     const helene::small_vector<int> intvec{
         10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+
+    CHECK(intvec.front() == 10);
 
     SECTION("copy elements via iterators")
     {
