@@ -10,7 +10,7 @@ option(HELENE_BUILD_TESTS "Build unit tests" OFF)
 add_subdirectory(external/metamusil)
 
 add_library(helene INTERFACE)
-target_compile_features(helene INTERFACE cxx_std_14)
+target_compile_features(helene INTERFACE cxx_std_17)
 target_include_directories(helene
     INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include/
     )
