@@ -428,6 +428,19 @@ TEST_CASE("construct with initializer_list of size above max stack size",
         CHECK(intvec[0] == 10);
         CHECK(intvec[1] == 20);
     }
+
+    SECTION("move construct")
+    {
+        helene::small_vector<int, 6 * sizeof(int)> intvec2(std::move(intvec));
+
+        CHECK(intvec2.size() == 10);
+        CHECK(!intvec2.on_stack());
+
+        for(int i = 0; i < 10; ++i)
+        {
+            CHECK(intvec2[i] == 10 * (i + 1));
+        }
+    }
 }
 
 TEST_CASE("construct a const small_vector", "[small_vector]")
@@ -462,4 +475,49 @@ TEST_CASE("construct a const small_vector above stack size", "[small_vector]")
             CHECK(intvec[i] == check_vec[i]);
         }
     }
+}
+
+
+TEST_CASE(
+    "default construct a small_vector and move assign to it from higher scope",
+    "[small_vector]")
+{
+    helene::small_vector<long, 5 * sizeof(long)> lv;
+
+    {
+        helene::small_vector<long, 5 * sizeof(long)> lv_temp{0l, 1l, 2l, 3l};
+
+        lv = std::move(lv_temp);
+    }
+
+    CHECK(lv.size() == 4);
+    CHECK(lv.on_stack());
+    CHECK(lv[0] == 0l);
+    CHECK(lv[1] == 1l);
+    CHECK(lv[2] == 2l);
+    CHECK(lv[3] == 3l);
+}
+
+
+TEST_CASE("move assign large small_vector from higher scope", "[small_vector]")
+{
+    helene::small_vector<long, 5 * sizeof(long)> lv;
+
+    {
+        helene::small_vector<long, 5 * sizeof(long)> lv_temp{
+            0l, 1l, 2l, 3l, 4l, 5l, 6l, 7l};
+
+        lv = std::move(lv_temp);
+    }
+
+    CHECK(lv.size() == 8);
+    CHECK(!lv.on_stack());
+    CHECK(lv[0] == 0l);
+    CHECK(lv[1] == 1l);
+    CHECK(lv[2] == 2l);
+    CHECK(lv[3] == 3l);
+    CHECK(lv[4] == 4l);
+    CHECK(lv[5] == 5l);
+    CHECK(lv[6] == 6l);
+    CHECK(lv[7] == 7l);
 }

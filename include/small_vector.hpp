@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <iterator>
 #include <utility>
+#include <memory>
 
 
 namespace helene
