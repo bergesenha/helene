@@ -29,12 +29,14 @@ public:
     {
         nodes_.insert(T{});
         parents_.push_back(inactive_tag);
+        children_.resize(1);
     }
 
     tree(const T& root_node) : nodes_(), parents_(), children_()
     {
         nodes_.insert(root_node);
         parents_.push_back(inactive_tag);
+        children_.resize(1);
     }
 
     node_tag_type

@@ -7,6 +7,8 @@ TEST_CASE("", "")
     helene::tree<char> mt('a');
 
     const auto root_tag = mt.root_tag();
+    auto children1 = mt.children(root_tag);
+    CHECK(std::distance(children1.first, children1.second) == 0);
 
     CHECK(mt[root_tag] == 'a');
 
