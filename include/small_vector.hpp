@@ -127,6 +127,7 @@ public:
             new(&storage_) T[max_stack_size_];
             std::copy(
                 temp.begin(), temp.end() - 1, reinterpret_cast<T*>(&storage_));
+            --size_;
         }
         else // remain on stack
         {
