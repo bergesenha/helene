@@ -282,6 +282,7 @@ TEST_CASE("construct with initializer_list of size above max stack size",
 
         CHECK(intvec.size() == 9);
         CHECK(*res == 60);
+        CHECK(!intvec.on_stack());
     }
 
     SECTION("erase first three elements")
@@ -290,6 +291,30 @@ TEST_CASE("construct with initializer_list of size above max stack size",
 
         CHECK(*res == 40);
         CHECK(intvec.size() == 7);
+        CHECK(!intvec.on_stack());
+    }
+
+    SECTION("erase last three elements")
+    {
+        auto res = intvec.erase(intvec.end() - 3, intvec.end());
+
+        CHECK(res == intvec.end());
+        CHECK(intvec.size() == 7);
+        CHECK(intvec[6] == 70);
+        CHECK(!intvec.on_stack());
+    }
+
+    SECTION("erase from 3rd to 8th element")
+    {
+        auto res = intvec.erase(intvec.begin() + 2, intvec.begin() + 8);
+
+        CHECK(*res == 90);
+        CHECK(intvec.size() == 4);
+        CHECK(intvec.on_stack());
+        CHECK(intvec[0] == 10);
+        CHECK(intvec[1] == 20);
+        CHECK(intvec[2] == 90);
+        CHECK(intvec[3] == 100);
     }
 }
 
