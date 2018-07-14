@@ -18,8 +18,13 @@ class small_vector
                   "small_vector is only compatible with trivial types");
 
 public:
+    typedef T value_type;
     typedef typename std::vector<T>::size_type size_type;
     typedef typename std::vector<T>::difference_type difference_type;
+    typedef T& reference;
+    typedef const T& const_reference;
+    typedef T* pointer;
+    typedef const T* const_pointer;
     typedef T* iterator;
     typedef const T* const_iterator;
 
