@@ -105,6 +105,13 @@ public:
         return std::make_pair(children_[node].begin(), children_[node].end());
     }
 
+    std::pair<iterator, iterator>
+    children(node_tag_type node)
+    {
+        return std::make_pair(iterator(children_[node].begin(), nodes_),
+                              iterator(children_[node].end(), nodes_));
+    }
+
     reference operator[](node_tag_type n)
     {
         return nodes_[n];
