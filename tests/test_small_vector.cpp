@@ -18,6 +18,15 @@ TEST_CASE("default construct", "[small_vector]")
         CHECK(intvec.size() == 1);
         CHECK(std::distance(intvec.begin(), intvec.end()) == 1);
         CHECK(intvec.on_stack());
+
+        SECTION("pop back the value")
+        {
+            intvec.pop_back();
+
+            CHECK(intvec.size() == 0);
+            CHECK(intvec.empty());
+            CHECK(intvec.on_stack());
+        }
     }
 
     SECTION("push back 2 values")
@@ -37,6 +46,15 @@ TEST_CASE("default construct", "[small_vector]")
 
             CHECK(check_vec[0] == 1);
             CHECK(check_vec[1] == 2);
+        }
+
+        SECTION("pop back")
+        {
+            intvec.pop_back();
+
+            CHECK(intvec[0] == 1);
+            CHECK(intvec.size() == 1);
+            CHECK(intvec.on_stack());
         }
     }
 
@@ -62,6 +80,18 @@ TEST_CASE("default construct", "[small_vector]")
             }
         }
 
+        SECTION("pop back an element")
+        {
+            intvec.pop_back();
+
+            for(std::size_t i = 0; i < intvec.size(); ++i)
+            {
+                CHECK(intvec[i] == i * 10);
+            }
+            CHECK(intvec.size() == intvec.max_stack_size() - 1);
+            CHECK(intvec.on_stack());
+        }
+
         SECTION("push back another element")
         {
             intvec.push_back(100);
@@ -79,6 +109,18 @@ TEST_CASE("default construct", "[small_vector]")
                 for(std::size_t i = 0; i < intvec.size(); ++i)
                 {
                     CHECK(check_vec[i] == intvec[i]);
+                }
+            }
+
+            SECTION("pop back an element")
+            {
+                intvec.pop_back();
+
+                CHECK(intvec.on_stack());
+
+                for(std::size_t i = 0; i < intvec.size(); ++i)
+                {
+                    CHECK(intvec[i] == i * 10);
                 }
             }
         }
@@ -138,6 +180,13 @@ TEST_CASE("construct with initializer_list of size above max stack size",
     for(int i = 0; i < 10; ++i)
     {
         CHECK(intvec[i] == 10 * (i + 1));
+    }
+
+    SECTION("pop back an element")
+    {
+        intvec.pop_back();
+
+        CHECK(!intvec.on_stack());
     }
 }
 
