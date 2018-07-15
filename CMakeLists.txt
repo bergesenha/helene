@@ -10,7 +10,7 @@ option(HELENE_BUILD_TESTS "Build unit tests" OFF)
 add_subdirectory(external/metamusil)
 
 add_library(helene INTERFACE)
-target_compile_features(helene INTERFACE cxx_std_14)
+target_compile_features(helene INTERFACE cxx_std_17)
 target_include_directories(helene
     INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include/
     )
@@ -36,5 +36,6 @@ if(HELENE_BUILD_TESTS)
         PRIVATE tests/test_stable_container.cpp
         PRIVATE tests/test_handle_map.cpp
         PRIVATE tests/test_small_vector.cpp
+        PRIVATE tests/test_tree.cpp
         )
 endif(HELENE_BUILD_TESTS)
