@@ -1,9 +1,4 @@
-build/
-build_clang/
-build_gcc/
-build_debug/
-build_release/
-build_ubsan/
+build*
 .ycm_extra_conf.py*
 .color_coded
 compile_commands.json
