@@ -12,10 +12,10 @@ namespace detail
 {
 }
 
-template <class T, class Allocator = std::allocator<T>>
+template <class T>
 class stable_vector
 {
-    typedef std::vector<T, Allocator> vector_type;
+    typedef std::vector<T> vector_type;
 
 
 public:
@@ -93,6 +93,6 @@ public:
 
 private:
     vector_type data_;
-    std::vector<size_type, Allocator> erased_;
+    std::vector<size_type> erased_;
 };
 } // namespace helene
