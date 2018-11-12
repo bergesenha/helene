@@ -10,6 +10,11 @@
 #include <memory>
 #include <new>
 
+#ifndef __clang__
+#define LAUNDER std::launder
+#else
+#define LAUNDER
+#endif
 
 namespace helene
 {
@@ -53,7 +58,7 @@ public:
             new(&storage_) T[max_stack_size_];
             std::copy(init.begin(),
                       init.end(),
-                      std::launder(reinterpret_cast<T*>(&storage_)));
+                      LAUNDER(reinterpret_cast<T*>(&storage_)));
         }
     }
 
@@ -66,8 +71,7 @@ public:
         else
         {
             new(&storage_) T[max_stack_size_];
-            std::fill_n(
-                std::launder(reinterpret_cast<T*>(&storage_)), size_, T{});
+            std::fill_n(LAUNDER(reinterpret_cast<T*>(&storage_)), size_, T{});
         }
     }
 
@@ -80,8 +84,7 @@ public:
         else
         {
             new(&storage_) T[max_stack_size_];
-            std::fill_n(
-                std::launder(reinterpret_cast<T*>(&storage_)), size_, value);
+            std::fill_n(LAUNDER(reinterpret_cast<T*>(&storage_)), size_, value);
         }
     }
 
@@ -89,7 +92,7 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            new(&storage_) std::vector<T>(*std::launder(
+            new(&storage_) std::vector<T>(*LAUNDER(
                 reinterpret_cast<const std::vector<T>*>(&other.storage_)));
         }
         else
@@ -134,8 +137,7 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
-                ->~vector();
+            LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))->~vector();
         }
     }
 
@@ -145,22 +147,22 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                 ->push_back(value);
         }
         else if(size_ == max_stack_size_)
         {
-            T* buff = std::launder(reinterpret_cast<T*>(&storage_));
+            T* buff = LAUNDER(reinterpret_cast<T*>(&storage_));
             T temp[max_stack_size_];
             std::copy(buff, buff + size_, std::begin(temp));
 
             new(&storage_) std::vector<T>(std::begin(temp), std::end(temp));
-            std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                 ->push_back(value);
         }
         else
         {
-            std::launder(reinterpret_cast<T*>(&storage_))[size_] = value;
+            LAUNDER(reinterpret_cast<T*>(&storage_))[size_] = value;
         }
 
         ++size_;
@@ -171,8 +173,7 @@ public:
     {
         if(size_ > max_stack_size_ + 1) // remain on heap
         {
-            std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
-                ->pop_back();
+            LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))->pop_back();
             --size_;
         }
         else if(size_ == max_stack_size_ + 1) // transition to stack
@@ -181,14 +182,13 @@ public:
             // not necessary, trivially destructible
 
             std::vector<T> temp(std::move(
-                *(std::launder(reinterpret_cast<std::vector<T>*>(&storage_)))));
-            std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
-                ->~vector();
+                *(LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_)))));
+            LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))->~vector();
 
             new(&storage_) T[max_stack_size_];
             std::copy(temp.begin(),
                       temp.end() - 1,
-                      std::launder(reinterpret_cast<T*>(&storage_)));
+                      LAUNDER(reinterpret_cast<T*>(&storage_)));
             --size_;
         }
         else // remain on stack
@@ -201,13 +201,13 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                 ->
                 operator[](n);
         }
         else
         {
-            return std::launder(reinterpret_cast<T*>(&storage_))[n];
+            return LAUNDER(reinterpret_cast<T*>(&storage_))[n];
         }
     }
 
@@ -215,14 +215,13 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(
-                       reinterpret_cast<const std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<const std::vector<T>*>(&storage_))
                 ->
                 operator[](n);
         }
         else
         {
-            return std::launder(reinterpret_cast<const T*>(&storage_))[n];
+            return LAUNDER(reinterpret_cast<const T*>(&storage_))[n];
         }
     }
 
@@ -231,12 +230,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                 ->front();
         }
         else
         {
-            return std::launder(reinterpret_cast<T*>(&storage_))[0];
+            return LAUNDER(reinterpret_cast<T*>(&storage_))[0];
         }
     }
 
@@ -245,13 +244,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(
-                       reinterpret_cast<const std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<const std::vector<T>*>(&storage_))
                 ->front();
         }
         else
         {
-            return std::launder(reinterpret_cast<const T*>(&storage_))[0];
+            return LAUNDER(reinterpret_cast<const T*>(&storage_))[0];
         }
     }
 
@@ -261,12 +259,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                 ->back();
         }
         else
         {
-            return std::launder(reinterpret_cast<T*>(&storage_))[size_ - 1];
+            return LAUNDER(reinterpret_cast<T*>(&storage_))[size_ - 1];
         }
     }
 
@@ -275,14 +273,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(
-                       reinterpret_cast<const std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<const std::vector<T>*>(&storage_))
                 ->back();
         }
         else
         {
-            return std::launder(
-                reinterpret_cast<const T*>(&storage_))[size_ - 1];
+            return LAUNDER(reinterpret_cast<const T*>(&storage_))[size_ - 1];
         }
     }
 
@@ -292,7 +288,7 @@ public:
         if(size_ > max_stack_size_ + 1)
         {
             std::vector<T>* ref =
-                std::launder(reinterpret_cast<std::vector<T>*>(&storage_));
+                LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_));
 
             // convert to std::vector<T>::iterator
             typename std::vector<T>::iterator iter_pos =
@@ -310,7 +306,7 @@ public:
         else if(size_ == max_stack_size_ + 1)
         {
             std::vector<T>* ref =
-                std::launder(reinterpret_cast<std::vector<T>*>(&storage_));
+                LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_));
 
             // convert to std::vector<T>::iterator
             const auto diff = pos - ref->data();
@@ -326,14 +322,14 @@ public:
             new(&storage_) T[max_stack_size_];
             std::copy(temp.begin(),
                       temp.end(),
-                      std::launder(reinterpret_cast<T*>(&storage_)));
+                      LAUNDER(reinterpret_cast<T*>(&storage_)));
             --size_;
 
-            return std::launder(reinterpret_cast<T*>(&storage_)) + diff;
+            return LAUNDER(reinterpret_cast<T*>(&storage_)) + diff;
         }
         else
         {
-            T* beg = std::launder(reinterpret_cast<T*>(&storage_));
+            T* beg = LAUNDER(reinterpret_cast<T*>(&storage_));
             std::copy(pos + 1, end(), pos);
 
             --size_;
@@ -349,7 +345,7 @@ public:
         if(size_ > max_stack_size_ + erase_size)
         {
             std::vector<T>* ref =
-                std::launder(reinterpret_cast<std::vector<T>*>(&storage_));
+                LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_));
 
             // convert to std::vector<T>::iterator
             auto first_iter = ref->begin() + (first - begin());
@@ -363,7 +359,7 @@ public:
         }
         else if(size_ <= max_stack_size_)
         {
-            T* buff_beg = std::launder(reinterpret_cast<T*>(&storage_));
+            T* buff_beg = LAUNDER(reinterpret_cast<T*>(&storage_));
             if(last < end()) // if anything left past end of range to erase
             {
                 std::copy(last, end(), first);
@@ -374,7 +370,7 @@ public:
         else
         {
             std::vector<T>* ref =
-                std::launder(reinterpret_cast<std::vector<T>*>(&storage_));
+                LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_));
 
             // convert to std::vector<T>::iterator
             auto first_iter = ref->begin() + (first - begin());
@@ -391,7 +387,7 @@ public:
 
             std::copy(temp.begin(),
                       temp.end(),
-                      std::launder(reinterpret_cast<T*>(&storage_)));
+                      LAUNDER(reinterpret_cast<T*>(&storage_)));
 
             size_ -= erase_size;
 
@@ -405,12 +401,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                 ->data();
         }
         else
         {
-            return std::launder(reinterpret_cast<T*>(&storage_));
+            return LAUNDER(reinterpret_cast<T*>(&storage_));
         }
     }
 
@@ -419,13 +415,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(
-                       reinterpret_cast<const std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<const std::vector<T>*>(&storage_))
                 ->data();
         }
         else
         {
-            return std::launder(reinterpret_cast<const T*>(&storage_));
+            return LAUNDER(reinterpret_cast<const T*>(&storage_));
         }
     }
 
@@ -434,12 +429,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                 ->data();
         }
         else
         {
-            return std::launder(reinterpret_cast<T*>(&storage_));
+            return LAUNDER(reinterpret_cast<T*>(&storage_));
         }
     }
 
@@ -448,13 +443,13 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(reinterpret_cast<std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<std::vector<T>*>(&storage_))
                        ->data() +
                    size_;
         }
         else
         {
-            return std::launder(reinterpret_cast<T*>(&storage_)) + size_;
+            return LAUNDER(reinterpret_cast<T*>(&storage_)) + size_;
         }
     }
 
@@ -463,13 +458,12 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(
-                       reinterpret_cast<const std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<const std::vector<T>*>(&storage_))
                 ->data();
         }
         else
         {
-            return std::launder(reinterpret_cast<const T*>(&storage_));
+            return LAUNDER(reinterpret_cast<const T*>(&storage_));
         }
     }
 
@@ -478,14 +472,13 @@ public:
     {
         if(size_ > max_stack_size_)
         {
-            return std::launder(
-                       reinterpret_cast<const std::vector<T>*>(&storage_))
+            return LAUNDER(reinterpret_cast<const std::vector<T>*>(&storage_))
                        ->data() +
                    size_;
         }
         else
         {
-            return std::launder(reinterpret_cast<const T*>(&storage_)) + size_;
+            return LAUNDER(reinterpret_cast<const T*>(&storage_)) + size_;
         }
     }
 
