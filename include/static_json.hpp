@@ -7,6 +7,99 @@ namespace helene
 {
 namespace static_json
 {
+namespace detail
+{
+
+template <class...>
+struct type_list
+{
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// get first type of a type_list
+template <class TypeList>
+struct head;
+
+template <class First, class... Rest>
+struct head<type_list<First, Rest...>>
+{
+    typedef First type;
+};
+
+template <class TypeList>
+using head_t = typename head<TypeList>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// get tail of a type_list as another type_list
+template <class TypeList>
+struct tail;
+
+template <class First, class... Rest>
+struct tail<type_list<First, Rest...>>
+{
+    typedef type_list<Rest...> type;
+};
+
+template <class TypeList>
+using tail_t = typename tail<TypeList>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// returns length of a type_list
+template <class TypeList>
+struct length;
+
+template <class... Types>
+struct length<type_list<Types...>>
+{
+    static const std::size_t value = sizeof...(Types);
+};
+
+template <class TypeList>
+constexpr std::size_t length_v = length<TypeList>::value;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// returns type at index in a type_list
+template <class TypeList, std::size_t Index>
+struct type_at_index : type_at_index<tail_t<TypeList>, Index - 1>
+{
+    static_assert(length_v<TypeList>> Index, "out of bounds access");
+};
+
+template <class TypeList>
+struct type_at_index<TypeList, 0>
+{
+    typedef head_t<TypeList> type;
+};
+
+
+template <class TypeList, std::size_t Index>
+using type_at_index_t = typename type_at_index<TypeList, Index>::type;
+
+
+////////////////////////////////////////////////////////////////////////////////
+// return index of first type encountered that matches T
+template <class TypeList, class T, std::size_t Index = 0>
+struct index_of_type;
+
+template <class First, class... Rest, class T, std::size_t Index>
+struct index_of_type<type_list<First, Rest...>, T, Index>
+    : index_of_type<type_list<Rest...>, T, Index + 1>
+{
+};
+
+template <class... Rest, class T, std::size_t Index>
+struct index_of_type<type_list<T, Rest...>, T, Index>
+{
+    static const std::size_t value = Index;
+};
+
+template <class TypeList, class T>
+constexpr std::size_t index_of_type_v = index_of_type<TypeList, T>::value;
+
+} // namespace detail
 
 enum class value_type
 {
@@ -22,13 +115,7 @@ enum class value_type
 template <class NameProvider, class Type>
 struct field
 {
-};
-
-
-template <class T>
-struct holder
-{
-    T value;
+    Type value;
 };
 
 
@@ -36,9 +123,30 @@ template <class... Fields>
 class json;
 
 template <class... NameProviders, class... Types>
-class json<field<NameProviders, Types>...> : holder<Types>...
+class json<field<NameProviders, Types>...> : field<NameProviders, Types>...
 {
 public:
+    template <class NameProvider>
+    struct type_from_name
+    {
+        typedef detail::type_at_index_t<
+            detail::type_list<Types...>,
+            detail::index_of_type_v<detail::type_list<NameProviders...>,
+                                    NameProvider>>
+            type;
+    };
+
+    template <class NameProvider>
+    using type_from_name_t = typename type_from_name<NameProvider>::type;
+
+public:
+    template <class Name>
+    type_from_name_t<Name>&
+    get()
+    {
+        return static_cast<field<Name, type_from_name_t<Name>>*>(this)->value;
+    }
+
 private:
 };
 } // namespace static_json

@@ -17,4 +17,8 @@ using helene::static_json::value_type;
 TEST_CASE("", "")
 {
     json<field<data_name, int>> js1;
+
+    js1.get<data_name>() = 23;
+
+    CHECK(js1.get<data_name>() == 23);
 }
