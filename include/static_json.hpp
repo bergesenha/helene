@@ -147,6 +147,14 @@ public:
         return static_cast<field<Name, type_from_name_t<Name>>*>(this)->value;
     }
 
+    template <class Name>
+    const type_from_name_t<Name>&
+    get() const
+    {
+        return static_cast<const field<Name, type_from_name_t<Name>>*>(this)
+            ->value;
+    }
+
 private:
 };
 } // namespace static_json
