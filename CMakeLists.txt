@@ -39,5 +39,6 @@ if(HELENE_BUILD_TESTS)
         PRIVATE tests/test_small_vector.cpp
         PRIVATE tests/test_tree.cpp
         PRIVATE tests/test_iterators.cpp
+        PRIVATE tests/test_static_json.cpp
         )
 endif(HELENE_BUILD_TESTS)
