@@ -13,6 +13,11 @@ struct char_name
     static constexpr const char* value = "char_name";
 };
 
+struct object_name
+{
+    static constexpr const char* value = "subobj";
+};
+
 using helene::static_json::field;
 using helene::static_json::json;
 using helene::static_json::value_type;
@@ -53,4 +58,19 @@ TEST_CASE("json with two fields", "[json]")
         js1out << js1;
         CHECK(js1out.str() == js1.str());
     }
+}
+
+
+TEST_CASE("json with a number and a subobject", "[json]")
+{
+    json<field<data_name, int>,
+         field<object_name, json<field<char_name, char>>>>
+        js2;
+
+    js2.get<data_name>() = 101;
+    js2.get<object_name>().get<char_name>() = 'a';
+
+    CHECK(js2.get<data_name>() == 101);
+    CHECK(js2.get<object_name>().get<char_name>() == 'a');
+    CHECK(js2.str() == "{ data: 101, subobj: { char_name: 97 } }");
 }

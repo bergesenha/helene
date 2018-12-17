@@ -262,6 +262,12 @@ struct field<NameProvider, json<Subfields...>>
     json<Subfields...> value;
 
     std::string
+    name() const
+    {
+        return NameProvider::value;
+    }
+
+    std::string
     str() const
     {
         return value.str();
