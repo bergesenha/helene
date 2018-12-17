@@ -119,6 +119,12 @@ struct field
     Type value;
 
     std::string
+    name() const
+    {
+        return NameProvider::value;
+    }
+
+    std::string
     str() const
     {
         return std::to_string(value);
@@ -129,6 +135,13 @@ template <class NameProvider>
 struct field<NameProvider, bool>
 {
     bool value;
+
+
+    std::string
+    name() const
+    {
+        return NameProvider::value;
+    }
 
     std::string
     str() const
@@ -146,6 +159,13 @@ template <class NameProvider>
 struct field<NameProvider, std::string>
 {
     std::string value;
+
+
+    std::string
+    name() const
+    {
+        return NameProvider::value;
+    }
 
     std::string
     str() const
@@ -186,7 +206,8 @@ private:
         static std::string
         dispatch_str(const json<field<NameProviders, Types>...>* self)
         {
-            return static_cast<const FirstField*>(self)->str() + ", " +
+            const auto field_ptr = static_cast<const FirstField*>(self);
+            return field_ptr->name() + ": " + field_ptr->str() + ", " +
                    serialize_helper<RestFields...>::dispatch_str(self);
         };
     };
@@ -197,7 +218,8 @@ private:
         static std::string
         dispatch_str(const json<field<NameProviders, Types>...>* self)
         {
-            return static_cast<const LastField*>(self)->str();
+            const auto field_ptr = static_cast<const LastField*>(self);
+            return field_ptr->name() + ": " + field_ptr->str();
         };
     };
 
