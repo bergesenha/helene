@@ -18,7 +18,7 @@ using helene::static_json::json;
 using helene::static_json::value_type;
 
 
-TEST_CASE("", "")
+TEST_CASE("json with one field", "[json]")
 {
     json<field<data_name, int>> js1;
 
@@ -26,6 +26,13 @@ TEST_CASE("", "")
 
     CHECK(js1.get<data_name>() == 23);
     CHECK(js1.str() == "{ data: 23 }");
+
+    SECTION("stream out")
+    {
+        std::ostringstream js1out;
+        js1out << js1;
+        CHECK(js1out.str() == js1.str());
+    }
 }
 
 
@@ -39,4 +46,11 @@ TEST_CASE("json with two fields", "[json]")
     CHECK(js1.get<data_name>() == 23);
     CHECK(js1.get<char_name>() == 't');
     CHECK(js1.str() == "{ data: 23, char_name: 116 }");
+
+    SECTION("stream out")
+    {
+        std::ostringstream js1out;
+        js1out << js1;
+        CHECK(js1out.str() == js1.str());
+    }
 }

@@ -269,5 +269,13 @@ struct field<NameProvider, json<Subfields...>>
 };
 
 
+template <class... Fields>
+std::ostream&
+operator<<(std::ostream& out, const json<Fields...>& obj)
+{
+    out << obj.str();
+    return out;
+}
+
 } // namespace static_json
 } // namespace helene
