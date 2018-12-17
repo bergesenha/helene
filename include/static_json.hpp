@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 
 
 namespace helene
@@ -116,11 +117,50 @@ template <class NameProvider, class Type>
 struct field
 {
     Type value;
+
+    std::string
+    str() const
+    {
+        return std::to_string(value);
+    }
+};
+
+template <class NameProvider>
+struct field<NameProvider, bool>
+{
+    bool value;
+
+    std::string
+    str() const
+    {
+        if(value)
+        {
+            return "true";
+        }
+
+        return "false";
+    }
+};
+
+template <class NameProvider>
+struct field<NameProvider, std::string>
+{
+    std::string value;
+
+    std::string
+    str() const
+    {
+        return value;
+    }
 };
 
 
 template <class... Fields>
 class json;
+
+template <class NameProvider, class... Subfields>
+struct field<NameProvider, json<Subfields...>>;
+
 
 template <class... NameProviders, class... Types>
 class json<field<NameProviders, Types>...> : field<NameProviders, Types>...
@@ -139,6 +179,28 @@ public:
     template <class NameProvider>
     using type_from_name_t = typename type_from_name<NameProvider>::type;
 
+private:
+    template <class FirstField, class... RestFields>
+    struct serialize_helper
+    {
+        static std::string
+        dispatch_str(const json<field<NameProviders, Types>...>* self)
+        {
+            return static_cast<const FirstField*>(self)->str() + ", " +
+                   serialize_helper<RestFields...>::dispatch_str(self);
+        };
+    };
+
+    template <class LastField>
+    struct serialize_helper<LastField>
+    {
+        static std::string
+        dispatch_str(const json<field<NameProviders, Types>...>* self)
+        {
+            return static_cast<const LastField*>(self)->str();
+        };
+    };
+
 public:
     template <class Name>
     type_from_name_t<Name>&
@@ -155,7 +217,35 @@ public:
             ->value;
     }
 
+    std::string
+    str() const
+    {
+        std::string out("{ ");
+
+        out.append(
+            serialize_helper<field<NameProviders, Types>...>::dispatch_str(
+                this));
+
+        out.append(" }");
+
+        return out;
+    }
+
 private:
 };
+
+template <class NameProvider, class... Subfields>
+struct field<NameProvider, json<Subfields...>>
+{
+    json<Subfields...> value;
+
+    std::string
+    str() const
+    {
+        return value.str();
+    }
+};
+
+
 } // namespace static_json
 } // namespace helene

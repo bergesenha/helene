@@ -25,6 +25,7 @@ TEST_CASE("", "")
     js1.get<data_name>() = 23;
 
     CHECK(js1.get<data_name>() == 23);
+    CHECK(js1.str() == "{ 23 }");
 }
 
 
@@ -37,4 +38,5 @@ TEST_CASE("json with two fields", "[json]")
 
     CHECK(js1.get<data_name>() == 23);
     CHECK(js1.get<char_name>() == 't');
+    CHECK(js1.str() == "{ 23, 116 }");
 }
