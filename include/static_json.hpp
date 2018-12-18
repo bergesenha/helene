@@ -119,16 +119,6 @@ constexpr std::size_t static_string_length_v =
 
 } // namespace detail
 
-enum class value_type
-{
-    number_type,
-    bool_type,
-    string_type,
-    null_type,
-    array_type,
-    object_type
-};
-
 
 template <class NameProvider, class Type>
 struct field

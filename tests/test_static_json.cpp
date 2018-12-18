@@ -20,7 +20,6 @@ struct object_name
 
 using helene::static_json::field;
 using helene::static_json::json;
-using helene::static_json::value_type;
 
 
 TEST_CASE("json with one field", "[json]")
