@@ -100,6 +100,23 @@ struct index_of_type<type_list<T, Rest...>, T, Index>
 template <class TypeList, class T>
 constexpr std::size_t index_of_type_v = index_of_type<TypeList, T>::value;
 
+
+template <class NameProvider, char C, std::size_t P>
+struct static_string_length_
+    : static_string_length_<NameProvider, NameProvider::value[P], P + 1>
+{
+};
+
+template <class NameProvider, std::size_t P>
+struct static_string_length_<NameProvider, '\0', P>
+{
+    static const std::size_t value = P;
+};
+
+template <class NameProvider>
+constexpr std::size_t static_string_length_v =
+    static_string_length_<NameProvider, NameProvider::value[0], 1>::value;
+
 } // namespace detail
 
 enum class value_type
