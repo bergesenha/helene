@@ -217,6 +217,16 @@ private:
             return field_ptr->name() + ": " + field_ptr->str() + ", " +
                    serialize_helper<RestFields...>::dispatch_str(self);
         };
+
+        static void
+        dispatch_stream_set(std::istream& in,
+                            json<field<NameProviders, Types>...>* self)
+        {
+            in >> static_cast<FirstField*>(self)->value;
+            in.ignore(std::numeric_limits<std::streamsize>::max(), ':');
+
+            serialize_helper<RestFields...>::dispatch_stream_set(in, self);
+        }
     };
 
     template <class LastField>
@@ -228,6 +238,13 @@ private:
             const auto field_ptr = static_cast<const LastField*>(self);
             return field_ptr->name() + ": " + field_ptr->str();
         };
+
+        static void
+        dispatch_stream_set(std::istream& in,
+                            json<field<NameProviders, Types>...>* self)
+        {
+            in >> static_cast<LastField*>(self)->value;
+        }
     };
 
 public:
@@ -260,6 +277,19 @@ public:
         return out;
     }
 
+    void
+    stream_set(std::istream& in)
+    {
+        // strip beginning of json stream ie. "{ somename:"
+        in.ignore(std::numeric_limits<std::streamsize>::max(), ':');
+
+        serialize_helper<field<NameProviders, Types>...>::dispatch_stream_set(
+            in, this);
+
+        // ensure whole json message is consumed
+        in.ignore(std::numeric_limits<std::streamsize>::max(), '}');
+    }
+
 private:
 };
 
@@ -290,5 +320,13 @@ operator<<(std::ostream& out, const json<Fields...>& obj)
     return out;
 }
 
+template <class... Fields>
+std::istream&
+operator>>(std::istream& in, json<Fields...>& obj)
+{
+    obj.stream_set(in);
+
+    return in;
+}
 } // namespace static_json
 } // namespace helene
