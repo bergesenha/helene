@@ -22,7 +22,7 @@ if(HELENE_BUILD_TESTS)
 
 
     add_executable(unit_tests tests/test_main.cpp)
-    target_link_libraries(unit_tests helene)
+    target_link_libraries(unit_tests helene metamusil)
     target_include_directories(unit_tests
         PRIVATE external/Catch/include/
         )
@@ -39,5 +39,6 @@ if(HELENE_BUILD_TESTS)
         PRIVATE tests/test_small_vector.cpp
         PRIVATE tests/test_tree.cpp
         PRIVATE tests/test_iterators.cpp
+        PRIVATE tests/test_static_json.cpp
         )
 endif(HELENE_BUILD_TESTS)
