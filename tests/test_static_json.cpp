@@ -75,7 +75,7 @@ TEST_CASE("json with two fields", "[json]")
 TEST_CASE("json with a number and a subobject", "[json]")
 {
     json<field<data_name, int>,
-         field<object_name, json<field<long_name, char>>>>
+         field<object_name, json<field<long_name, std::size_t>>>>
         js2;
 
     js2.get<data_name>() = 101;
@@ -84,4 +84,16 @@ TEST_CASE("json with a number and a subobject", "[json]")
     CHECK(js2.get<data_name>() == 101);
     CHECK(js2.get<object_name>().get<long_name>() == 'a');
     CHECK(js2.str() == "{ data: 101, subobj: { long_name: 97 } }");
+
+    SECTION("deserialize json message into js2")
+    {
+        std::string msg("{ data: 32, subobj: { long_name: 2000000 } }");
+        std::istringstream msg_stream(msg);
+
+        msg_stream >> js2;
+
+        CHECK(js2.get<data_name>() == 32);
+        CHECK(js2.get<object_name>().get<long_name>() == 2000000);
+        std::cout << js2 << std::endl;
+    }
 }
