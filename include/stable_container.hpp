@@ -12,6 +12,9 @@ namespace detail
 {
 }
 
+// deleting an element of a stable_vector doesn't affect elements before or
+// after, storage is not reallocated, and the slot of the previously deleted
+// element will be recycled when adding additional elements.
 template <class T>
 class stable_vector
 {
